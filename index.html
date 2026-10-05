@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMA Muhammadiyah 3 Yogyakarta - Sistem Integrasi SPMB & TU</title>
+  <link rel="stylesheet" href="shared/styles.css">
+</head>
+<body>
+
+  <!-- Dynamic Header -->
+  <div id="app-header-container"></div>
+
+  <!-- Modular Navigation Tabs -->
+  <nav class="nav-tabs">
+    <button class="tab-btn active" onclick="switchModule('01')">01. Portal SPMB</button>
+    <button class="tab-btn" onclick="switchModule('02')">02. Admin SPMB</button>
+    <button class="tab-btn" onclick="switchModule('03')">03. Keuangan SPMB</button>
+    <button class="tab-btn" onclick="switchModule('04')">04. Wawancara</button>
+    <button class="tab-btn" onclick="switchModule('05')">05. Kelulusan</button>
+    <button class="tab-btn" onclick="switchModule('06')">06. Verifikasi Loket</button>
+    <button class="tab-btn" onclick="switchModule('07')">07. Lock Data</button>
+    <button class="tab-btn" onclick="switchModule('08')">08. Schema TU</button>
+    <button class="tab-btn" onclick="switchModule('09')">09. Dashboard TU</button>
+    <button class="tab-btn" onclick="switchModule('10')">10. Executive Report</button>
+  </nav>
+
+  <!-- Module Content Workspace -->
+  <main class="container">
+    <div id="module-viewport"></div>
+  </main>
+
+  <script type="module">
+    import { renderHeader } from './shared/header-footer.js';
+    import { renderPortalSPMB } from './modules/01_portal_spmb/portal.js';
+    import { renderAdminSPMB } from './modules/02_admin_spmb/admin.js';
+    import { renderKeuangan } from './modules/03_keuangan_spmb/keuangan.js';
+    import { renderWawancara } from './modules/04_wawancara_spmb/wawancara.js';
+    import { renderKelulusan } from './modules/05_kelulusan_spmb/kelulusan.js';
+    import { renderLoketDaftarUlang } from './modules/06_verifikasi_loket/loket.js';
+    import { renderLockValidasi } from './modules/07_pengelolaan_data/lock.js';
+    import { renderSchemaTU } from './modules/08_basis_data_tu/schema.js';
+    import { renderTUDashboard } from './modules/09_pemanfaatan_tu/tu_dashboard.js';
+    import { renderExecutiveReport } from './modules/10_executive_report/report.js';
+
+    // Render Shared Header
+    renderHeader();
+
+    // Router function
+    window.switchModule = function(moduleId) {
+      // Update tab active UI
+      const tabs = document.querySelectorAll('.tab-btn');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      
+      const activeTab = Array.from(tabs).find(tab => tab.textContent.startsWith(moduleId));
+      if (activeTab) activeTab.classList.add('active');
+
+      const viewport = 'module-viewport';
+      
+      switch(moduleId) {
+        case '01': renderPortalSPMB(viewport); break;
+        case '02': renderAdminSPMB(viewport); break;
+        case '03': renderKeuangan(viewport); break;
+        case '04': renderWawancara(viewport); break;
+        case '05': renderKelulusan(viewport); break;
+        case '06': renderLoketDaftarUlang(viewport); break;
+        case '07': renderLockValidasi(viewport); break;
+        case '08': renderSchemaTU(viewport); break;
+        case '09': renderTUDashboard(viewport); break;
+        case '10': renderExecutiveReport(viewport); break;
+        default: renderPortalSPMB(viewport);
+      }
+    };
+
+    // Initial default render
+    switchModule('01');
+  </script>
+</body>
+</html>
