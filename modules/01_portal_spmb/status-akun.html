@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Status Akun - Portal SPMB SMA Muhammadiyah 3 Yogyakarta</title>
+  <link rel="stylesheet" href="../../shared/styles.css">
+  <style>
+    .portal-container {
+      max-width: 560px;
+      margin: 2.5rem auto;
+      padding: 0 1rem;
+    }
+    .portal-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 2.25rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      border: 1px solid #e2e8f0;
+    }
+    .brand-header {
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #006837 0%, #004d28 100%);
+      color: white;
+      border-radius: 14px;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 4px 12px rgba(0, 104, 55, 0.25);
+    }
+    .nav-steps {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .step-pill {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #e2e8f0;
+      color: #64748b;
+    }
+    .step-pill.active { background: #006837; color: #ffffff; }
+    .status-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .status-pending { background-color: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+    .status-active { background-color: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+    .notice-card {
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-top: 1rem;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .notice-pending { background-color: #fffbeb; border-left: 4px solid #f59e0b; color: #92400e; }
+    .notice-active { background-color: #f0fdf4; border-left: 4px solid #22c55e; color: #14532d; }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      background: #f8fafc;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1.25rem 0;
+      font-size: 0.85rem;
+    }
+    .detail-item strong { display: block; color: #64748b; font-size: 0.72rem; }
+  </style>
+</head>
+<body>
+  <div class="portal-container">
+    <div class="nav-steps">
+      <span class="step-pill">1. Registrasi</span>
+      <span class="step-pill active">2. Status Aktivasi</span>
+      <span class="step-pill">3. Login Pendaftar</span>
+      <span class="step-pill">4. Formulir & Bukti</span>
+    </div>
+
+    <div class="portal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <span style="font-size: 0.8rem; color: #64748b;">SMA Muhammadiyah 3 Yogyakarta</span>
+        <button id="btn-logout" class="btn btn-secondary" style="font-size: 0.75rem; padding: 4px 12px;">Logout Session</button>
+      </div>
+
+      <div class="brand-header">
+        <div class="brand-logo">M3</div>
+        <h2 style="font-size: 1.4rem; font-weight: 700; color: #0f172a;">Status & Notifikasi Akun</h2>
+      </div>
+
+      <div style="text-align: center;">
+        <span id="badge-status" class="status-badge status-pending">pending_activation</span>
+      </div>
+
+      <div id="notice-container" class="notice-card notice-pending">
+        <strong>Pemberitahuan Aktivasi:</strong><br>
+        Akun Anda berhasil dibuat dan sedang menunggu aktivasi dari Admin SPMB.
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-item">
+          <strong>ID Pendaftar</strong>
+          <span id="display-reg-id">-</span>
+        </div>
+        <div class="detail-item">
+          <strong>Nama Pendaftar</strong>
+          <span id="display-nama">-</span>
+        </div>
+        <div class="detail-item">
+          <strong>NISN</strong>
+          <span id="display-nisn">-</span>
+        </div>
+        <div class="detail-item">
+          <strong>Waktu Pendaftaran</strong>
+          <span id="display-created-at">-</span>
+        </div>
+      </div>
+
+      <div id="action-area" style="margin-top: 1.5rem;">
+        <button id="btn-login-page" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 1rem;" disabled>
+          🔑 Ke Halaman Login Pendaftar &rarr;
+        </button>
+      </div>
+
+      <!-- Quick Demo Simulation Toggle -->
+      <div style="margin-top: 1.75rem; padding: 12px; background: #f1f5f9; border-radius: 10px; border: 1px dashed #cbd5e1; text-align: center; font-size: 0.78rem; color: #475569;">
+        <strong>💡 Testing Handover Admin SPMB:</strong><br>
+        <span style="display: block; margin: 4px 0;">Simulasi perubahan status_akun oleh Modul 02:</span>
+        <button id="btn-toggle-status" class="btn btn-secondary" style="padding: 5px 12px; font-size: 0.75rem;">
+          ⚡ Toggle status_akun (pending_activation / active)
+        </button>
+      </div>
+
+      <p style="text-align: center; margin-top: 1.25rem; font-size: 0.85rem;">
+        <a href="register.html" style="color: #64748b; text-decoration: none;">&larr; Kembali ke Form Registrasi</a>
+      </p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { getPendaftarList, updateStatusAkun, logoutUser } from './utils.js';
+
+    let user = JSON.parse(localStorage.getItem('m3_spmb_logged_in_user')) || JSON.parse(localStorage.getItem('m3_spmb_current_user'));
+
+    if (!user) {
+      const pendaftarList = getPendaftarList();
+      if (pendaftarList.length > 0) {
+        user = pendaftarList[pendaftarList.length - 1];
+        localStorage.setItem('m3_spmb_current_user', JSON.stringify(user));
+      } else {
+        window.location.href = 'register.html';
+      }
+    }
+
+    function renderStatus() {
+      const pendaftarList = getPendaftarList();
+      const currentInDb = pendaftarList.find(p => p.nisn === user.nisn || p.id_pendaftar === user.id_pendaftar) || user;
+      
+      const badge = document.getElementById('badge-status');
+      const notice = document.getElementById('notice-container');
+      const btnLoginPage = document.getElementById('btn-login-page');
+
+      document.getElementById('display-reg-id').textContent = currentInDb.id_pendaftar || currentInDb.id || 'REG-2026-001';
+      document.getElementById('display-nama').textContent = currentInDb.nama_lengkap || currentInDb.nama || '-';
+      document.getElementById('display-nisn').textContent = currentInDb.nisn || '-';
+      
+      const createdDate = currentInDb.created_at ? new Date(currentInDb.created_at).toLocaleString('id-ID') : '-';
+      document.getElementById('display-created-at').textContent = createdDate;
+
+      const isAccountActive = (currentInDb.status_akun === 'active' || currentInDb.status_akun === 'AKTIF');
+
+      if (isAccountActive) {
+        badge.className = 'status-badge status-active';
+        badge.textContent = 'ACTIVE';
+
+        notice.className = 'notice-card notice-active';
+        notice.innerHTML = '<strong>Akun Terverifikasi & Aktif!</strong><br>Selamat! Akun Anda telah diaktivasi oleh Admin SPMB. Silakan <strong>Login</strong> terlebih dahulu untuk mengisi Formulir Pendaftaran lengkap.';
+
+        btnLoginPage.disabled = false;
+        btnLoginPage.onclick = () => { window.location.href = 'login.html'; };
+      } else {
+        badge.className = 'status-badge status-pending';
+        badge.textContent = 'PENDING ACTIVATION';
+
+        notice.className = 'notice-card notice-pending';
+        notice.innerHTML = '<strong>Akun Anda berhasil dibuat dan sedang menunggu aktivasi dari Admin SPMB.</strong><br>Silakan secara berkala memeriksa halaman ini atau menghubungi Panitia SPMB SMA Muhammadiyah 3 Yogyakarta.';
+
+        btnLoginPage.disabled = true;
+      }
+    }
+
+    // Logout Handler
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      logoutUser();
+      alert('Sesi Anda telah di-logout.');
+      window.location.href = 'login.html';
+    });
+
+    // Toggle status demo button handler
+    document.getElementById('btn-toggle-status').addEventListener('click', () => {
+      const pendaftarList = getPendaftarList();
+      const currentInDb = pendaftarList.find(p => p.nisn === user.nisn || p.id_pendaftar === user.id_pendaftar) || user;
+      const nextStatus = (currentInDb.status_akun === 'active' || currentInDb.status_akun === 'AKTIF') ? 'pending_activation' : 'active';
+      
+      const updated = updateStatusAkun(currentInDb.id_pendaftar || currentInDb.id, nextStatus);
+      if (updated) {
+        user = updated;
+        localStorage.setItem('m3_spmb_current_user', JSON.stringify(updated));
+        renderStatus();
+      }
+    });
+
+    renderStatus();
+  </script>
+</body>
+</html>
