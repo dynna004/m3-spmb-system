@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modul Keuangan SPMB – Bendahara | SMA Muhammadiyah 3 Yogyakarta</title>
+  <meta name="description"
+    content="Dashboard Keuangan SPMB untuk Bendahara – Verifikasi pembayaran formulir dan pencatatan uang pangkal calon siswa baru SMA Muhammadiyah 3 Yogyakarta.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
+  <style>
+    /* ===================================================
+       DESIGN TOKENS & RESET
+    =================================================== */
+    :root {
+      --green-900: #003d20;
+      --green-800: #006837;
+      --green-700: #008349;
+      --green-100: #dcfce7;
+      --green-50: #f0fdf4;
+      --yellow: #f5a623;
+      --yellow-bg: #fef3c7;
+      --yellow-text: #92400e;
+      --red: #dc2626;
+      --red-bg: #fef2f2;
+      --red-text: #991b1b;
+      --blue-bg: #eff6ff;
+      --blue-text: #1e40af;
+      --blue: #3b82f6;
+      --purple-bg: #f5f3ff;
+      --purple-text: #5b21b6;
+      --bg-main: #f0f4f8;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.10);
+      --radius: 14px;
+      --radius-sm: 8px;
+      --transition: all 0.22s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .app-header {
+      background: linear-gradient(135deg, var(--green-900) 0%, var(--green-800) 60%, var(--green-700) 100%);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .header-logo {
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      font-weight: 800;
+      backdrop-filter: blur(4px);
+    }
+
+    .header-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .header-subtitle {
+      font-size: 0.72rem;
+      opacity: 0.75;
+    }
+
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
+
+    .header-badge {
+      background: var(--yellow);
+      color: #000;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .btn-header-refresh {
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    .btn-header-refresh:hover {
+      background: rgba(255, 255, 255, 0.30);
+    }
+
+    /* LAYOUT */
+    .page-wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1.75rem 1.5rem 3rem;
+    }
+
+    /* STATS CARDS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+    }
+
+    .stat-card.green::before {
+      background: var(--green-800);
+    }
+
+    .stat-card.yellow::before {
+      background: var(--yellow);
+    }
+
+    .stat-card.red::before {
+      background: var(--red);
+    }
+
+    .stat-card.blue::before {
+      background: var(--blue);
+    }
+
+    .stat-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .stat-icon {
+      font-size: 1.85rem;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+
+    .stat-icon.green {
+      background: var(--green-50);
+    }
+
+    .stat-icon.yellow {
+      background: var(--yellow-bg);
+    }
+
+    .stat-icon.red {
+      background: var(--red-bg);
+    }
+
+    .stat-icon.blue {
+      background: var(--blue-bg);
+    }
+
+    .stat-info {
+      flex: 1;
+    }
+
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--text-main);
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 3px;
+    }
+
+    /* SECTION TABS */
+    .section-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-tab {
+      padding: 8px 18px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--bg-card);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: var(--transition);
+    }
+
+    .section-tab:hover {
+      border-color: var(--green-800);
+      color: var(--green-800);
+    }
+
+    .section-tab.active {
+      background: var(--green-800);
+      color: white;
+      border-color: var(--green-800);
+    }
+
+    /* PANEL */
+    .panel-section {
+      display: none;
+    }
+
+    .panel-section.active {
+      display: block;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 1.1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: #fafbfc;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--green-800);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-body {
+      padding: 1.25rem 1.5rem;
+    }
+
+    /* TOOLBAR */
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .toolbar-search {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .toolbar-search input {
+      width: 100%;
+      padding: 9px 14px 9px 38px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.875rem;
+      background: #f8fafc;
+      transition: var(--transition);
+    }
+
+    .toolbar-search input:focus {
+      outline: none;
+      border-color: var(--green-800);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(0, 104, 55, 0.12);
+    }
+
+    .toolbar-search .search-icon {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      pointer-events: none;
+    }
+
+    .toolbar select {
+      padding: 9px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.875rem;
+      background: #f8fafc;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .toolbar select:focus {
+      outline: none;
+      border-color: var(--green-800);
+    }
+
+    /* TABLE */
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    .data-table thead th {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 11px 14px;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .data-table tbody tr {
+      border-bottom: 1px solid #f1f5f9;
+      transition: background 0.15s;
+    }
+
+    .data-table tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .data-table tbody td {
+      padding: 11px 14px;
+      vertical-align: middle;
+    }
+
+    .data-table tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    /* BADGES */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge-pending {
+      background: var(--yellow-bg);
+      color: var(--yellow-text);
+    }
+
+    .badge-lunas {
+      background: var(--green-100);
+      color: #15803d;
+    }
+
+    .badge-ditolak {
+      background: var(--red-bg);
+      color: var(--red-text);
+    }
+
+    .badge-belum {
+      background: #f1f5f9;
+      color: var(--text-muted);
+    }
+
+    .badge-cicilan {
+      background: var(--blue-bg);
+      color: var(--blue-text);
+    }
+
+    .badge-info {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    /* ACTION BUTTONS */
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 12px;
+      border-radius: 7px;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .btn-validate {
+      background: var(--green-800);
+      color: white;
+    }
+
+    .btn-validate:hover {
+      background: var(--green-900);
+      transform: scale(1.03);
+    }
+
+    .btn-validate:disabled {
+      background: #cbd5e1;
+      color: #94a3b8;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-reject {
+      background: var(--red-bg);
+      color: var(--red-text);
+      border: 1px solid #fecaca;
+    }
+
+    .btn-reject:hover {
+      background: #fecaca;
+    }
+
+    .btn-reject:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .btn-view {
+      background: var(--blue-bg);
+      color: var(--blue-text);
+      border: 1px solid #bfdbfe;
+    }
+
+    .btn-view:hover {
+      background: #dbeafe;
+    }
+
+    .btn-primary {
+      background: var(--green-800);
+      color: white;
+      padding: 9px 18px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary:hover {
+      background: var(--green-900);
+    }
+
+    .btn-secondary-action {
+      background: var(--yellow-bg);
+      color: var(--yellow-text);
+      padding: 9px 18px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: 1px solid #fde68a;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-secondary-action:hover {
+      background: #fde68a;
+    }
+
+    /* FORM */
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .form-group label .req {
+      color: var(--red);
+    }
+
+    .form-control {
+      padding: 9px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.875rem;
+      background: #f8fafc;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--green-800);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(0, 104, 55, 0.10);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 1.25rem;
+    }
+
+    /* ALERTS */
+    .alert {
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1rem;
+      animation: slideIn 0.25s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .alert-success {
+      background: var(--green-50);
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+
+    .alert-error {
+      background: var(--red-bg);
+      color: var(--red-text);
+      border: 1px solid #fecaca;
+    }
+
+    .alert-info {
+      background: var(--blue-bg);
+      color: var(--blue-text);
+      border: 1px solid #bfdbfe;
+    }
+
+    .alert-warning {
+      background: var(--yellow-bg);
+      color: var(--yellow-text);
+      border: 1px solid #fde68a;
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(3px);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal-box {
+      background: var(--bg-card);
+      border-radius: 18px;
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 620px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: scaleIn 0.22s ease;
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.94);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--green-800);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 1.3rem;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+
+    .modal-close:hover {
+      color: var(--red);
+    }
+
+    .modal-body {
+      padding: 1.25rem 1.5rem;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    /* DETAIL INFO GRID */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 1rem;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .detail-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .detail-value {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .bukti-preview-box {
+      margin-top: 12px;
+      border: 1.5px dashed var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: #f8fafc;
+      text-align: center;
+      padding: 12px;
+    }
+
+    .bukti-preview-box img {
+      max-width: 100%;
+      max-height: 240px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .no-preview {
+      padding: 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state .icon {
+      font-size: 2.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .empty-state p {
+      font-size: 0.9rem;
+    }
+
+    /* TOTAL ROW */
+    .tfoot-total td {
+      font-weight: 700;
+      color: var(--green-800);
+      border-top: 2px solid var(--border);
+      background: var(--green-50) !important;
+      padding: 11px 14px;
+    }
+
+    @media (max-width: 640px) {
+      .app-header {
+        padding: 0.85rem 1rem;
+      }
+
+      .header-meta {
+        display: none;
+      }
+
+      .page-wrapper {
+        padding: 1rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-brand">
+      <div class="header-logo">M3</div>
+      <div>
+        <div class="header-title">💳 Modul Keuangan SPMB</div>
+        <div class="header-subtitle">SMA Muhammadiyah 3 Yogyakarta — Panel Bendahara</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <span class="header-badge">BENDAHARA</span>
+      <span id="hdr-datetime" style="font-size:0.78rem; opacity:0.85;"></span>
+      <button class="btn-header-refresh" id="btn-refresh-global" title="Refresh data dari localStorage">
+        🔄 Refresh Data
+      </button>
+    </div>
+  </header>
+
+  <div class="page-wrapper">
+
+    <!-- Notification Area -->
+    <div id="global-alert-area"></div>
+
+    <!-- KPI Stats -->
+    <div class="stats-grid">
+      <div class="stat-card green">
+        <div class="stat-icon green">👥</div>
+        <div class="stat-info">
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-label">Total Pendaftar</div>
+        </div>
+      </div>
+      <div class="stat-card yellow">
+        <div class="stat-icon yellow">⏳</div>
+        <div class="stat-info">
+          <div class="stat-value" id="stat-pending">0</div>
+          <div class="stat-label">Menunggu Validasi</div>
+        </div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon green">✅</div>
+        <div class="stat-info">
+          <div class="stat-value" id="stat-lunas">0</div>
+          <div class="stat-label">Pembayaran Lunas</div>
+        </div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-icon blue">🏫</div>
+        <div class="stat-info">
+          <div class="stat-value" id="stat-uang-pangkal">0</div>
+          <div class="stat-label">Uang Pangkal Lunas</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section Tabs -->
+    <div class="section-tabs">
+      <button class="section-tab active" id="tab-verifikasi" onclick="switchTab('verifikasi')">
+        📋 Verifikasi Pembayaran Formulir
+      </button>
+      <button class="section-tab" id="tab-uangpangkal" onclick="switchTab('uangpangkal')">
+        🏫 Uang Pangkal Sekolah
+      </button>
+      <button class="section-tab" id="tab-rekap" onclick="switchTab('rekap')">
+        📊 Rekap Keuangan
+      </button>
+    </div>
+
+    <!-- PANEL 1: Verifikasi Pembayaran Formulir -->
+    <div id="panel-verifikasi" class="panel-section active">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📋 Tabel Pembayaran Formulir Pendaftaran</div>
+          <div class="toolbar">
+            <div class="toolbar-search">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="search-formulir" placeholder="Cari nama, ID, atau No. WA...">
+            </div>
+            <select id="filter-status-formulir">
+              <option value="">Semua Status</option>
+              <option value="pending_verification">Menunggu Verifikasi</option>
+              <option value="lunas">Lunas</option>
+              <option value="ditolak">Ditolak</option>
+              <option value="belum_bayar">Belum Bayar</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>ID Pendaftar</th>
+                  <th>Nama Lengkap</th>
+                  <th>No. WA</th>
+                  <th>Pilihan Jurusan</th>
+                  <th>Tgl. Pendaftaran</th>
+                  <th>Status Pembayaran</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-formulir">
+                <tr>
+                  <td colspan="8">
+                    <div class="empty-state">
+                      <div class="icon">⏳</div>
+                      <p>Memuat data...</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 2: Uang Pangkal Sekolah -->
+    <div id="panel-uangpangkal" class="panel-section">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">➕ Catat Pelunasan Uang Pangkal</div>
+          <button class="btn-secondary-action" onclick="clearFormUangPangkal()" id="btn-clear-form">
+            🗑 Bersihkan Form
+          </button>
+        </div>
+        <div class="card-body">
+          <div id="form-alert-area"></div>
+          <form id="form-uang-pangkal" autocomplete="off">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="up-cari-siswa">Cari Siswa (ID / Nama) <span class="req">*</span></label>
+                <input type="text" id="up-cari-siswa" class="form-control" placeholder="Ketik ID Pendaftar atau Nama..."
+                  autocomplete="off">
+                <div id="up-autocomplete" style="
+                  position: relative; z-index: 50; background: #fff;
+                  border: 1px solid var(--border); border-radius: var(--radius-sm);
+                  box-shadow: var(--shadow-md); display: none; margin-top: 2px;
+                  max-height: 180px; overflow-y: auto;
+                "></div>
+              </div>
+              <div class="form-group">
+                <label for="up-id-pendaftar">ID Pendaftar</label>
+                <input type="text" id="up-id-pendaftar" class="form-control" readonly
+                  placeholder="Auto-isi dari pencarian">
+              </div>
+              <div class="form-group">
+                <label for="up-nama">Nama Siswa</label>
+                <input type="text" id="up-nama" class="form-control" readonly placeholder="Auto-isi dari pencarian">
+              </div>
+            </div>
+            <div class="form-row" style="margin-top: 1rem;">
+              <div class="form-group">
+                <label for="up-jumlah">Jumlah Dibayar (Rp) <span class="req">*</span></label>
+                <input type="number" id="up-jumlah" class="form-control" placeholder="Contoh: 5000000" min="1">
+              </div>
+              <div class="form-group">
+                <label for="up-tgl-bayar">Tanggal Bayar <span class="req">*</span></label>
+                <input type="date" id="up-tgl-bayar" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="up-metode">Metode Pembayaran <span class="req">*</span></label>
+                <select id="up-metode" class="form-control">
+                  <option value="">-- Pilih Metode --</option>
+                  <option value="Tunai">Tunai</option>
+                  <option value="Transfer Bank">Transfer Bank</option>
+                  <option value="QRIS">QRIS</option>
+                  <option value="Cicilan">Cicilan (Bertahap)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="up-status">Status Pelunasan <span class="req">*</span></label>
+                <select id="up-status" class="form-control">
+                  <option value="lunas">Lunas</option>
+                  <option value="cicilan">Cicilan / Belum Lunas</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row" style="margin-top: 1rem;">
+              <div class="form-group" style="grid-column: 1 / -1;">
+                <label for="up-catatan">Catatan Bendahara</label>
+                <textarea id="up-catatan" class="form-control" rows="2"
+                  placeholder="Opsional: nomor bukti transfer, keterangan cicilan, dll."></textarea>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn-primary">💾 Simpan Data Uang Pangkal</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📋 Riwayat Pembayaran Uang Pangkal</div>
+          <div class="toolbar">
+            <div class="toolbar-search">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="search-uangpangkal" placeholder="Cari nama atau ID...">
+            </div>
+            <select id="filter-status-up">
+              <option value="">Semua Status</option>
+              <option value="lunas">Lunas</option>
+              <option value="cicilan">Cicilan</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>ID Pendaftar</th>
+                  <th>Nama Siswa</th>
+                  <th>Jumlah Dibayar</th>
+                  <th>Tgl. Bayar</th>
+                  <th>Metode</th>
+                  <th>Status</th>
+                  <th>Catatan</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-uangpangkal">
+                <tr>
+                  <td colspan="9">
+                    <div class="empty-state">
+                      <div class="icon">🏫</div>
+                      <p>Belum ada data uang pangkal. Gunakan form di atas untuk mencatat.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot id="tfoot-uangpangkal"></tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 3: Rekap Keuangan -->
+    <div id="panel-rekap" class="panel-section">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📊 Rekap Keuangan SPMB</div>
+          <button class="btn-primary" onclick="exportRekapCSV()" style="font-size: 0.8rem; padding: 7px 14px;">
+            📥 Export CSV
+          </button>
+        </div>
+        <div class="card-body">
+          <div id="rekap-content"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /page-wrapper -->
+
+  <!-- MODAL: Detail Pendaftar -->
+  <div id="modal-detail" class="modal-overlay" style="display:none;" onclick="closeModalOnOverlay(event)">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-detail-title">Detail Pendaftar</div>
+        <button class="modal-close" onclick="closeModal('modal-detail')" title="Tutup">✕</button>
+      </div>
+      <div class="modal-body" id="modal-detail-body"></div>
+      <div class="modal-footer">
+        <button class="btn-secondary-action" onclick="closeModal('modal-detail')">Tutup</button>
+        <button class="btn-primary" id="modal-btn-validate" onclick="validateFromModal()">✅ Validasi Pembayaran</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Konfirmasi Tolak -->
+  <div id="modal-tolak" class="modal-overlay" style="display:none;" onclick="closeModalOnOverlay(event)">
+    <div class="modal-box" style="max-width: 440px;">
+      <div class="modal-header">
+        <div class="modal-title">⚠️ Konfirmasi Penolakan</div>
+        <button class="modal-close" onclick="closeModal('modal-tolak')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Anda yakin ingin menolak pembayaran pendaftar berikut?
+        </p>
+        <div id="modal-tolak-info" style="
+          background: var(--red-bg); border: 1px solid #fecaca;
+          border-radius: var(--radius-sm); padding: 12px 14px;
+          font-size: 0.875rem; font-weight: 600; color: var(--red-text);
+        "></div>
+        <div class="form-group" style="margin-top: 1rem;">
+          <label>Alasan Penolakan (opsional)</label>
+          <textarea id="alasan-tolak" class="form-control" rows="2"
+            placeholder="Contoh: Bukti bayar tidak terbaca / nominal kurang..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary-action" onclick="closeModal('modal-tolak')">Batal</button>
+        <button class="btn-action btn-reject" style="padding: 9px 18px; font-size: 0.875rem;"
+          onclick="confirmTolak()">🚫 Ya, Tolak</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    // KONSTANTA LOCALSTORAGE
+    // Key 'spmb_pendaftar_db' dipakai bersama Module 01 (Portal).
+    // Key 'spmb_uang_pangkal_db' khusus Modul Keuangan.
+    // ============================================================
+    const STORAGE_KEY_PENDAFTAR = 'spmb_pendaftar_db';
+    const STORAGE_KEY_UANG_PANGKAL = 'spmb_uang_pangkal_db';
+
+    // STATE APLIKASI
+    let allPendaftar = [];
+    let allUangPangkal = [];
+    let currentModalId = null;
+    let pendingTolakId = null;
+
+    // ============================================================
+    // UTILITY FUNCTIONS
+    // ============================================================
+    function formatRupiah(angka) {
+      if (!angka && angka !== 0) return '-';
+      return 'Rp ' + Number(angka).toLocaleString('id-ID');
+    }
+
+    function formatDate(isoStr) {
+      if (!isoStr) return '-';
+      const d = new Date(isoStr);
+      if (isNaN(d)) return isoStr;
+      return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function showGlobalAlert(msg, type = 'success', duration = 3500) {
+      const area = document.getElementById('global-alert-area');
+      const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
+      const el = document.createElement('div');
+      el.className = 'alert alert-' + type;
+      el.innerHTML = (icons[type] || '') + ' ' + msg;
+      area.prepend(el);
+      setTimeout(() => el.remove(), duration);
+    }
+
+    function showFormAlert(msg, type = 'error') {
+      const area = document.getElementById('form-alert-area');
+      area.innerHTML = '<div class="alert alert-' + type + '">' + msg + '</div>';
+      setTimeout(() => { area.innerHTML = ''; }, 3500);
+    }
+
+    // ============================================================
+    // FUNGSI: AMBIL DATA PENDAFTAR DARI LOCALSTORAGE
+    // Membaca shared key 'spmb_pendaftar_db' yang ditulis
+    // oleh Module 01 Portal SPMB (dummy-data.js & formulir.html).
+    // ============================================================
+    function fetchPendaftarFromStorage() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY_PENDAFTAR);
+        if (!raw) return [];
+        var parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        console.error('[Keuangan] Gagal parse data pendaftar:', e);
+        return [];
+      }
+    }
+
+    // ============================================================
+    // FUNGSI: SIMPAN DATA PENDAFTAR KE LOCALSTORAGE
+    // Menyimpan kembali ke shared key agar perubahan status
+    // pembayaran langsung terlihat di Portal (Module 01).
+    // ============================================================
+    function savePendaftarToStorage(data) {
+      try {
+        localStorage.setItem(STORAGE_KEY_PENDAFTAR, JSON.stringify(data));
+        return true;
+      } catch (e) {
+        console.error('[Keuangan] Gagal simpan data pendaftar:', e);
+        return false;
+      }
+    }
+
+    function fetchUangPangkalFromStorage() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY_UANG_PANGKAL);
+        if (!raw) return [];
+        return JSON.parse(raw) || [];
+      } catch (e) { return []; }
+    }
+
+    function saveUangPangkalToStorage(data) {
+      localStorage.setItem(STORAGE_KEY_UANG_PANGKAL, JSON.stringify(data));
+    }
+
+    // ============================================================
+    // INISIALISASI UTAMA
+    // ============================================================
+    function initKeuangan() {
+      allPendaftar = fetchPendaftarFromStorage();
+      allUangPangkal = fetchUangPangkalFromStorage();
+
+      // Fallback: jika storage kosong, isi dengan data dummy
+      if (allPendaftar.length === 0) {
+        allPendaftar = getDummyData();
+        savePendaftarToStorage(allPendaftar);
+      }
+
+      updateStats();
+      renderTabelFormulir();
+      renderTabelUangPangkal();
+      renderRekap();
+      updateClock();
+    }
+
+    // ============================================================
+    // DATA DUMMY FALLBACK
+    // Skema identik dengan dummy-data.js (Module 01 Portal SPMB).
+    // ============================================================
+    function getDummyData() {
+      return [
+        {
+          id_pendaftar: "REG-2026-001",
+          nama_lengkap: "Ahmad Dahlan",
+          email: "ahmad@email.com",
+          no_wa: "081234567891",
+          nisn: "0051234567",
+          status_akun: "pending_activation",
+          created_at: "2026-10-05T08:00:00Z",
+          biodata: null,
+          pembayaran: null
+        },
+        {
+          id_pendaftar: "REG-2026-002",
+          nama_lengkap: "Budi Santoso",
+          email: "budi@email.com",
+          no_wa: "081234567890",
+          nisn: "1234567890",
+          status_akun: "active",
+          created_at: "2026-10-05T09:15:00Z",
+          biodata: { nik: "3171012345678901", alamat: "Jl. Merdeka No. 10", asal_sekolah: "SMPN 1 Jakarta", nama_orang_tua: "Siti Aminah", pilihan_jurusan: "MIPA" },
+          pembayaran: { file_bukti: "bukti_bayar_002.png", file_data_url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==", status_pembayaran: "pending_verification" }
+        },
+        {
+          id_pendaftar: "REG-2026-003",
+          nama_lengkap: "Citra Dewi",
+          email: "citra@email.com",
+          no_wa: "082345678901",
+          nisn: "2345678901",
+          status_akun: "active",
+          created_at: "2026-10-05T10:30:00Z",
+          biodata: { nik: "3171012345678902", alamat: "Jl. Sudirman No. 5", asal_sekolah: "SMPN 2 Yogyakarta", nama_orang_tua: "Eko Prasetyo", pilihan_jurusan: "IPS" },
+          pembayaran: { file_bukti: "bukti_bayar_003.jpg", file_data_url: null, status_pembayaran: "lunas", validated_at: "2026-10-05T12:00:00Z", validated_by: "Bendahara SPMB" }
+        },
+        {
+          id_pendaftar: "REG-2026-004",
+          nama_lengkap: "Dimas Arya",
+          email: "dimas@email.com",
+          no_wa: "083456789012",
+          nisn: "3456789012",
+          status_akun: "active",
+          created_at: "2026-10-05T11:00:00Z",
+          biodata: null,
+          pembayaran: null
+        }
+      ];
+    }
+
+    // ============================================================
+    // UPDATE KPI STATS
+    // ============================================================
+    function updateStats() {
+      document.getElementById('stat-total').textContent =
+        allPendaftar.length;
+      document.getElementById('stat-pending').textContent =
+        allPendaftar.filter(function (p) { return p.pembayaran && p.pembayaran.status_pembayaran === 'pending_verification'; }).length;
+      document.getElementById('stat-lunas').textContent =
+        allPendaftar.filter(function (p) { return p.pembayaran && p.pembayaran.status_pembayaran === 'lunas'; }).length;
+      document.getElementById('stat-uang-pangkal').textContent =
+        allUangPangkal.filter(function (u) { return u.status === 'lunas'; }).length;
+    }
+
+    // ============================================================
+    // BADGE HELPER
+    // ============================================================
+    function getBadgeClass(status) {
+      var map = { pending_verification: 'badge-pending', lunas: 'badge-lunas', ditolak: 'badge-ditolak', cicilan: 'badge-cicilan' };
+      return map[status] || 'badge-belum';
+    }
+    function getStatusLabel(status) {
+      var map = { pending_verification: '⏳ Menunggu Verifikasi', lunas: '✅ Lunas', ditolak: '🚫 Ditolak', cicilan: '🔄 Cicilan' };
+      return map[status] || '— Belum Bayar';
+    }
+
+    // ============================================================
+    // RENDER TABEL FORMULIR (Panel 1)
+    // Menampilkan semua pendaftar beserta status pembayaran-nya
+    // yang dibaca langsung dari localStorage (shared dengan Portal).
+    // ============================================================
+    function renderTabelFormulir(filterNama, filterStatus) {
+      filterNama = filterNama || '';
+      filterStatus = filterStatus || '';
+      var tbody = document.getElementById('tbody-formulir');
+
+      var data = allPendaftar.filter(function (p) {
+        var matchNama = !filterNama || p.nama_lengkap.toLowerCase().includes(filterNama.toLowerCase())
+          || (p.id_pendaftar || '').toLowerCase().includes(filterNama.toLowerCase())
+          || (p.no_wa || '').includes(filterNama);
+        var statusPembayaran = (p.pembayaran && p.pembayaran.status_pembayaran) ? p.pembayaran.status_pembayaran : 'belum_bayar';
+        var matchStatus = !filterStatus || statusPembayaran === filterStatus;
+        return matchNama && matchStatus;
+      });
+
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">🔍</div><p>Tidak ada data yang sesuai pencarian.</p></div></td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = data.map(function (p, idx) {
+        var status = (p.pembayaran && p.pembayaran.status_pembayaran) ? p.pembayaran.status_pembayaran : 'belum_bayar';
+        var jurusan = (p.biodata && p.biodata.pilihan_jurusan) ? p.biodata.pilihan_jurusan : '-';
+        var isLunas = status === 'lunas';
+        var isDitolak = status === 'ditolak';
+        var isBelum = !p.pembayaran;
+
+        return '<tr>'
+          + '<td style="color:var(--text-muted);font-size:0.8rem;">' + (idx + 1) + '</td>'
+          + '<td><code style="font-size:0.78rem;background:#f1f5f9;padding:2px 6px;border-radius:4px;">' + (p.id_pendaftar || '-') + '</code></td>'
+          + '<td style="font-weight:600;">' + (p.nama_lengkap || '-') + '</td>'
+          + '<td style="color:var(--text-muted);">' + (p.no_wa || '-') + '</td>'
+          + '<td>' + (jurusan !== '-' ? '<span class="badge badge-info">' + jurusan + '</span>' : '<span style="color:var(--text-muted)">—</span>') + '</td>'
+          + '<td style="color:var(--text-muted);font-size:0.82rem;">' + formatDate(p.created_at) + '</td>'
+          + '<td><span class="badge ' + getBadgeClass(status) + '">' + getStatusLabel(status) + '</span></td>'
+          + '<td><div style="display:flex;gap:6px;flex-wrap:wrap;">'
+          + '<button class="btn-action btn-view" onclick="openDetailModal(\'' + p.id_pendaftar + '\')" title="Lihat detail">🔍 Detail</button>'
+          + '<button class="btn-action btn-validate" onclick="validatePembayaran(\'' + p.id_pendaftar + '\')"'
+          + ((isLunas || isBelum) ? ' disabled title="Tidak dapat divalidasi"' : '') + '>✅ Validasi</button>'
+          + '<button class="btn-action btn-reject" onclick="openTolakModal(\'' + p.id_pendaftar + '\')"'
+          + ((isDitolak || isBelum) ? ' disabled title="Tidak dapat ditolak"' : '') + '>🚫 Tolak</button>'
+          + '</div></td></tr>';
+      }).join('');
+    }
+
+    // ============================================================
+    // AKSI: VALIDASI PEMBAYARAN FORMULIR
+    // Mengubah status_pembayaran dari 'pending_verification'
+    // menjadi 'lunas', lalu menyimpan ke localStorage shared key.
+    // Perubahan ini otomatis terbaca oleh Module 01 Portal SPMB.
+    // ============================================================
+    function validatePembayaran(idPendaftar) {
+      var idx = allPendaftar.findIndex(function (p) { return p.id_pendaftar === idPendaftar; });
+      if (idx === -1) { showGlobalAlert('Pendaftar tidak ditemukan!', 'error'); return; }
+
+      var p = allPendaftar[idx];
+      if (!p.pembayaran) { showGlobalAlert('Pendaftar ini belum memiliki data pembayaran!', 'warning'); return; }
+      if (!confirm('Validasi pembayaran formulir untuk:\n"' + p.nama_lengkap + '" (' + idPendaftar + ')?\n\nStatus akan berubah → LUNAS.')) return;
+
+      // --- UPDATE: status_pembayaran → 'lunas' ---
+      allPendaftar[idx] = Object.assign({}, p, {
+        pembayaran: Object.assign({}, p.pembayaran, {
+          status_pembayaran: 'lunas',
+          validated_at: new Date().toISOString(),
+          validated_by: 'Bendahara SPMB'
+        })
+      });
+
+      // Simpan ke shared localStorage key (sinkron dengan Module 01)
+      if (savePendaftarToStorage(allPendaftar)) {
+        showGlobalAlert('✅ Pembayaran <strong>' + p.nama_lengkap + '</strong> berhasil divalidasi → LUNAS!', 'success');
+      }
+
+      updateStats();
+      renderTabelFormulir(
+        document.getElementById('search-formulir').value,
+        document.getElementById('filter-status-formulir').value
+      );
+      if (currentModalId === idPendaftar) closeModal('modal-detail');
+    }
+
+    // ============================================================
+    // AKSI: BUKA MODAL PENOLAKAN
+    // ============================================================
+    function openTolakModal(idPendaftar) {
+      var p = allPendaftar.find(function (x) { return x.id_pendaftar === idPendaftar; });
+      if (!p) return;
+      pendingTolakId = idPendaftar;
+      document.getElementById('modal-tolak-info').innerHTML = p.nama_lengkap + ' &nbsp;|&nbsp; <code>' + idPendaftar + '</code>';
+      document.getElementById('alasan-tolak').value = '';
+      document.getElementById('modal-tolak').style.display = 'flex';
+    }
+
+    // ============================================================
+    // AKSI: KONFIRMASI PENOLAKAN PEMBAYARAN
+    // Mengubah status_pembayaran → 'ditolak' dan menyimpan
+    // ke shared localStorage (sinkron dengan Module 01 Portal).
+    // ============================================================
+    function confirmTolak() {
+      if (!pendingTolakId) return;
+      var idx = allPendaftar.findIndex(function (p) { return p.id_pendaftar === pendingTolakId; });
+      if (idx === -1) return;
+
+      var p = allPendaftar[idx];
+      var alasan = document.getElementById('alasan-tolak').value.trim();
+
+      // --- UPDATE: status_pembayaran → 'ditolak' ---
+      allPendaftar[idx] = Object.assign({}, p, {
+        pembayaran: Object.assign({}, p.pembayaran, {
+          status_pembayaran: 'ditolak',
+          rejected_at: new Date().toISOString(),
+          rejected_by: 'Bendahara SPMB',
+          alasan_penolakan: alasan || 'Tidak ada keterangan'
+        })
+      });
+
+      savePendaftarToStorage(allPendaftar);
+      showGlobalAlert('🚫 Pembayaran <strong>' + p.nama_lengkap + '</strong> ditolak.', 'error');
+      closeModal('modal-tolak');
+      pendingTolakId = null;
+      updateStats();
+      renderTabelFormulir(
+        document.getElementById('search-formulir').value,
+        document.getElementById('filter-status-formulir').value
+      );
+    }
+
+    // ============================================================
+    // MODAL: DETAIL PENDAFTAR & BUKTI BAYAR
+    // ============================================================
+    function openDetailModal(idPendaftar) {
+      var p = allPendaftar.find(function (x) { return x.id_pendaftar === idPendaftar; });
+      if (!p) return;
+      currentModalId = idPendaftar;
+
+      var bio = p.biodata || {};
+      var bayar = p.pembayaran || {};
+      var status = bayar.status_pembayaran || 'belum_bayar';
+
+      var btnValidate = document.getElementById('modal-btn-validate');
+      btnValidate.disabled = (status === 'lunas' || status === 'belum_bayar' || !p.pembayaran);
+      btnValidate.textContent = status === 'lunas' ? '✅ Sudah Lunas' : '✅ Validasi Pembayaran';
+      document.getElementById('modal-detail-title').textContent = 'Detail — ' + p.nama_lengkap;
+
+      var previewHtml;
+      if (bayar.file_data_url && bayar.file_data_url.startsWith('data:image')) {
+        previewHtml = '<img src="' + bayar.file_data_url + '" alt="Bukti Bayar">';
+      } else if (bayar.file_bukti) {
+        previewHtml = '<div class="no-preview">📄 File: <strong>' + bayar.file_bukti + '</strong><br><small>Preview tidak tersedia</small></div>';
+      } else {
+        previewHtml = '<div class="no-preview">📭 Belum ada file bukti bayar yang diunggah.</div>';
+      }
+
+      document.getElementById('modal-detail-body').innerHTML =
+        '<div class="detail-grid">'
+        + '<div class="detail-item"><span class="detail-label">ID Pendaftar</span><span class="detail-value"><code>' + p.id_pendaftar + '</code></span></div>'
+        + '<div class="detail-item"><span class="detail-label">Nama Lengkap</span><span class="detail-value">' + p.nama_lengkap + '</span></div>'
+        + '<div class="detail-item"><span class="detail-label">NISN</span><span class="detail-value">' + (p.nisn || '-') + '</span></div>'
+        + '<div class="detail-item"><span class="detail-label">No. WhatsApp</span><span class="detail-value">' + (p.no_wa || '-') + '</span></div>'
+        + '<div class="detail-item"><span class="detail-label">Email</span><span class="detail-value">' + (p.email || '-') + '</span></div>'
+        + '<div class="detail-item"><span class="detail-label">Status Akun</span><span class="detail-value">' + (p.status_akun || '-') + '</span></div>'
+        + '<div class="detail-item"><span class="detail-label">Asal Sekolah</span><span class="detail-value">' + (bio.asal_sekolah || '-') + '</span></div>'
+        + '<div class="detail-item"><span class="detail-label">Pilihan Jurusan</span><span class="detail-value">' + (bio.pilihan_jurusan || '-') + '</span></div>'
+        + '<div class="detail-item"><span class="detail-label">Nama Orang Tua</span><span class="detail-value">' + (bio.nama_orang_tua || '-') + '</span></div>'
+        + '<div class="detail-item"><span class="detail-label">Tgl. Pendaftaran</span><span class="detail-value">' + formatDate(p.created_at) + '</span></div>'
+        + '</div>'
+        + '<hr style="border:none;border-top:1px solid var(--border);margin:1rem 0;">'
+        + '<div style="margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'
+        + '<strong style="font-size:0.9rem;">Status Pembayaran:</strong>'
+        + '<span class="badge ' + getBadgeClass(status) + '">' + getStatusLabel(status) + '</span>'
+        + (bayar.validated_at ? '<small style="color:var(--text-muted);">Divalidasi: ' + formatDate(bayar.validated_at) + '</small>' : '')
+        + (bayar.rejected_at ? '<small style="color:var(--red-text);">Ditolak: ' + formatDate(bayar.rejected_at) + ' — ' + (bayar.alasan_penolakan || '') + '</small>' : '')
+        + '</div>'
+        + '<div class="bukti-preview-box">' + previewHtml + '</div>'
+        + (bayar.file_bukti ? '<p style="font-size:0.78rem;color:var(--text-muted);margin-top:6px;">Nama file: <code>' + bayar.file_bukti + '</code></p>' : '');
+
+      document.getElementById('modal-detail').style.display = 'flex';
+    }
+
+    function validateFromModal() { if (currentModalId) validatePembayaran(currentModalId); }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function closeModalOnOverlay(e) { if (e.target === e.currentTarget) closeModal(e.currentTarget.id); }
+
+    // ============================================================
+    // RENDER TABEL UANG PANGKAL (Panel 2)
+    // ============================================================
+    function renderTabelUangPangkal(filterNama, filterStatus) {
+      filterNama = filterNama || '';
+      filterStatus = filterStatus || '';
+      var tbody = document.getElementById('tbody-uangpangkal');
+      var tfoot = document.getElementById('tfoot-uangpangkal');
+
+      var data = allUangPangkal.filter(function (u) {
+        var matchNama = !filterNama || u.nama.toLowerCase().includes(filterNama.toLowerCase())
+          || u.id_pendaftar.toLowerCase().includes(filterNama.toLowerCase());
+        var matchStatus = !filterStatus || u.status === filterStatus;
+        return matchNama && matchStatus;
+      });
+
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><div class="icon">🏫</div><p>Belum ada data uang pangkal yang dicatat.</p></div></td></tr>';
+        tfoot.innerHTML = '';
+        return;
+      }
+
+      tbody.innerHTML = data.map(function (u, idx) {
+        return '<tr>'
+          + '<td style="color:var(--text-muted);font-size:0.8rem;">' + (idx + 1) + '</td>'
+          + '<td><code style="font-size:0.78rem;background:#f1f5f9;padding:2px 6px;border-radius:4px;">' + u.id_pendaftar + '</code></td>'
+          + '<td style="font-weight:600;">' + u.nama + '</td>'
+          + '<td style="font-weight:700;color:var(--green-800);">' + formatRupiah(u.jumlah) + '</td>'
+          + '<td style="color:var(--text-muted);font-size:0.82rem;">' + formatDate(u.tgl_bayar) + '</td>'
+          + '<td>' + (u.metode || '-') + '</td>'
+          + '<td><span class="badge ' + (u.status === 'lunas' ? 'badge-lunas' : 'badge-cicilan') + '">'
+          + (u.status === 'lunas' ? '✅ Lunas' : '🔄 Cicilan') + '</span></td>'
+          + '<td style="color:var(--text-muted);font-size:0.82rem;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + (u.catatan || '') + '">' + (u.catatan || '—') + '</td>'
+          + '<td><button class="btn-action btn-reject" onclick="hapusUangPangkal(\'' + u.id + '\')">🗑</button></td>'
+          + '</tr>';
+      }).join('');
+
+      var totalJumlah = data.reduce(function (acc, u) { return acc + Number(u.jumlah || 0); }, 0);
+      tfoot.innerHTML = '<tr class="tfoot-total">'
+        + '<td colspan="3" style="text-align:right;font-size:0.85rem;">Total Terkumpul:</td>'
+        + '<td style="font-size:1rem;">' + formatRupiah(totalJumlah) + '</td>'
+        + '<td colspan="5"></td></tr>';
+    }
+
+    // ============================================================
+    // AKSI: SIMPAN DATA UANG PANGKAL
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', function () {
+      var formUP = document.getElementById('form-uang-pangkal');
+      if (formUP) {
+        formUP.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var idPendaftar = document.getElementById('up-id-pendaftar').value.trim();
+          var nama = document.getElementById('up-nama').value.trim();
+          var jumlah = document.getElementById('up-jumlah').value.trim();
+          var tglBayar = document.getElementById('up-tgl-bayar').value;
+          var metode = document.getElementById('up-metode').value;
+          var status = document.getElementById('up-status').value;
+          var catatan = document.getElementById('up-catatan').value.trim();
+
+          if (!idPendaftar || !nama) { showFormAlert('Pilih siswa terlebih dahulu melalui kolom pencarian!', 'error'); return; }
+          if (!jumlah || Number(jumlah) <= 0) { showFormAlert('Jumlah pembayaran harus diisi dengan angka valid!', 'error'); return; }
+          if (!tglBayar) { showFormAlert('Tanggal bayar wajib diisi!', 'error'); return; }
+          if (!metode) { showFormAlert('Pilih metode pembayaran!', 'error'); return; }
+
+          var newRecord = {
+            id: 'UP-' + Date.now(),
+            id_pendaftar: idPendaftar,
+            nama: nama,
+            jumlah: Number(jumlah),
+            tgl_bayar: tglBayar,
+            metode: metode,
+            status: status,
+            catatan: catatan,
+            created_at: new Date().toISOString(),
+            created_by: 'Bendahara SPMB'
+          };
+
+          allUangPangkal.push(newRecord);
+          saveUangPangkalToStorage(allUangPangkal);
+
+          showGlobalAlert('💾 Data uang pangkal <strong>' + nama + '</strong> berhasil disimpan!', 'success');
+          showFormAlert('Data berhasil disimpan! ✅', 'success');
+          clearFormUangPangkal();
+          updateStats();
+          renderTabelUangPangkal(
+            document.getElementById('search-uangpangkal').value,
+            document.getElementById('filter-status-up').value
+          );
+          renderRekap();
+        });
+      }
+    });
+
+    // ============================================================
+    // AKSI: HAPUS DATA UANG PANGKAL
+    // ============================================================
+    function hapusUangPangkal(id) {
+      if (!confirm('Hapus catatan uang pangkal ini?')) return;
+      allUangPangkal = allUangPangkal.filter(function (u) { return u.id !== id; });
+      saveUangPangkalToStorage(allUangPangkal);
+      updateStats();
+      renderTabelUangPangkal(
+        document.getElementById('search-uangpangkal').value,
+        document.getElementById('filter-status-up').value
+      );
+      renderRekap();
+      showGlobalAlert('🗑 Data uang pangkal dihapus.', 'info');
+    }
+
+    function clearFormUangPangkal() {
+      ['up-cari-siswa', 'up-id-pendaftar', 'up-nama', 'up-jumlah', 'up-catatan'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      document.getElementById('up-metode').value = '';
+      document.getElementById('up-status').value = 'lunas';
+      document.getElementById('up-tgl-bayar').value = new Date().toISOString().split('T')[0];
+      document.getElementById('up-autocomplete').style.display = 'none';
+      document.getElementById('form-alert-area').innerHTML = '';
+    }
+
+    // ============================================================
+    // AUTOCOMPLETE PENCARIAN SISWA (Form Uang Pangkal)
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', function () {
+      var cariInput = document.getElementById('up-cari-siswa');
+      var autocomplete = document.getElementById('up-autocomplete');
+      var idInput = document.getElementById('up-id-pendaftar');
+      var namaInput = document.getElementById('up-nama');
+
+      if (!cariInput) return;
+
+      cariInput.addEventListener('input', function () {
+        var q = cariInput.value.trim().toLowerCase();
+        autocomplete.innerHTML = '';
+        if (q.length < 2) { autocomplete.style.display = 'none'; return; }
+
+        var results = allPendaftar.filter(function (p) {
+          return p.nama_lengkap.toLowerCase().includes(q) || (p.id_pendaftar || '').toLowerCase().includes(q);
+        }).slice(0, 8);
+
+        if (results.length === 0) { autocomplete.style.display = 'none'; return; }
+
+        results.forEach(function (p) {
+          var item = document.createElement('div');
+          item.style.cssText = 'padding:9px 12px;cursor:pointer;font-size:0.875rem;border-bottom:1px solid #f1f5f9;';
+          item.innerHTML = '<strong>' + p.nama_lengkap + '</strong> <span style="color:var(--text-muted);font-size:0.78rem;">(' + p.id_pendaftar + ')</span>';
+          item.addEventListener('mouseenter', function () { item.style.background = '#f0fdf4'; });
+          item.addEventListener('mouseleave', function () { item.style.background = ''; });
+          item.addEventListener('click', function () {
+            cariInput.value = p.nama_lengkap;
+            idInput.value = p.id_pendaftar;
+            namaInput.value = p.nama_lengkap;
+            autocomplete.style.display = 'none';
+          });
+          autocomplete.appendChild(item);
+        });
+        autocomplete.style.display = 'block';
+      });
+
+      document.addEventListener('click', function (e) {
+        if (!cariInput.contains(e.target) && !autocomplete.contains(e.target)) {
+          autocomplete.style.display = 'none';
+        }
+      });
+
+      // Default tanggal hari ini
+      var tglInput = document.getElementById('up-tgl-bayar');
+      if (tglInput) tglInput.value = new Date().toISOString().split('T')[0];
+    });
+
+    // ============================================================
+    // RENDER REKAP KEUANGAN (Panel 3)
+    // ============================================================
+    function renderRekap() {
+      var lunas = allPendaftar.filter(function (p) { return p.pembayaran && p.pembayaran.status_pembayaran === 'lunas'; });
+      var pending = allPendaftar.filter(function (p) { return p.pembayaran && p.pembayaran.status_pembayaran === 'pending_verification'; });
+      var ditolak = allPendaftar.filter(function (p) { return p.pembayaran && p.pembayaran.status_pembayaran === 'ditolak'; });
+      var belumBayar = allPendaftar.filter(function (p) { return !p.pembayaran || !p.pembayaran.status_pembayaran; });
+
+      var totalUP = allUangPangkal.reduce(function (acc, u) { return acc + Number(u.jumlah || 0); }, 0);
+      var upLunas = allUangPangkal.filter(function (u) { return u.status === 'lunas'; });
+      var upCicilan = allUangPangkal.filter(function (u) { return u.status === 'cicilan'; });
+
+      var lunasRows = lunas.length === 0
+        ? '<div class="empty-state" style="padding:1.5rem;"><div class="icon">📭</div><p>Belum ada pembayaran yang divalidasi.</p></div>'
+        : '<div class="table-responsive"><table class="data-table"><thead><tr><th>#</th><th>ID Pendaftar</th><th>Nama</th><th>Jurusan</th><th>Tgl. Validasi</th><th>Divalidasi Oleh</th></tr></thead><tbody>'
+        + lunas.map(function (p, i) {
+          return '<tr>'
+            + '<td style="color:var(--text-muted)">' + (i + 1) + '</td>'
+            + '<td><code style="font-size:0.78rem;background:#f1f5f9;padding:2px 6px;border-radius:4px;">' + p.id_pendaftar + '</code></td>'
+            + '<td style="font-weight:600;">' + p.nama_lengkap + '</td>'
+            + '<td>' + (p.biodata && p.biodata.pilihan_jurusan ? '<span class="badge badge-info">' + p.biodata.pilihan_jurusan + '</span>' : '-') + '</td>'
+            + '<td style="color:var(--text-muted);font-size:0.82rem;">' + formatDate(p.pembayaran && p.pembayaran.validated_at) + '</td>'
+            + '<td style="color:var(--text-muted);font-size:0.82rem;">' + (p.pembayaran && p.pembayaran.validated_by ? p.pembayaran.validated_by : '-') + '</td>'
+            + '</tr>';
+        }).join('')
+        + '</tbody></table></div>';
+
+      document.getElementById('rekap-content').innerHTML =
+        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-bottom:1.5rem;">'
+        + '<div style="background:var(--green-50);border:1px solid #bbf7d0;border-radius:var(--radius);padding:1.25rem;">'
+        + '<h3 style="font-size:0.9rem;font-weight:700;color:var(--green-800);margin-bottom:1rem;">📋 Rekap Pembayaran Formulir</h3>'
+        + '<table style="width:100%;font-size:0.875rem;border-collapse:collapse;">'
+        + '<tr><td style="padding:5px 0;color:var(--text-muted);">Total Pendaftar</td><td style="font-weight:700;text-align:right;">' + allPendaftar.length + ' orang</td></tr>'
+        + '<tr><td style="padding:5px 0;color:#15803d;">✅ Lunas</td><td style="font-weight:700;color:#15803d;text-align:right;">' + lunas.length + ' orang</td></tr>'
+        + '<tr><td style="padding:5px 0;color:var(--yellow-text);">⏳ Menunggu Verifikasi</td><td style="font-weight:700;color:var(--yellow-text);text-align:right;">' + pending.length + ' orang</td></tr>'
+        + '<tr><td style="padding:5px 0;color:var(--red-text);">🚫 Ditolak</td><td style="font-weight:700;color:var(--red-text);text-align:right;">' + ditolak.length + ' orang</td></tr>'
+        + '<tr><td style="padding:5px 0;color:var(--text-muted);">— Belum Bayar</td><td style="font-weight:700;color:var(--text-muted);text-align:right;">' + belumBayar.length + ' orang</td></tr>'
+        + '</table></div>'
+        + '<div style="background:var(--blue-bg);border:1px solid #bfdbfe;border-radius:var(--radius);padding:1.25rem;">'
+        + '<h3 style="font-size:0.9rem;font-weight:700;color:var(--blue-text);margin-bottom:1rem;">🏫 Rekap Uang Pangkal</h3>'
+        + '<table style="width:100%;font-size:0.875rem;border-collapse:collapse;">'
+        + '<tr><td style="padding:5px 0;color:var(--text-muted);">Total Catatan</td><td style="font-weight:700;text-align:right;">' + allUangPangkal.length + ' transaksi</td></tr>'
+        + '<tr><td style="padding:5px 0;color:#15803d;">✅ Lunas</td><td style="font-weight:700;color:#15803d;text-align:right;">' + upLunas.length + ' siswa</td></tr>'
+        + '<tr><td style="padding:5px 0;color:var(--blue-text);">🔄 Cicilan</td><td style="font-weight:700;color:var(--blue-text);text-align:right;">' + upCicilan.length + ' siswa</td></tr>'
+        + '<tr style="border-top:1.5px solid #bfdbfe;"><td style="padding:8px 0 0;font-weight:700;">Total Terkumpul</td><td style="font-weight:800;color:var(--blue-text);text-align:right;padding-top:8px;">' + formatRupiah(totalUP) + '</td></tr>'
+        + '</table></div></div>'
+        + '<h4 style="font-size:0.9rem;font-weight:700;color:var(--text-main);margin-bottom:0.75rem;">✅ Daftar Pendaftar Formulir yang Sudah Lunas</h4>'
+        + lunasRows;
+    }
+
+    // ============================================================
+    // EXPORT CSV REKAP KEUANGAN
+    // ============================================================
+    function exportRekapCSV() {
+      var rows = [['No', 'ID Pendaftar', 'Nama Lengkap', 'Status Formulir', 'Tgl Validasi', 'Jurusan']];
+      allPendaftar.forEach(function (p, i) {
+        rows.push([
+          i + 1,
+          p.id_pendaftar,
+          p.nama_lengkap,
+          (p.pembayaran && p.pembayaran.status_pembayaran) ? p.pembayaran.status_pembayaran : 'belum_bayar',
+          (p.pembayaran && p.pembayaran.validated_at) ? formatDate(p.pembayaran.validated_at) : '-',
+          (p.biodata && p.biodata.pilihan_jurusan) ? p.biodata.pilihan_jurusan : '-'
+        ]);
+      });
+      var csvContent = rows.map(function (r) { return r.map(function (c) { return '"' + c + '"'; }).join(','); }).join('\n');
+      var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'rekap_keuangan_spmb_' + new Date().toISOString().slice(0, 10) + '.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      showGlobalAlert('📥 File CSV berhasil diunduh!', 'info');
+    }
+
+    // ============================================================
+    // SWITCH TAB (Panel Navigation)
+    // ============================================================
+    function switchTab(tabName) {
+      ['verifikasi', 'uangpangkal', 'rekap'].forEach(function (t) {
+        document.getElementById('tab-' + t).classList.toggle('active', t === tabName);
+        document.getElementById('panel-' + t).classList.toggle('active', t === tabName);
+      });
+      if (tabName === 'rekap') renderRekap();
+    }
+
+    // ============================================================
+    // SEARCH & FILTER EVENT LISTENERS
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', function () {
+      var searchF = document.getElementById('search-formulir');
+      var filterSF = document.getElementById('filter-status-formulir');
+      if (searchF) searchF.addEventListener('input', function () { renderTabelFormulir(searchF.value, filterSF.value); });
+      if (filterSF) filterSF.addEventListener('change', function () { renderTabelFormulir(searchF.value, filterSF.value); });
+
+      var searchUP = document.getElementById('search-uangpangkal');
+      var filterSUP = document.getElementById('filter-status-up');
+      if (searchUP) searchUP.addEventListener('input', function () { renderTabelUangPangkal(searchUP.value, filterSUP.value); });
+      if (filterSUP) filterSUP.addEventListener('change', function () { renderTabelUangPangkal(searchUP.value, filterSUP.value); });
+
+      var btnRefresh = document.getElementById('btn-refresh-global');
+      if (btnRefresh) {
+        btnRefresh.addEventListener('click', function () {
+          allPendaftar = fetchPendaftarFromStorage();
+          allUangPangkal = fetchUangPangkalFromStorage();
+          updateStats();
+          renderTabelFormulir(searchF ? searchF.value : '', filterSF ? filterSF.value : '');
+          renderTabelUangPangkal(searchUP ? searchUP.value : '', filterSUP ? filterSUP.value : '');
+          renderRekap();
+          showGlobalAlert('🔄 Data berhasil di-refresh dari localStorage!', 'info');
+        });
+      }
+
+      initKeuangan();
+    });
+
+    // ============================================================
+    // JAM REAL-TIME DI HEADER
+    // ============================================================
+    function updateClock() {
+      var el = document.getElementById('hdr-datetime');
+      if (!el) return;
+      var now = new Date();
+      el.textContent = now.toLocaleString('id-ID', {
+        weekday: 'short', day: '2-digit', month: 'short',
+        year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+      setTimeout(updateClock, 1000);
+    }
+  </script>
+
+</body>
+
+</html>
