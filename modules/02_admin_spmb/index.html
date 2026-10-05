@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin SPMB - SMA Muhammadiyah 3 Yogyakarta</title>
+  <link rel="stylesheet" href="../../shared/styles.css">
+  <link rel="stylesheet" href="./admin.css">
+  <style>
+    body {
+      background-color: #f1f5f9;
+      min-height: 100vh;
+    }
+
+    .standalone-container {
+      max-width: 1440px;
+      margin: 1.5rem auto;
+      padding: 0 1.25rem;
+    }
+  </style>
+</head>
+
+<body class="admin-standalone-body">
+
+  <!-- Standalone Top Bar Link back to Root SPA -->
+  <div
+    style="background: #004d28; color: white; padding: 8px 1.5rem; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      🏫 <strong>SMA Muhammadiyah 3 Yogyakarta</strong> &bull; SPMB & TU System (Standalone Admin Mode)
+    </div>
+    <div>
+      <a href="../../index.html" style="color: #f5a623; text-decoration: none; font-weight: 700;">&larr; Kembali ke
+        Navigasi Modul Terintegrasi</a>
+    </div>
+  </div>
+
+  <div class="standalone-container">
+    <div id="admin-viewport"></div>
+  </div>
+
+  <script type="module">
+    import { renderAdminSPMB } from './admin.js';
+    renderAdminSPMB('admin-viewport');
+  </script>
+</body>
+
+</html>

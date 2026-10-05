@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Pendaftar - Portal SPMB SMA Muhammadiyah 3 Yogyakarta</title>
+  <link rel="stylesheet" href="../../shared/styles.css">
+  <style>
+    .portal-container {
+      max-width: 500px;
+      margin: 2.5rem auto;
+      padding: 0 1rem;
+    }
+    .portal-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 2.25rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      border: 1px solid #e2e8f0;
+    }
+    .brand-header {
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #006837 0%, #004d28 100%);
+      color: white;
+      border-radius: 14px;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 4px 12px rgba(0, 104, 55, 0.25);
+    }
+    .alert-box {
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      margin-bottom: 1.25rem;
+      display: none;
+    }
+    .alert-danger { background-color: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .alert-warning { background-color: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+    .alert-success { background-color: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .nav-steps {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .step-pill {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #e2e8f0;
+      color: #64748b;
+    }
+    .step-pill.active { background: #006837; color: #ffffff; }
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 1rem;
+    }
+    .modal-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.75rem;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="portal-container">
+    <div class="nav-steps">
+      <span class="step-pill">1. Registrasi</span>
+      <span class="step-pill">2. Status Aktivasi</span>
+      <span class="step-pill active">3. Login Pendaftar</span>
+      <span class="step-pill">4. Formulir & Bukti</span>
+    </div>
+
+    <div class="portal-card">
+      <div class="brand-header">
+        <div class="brand-logo">M3</div>
+        <h2 style="font-size: 1.4rem; font-weight: 700; color: #0f172a;">Login Pendaftar SPMB</h2>
+        <p style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">Masuk dengan NISN / Email & Password Anda</p>
+      </div>
+
+      <div id="alert-msg" class="alert-box"></div>
+
+      <form id="form-login">
+        <div class="form-group">
+          <label for="identity">NISN atau Email</label>
+          <input type="text" id="identity" class="form-control" placeholder="10 digit NISN atau Email" required>
+        </div>
+
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <label for="password">Password</label>
+            <a href="#" id="btn-forgot-pass" style="font-size: 0.78rem; color: #006837; text-decoration: none; font-weight: 600;">Lupa Password?</a>
+          </div>
+          <input type="password" id="password" class="form-control" placeholder="Masukkan password Anda" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 12px; font-size: 1rem;">
+          Masuk / Login
+        </button>
+
+        <p style="text-align: center; margin-top: 1.25rem; font-size: 0.85rem; color: #64748b;">
+          Belum punya akun? <a href="register.html" style="color: #006837; font-weight: 600; text-decoration: none;">Registrasi Akun Awal</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Lupa Password / Reset Password -->
+  <div id="modal-reset" class="modal-overlay">
+    <div class="modal-card">
+      <h3 style="font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">Reset Password Akun</h3>
+      <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">Verifikasi NISN & Email terdaftar untuk menyetel password baru.</p>
+
+      <div id="reset-alert" class="alert-box"></div>
+
+      <form id="form-reset">
+        <div class="form-group">
+          <label for="reset-nisn">NISN Terdaftar *</label>
+          <input type="text" id="reset-nisn" class="form-control" placeholder="10 digit NISN" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reset-email">Email Terdaftar *</label>
+          <input type="email" id="reset-email" class="form-control" placeholder="nama@domain.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reset-new-pass">Password Baru *</label>
+          <input type="password" id="reset-new-pass" class="form-control" placeholder="Min. 6 karakter (huruf & angka)" required>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 1.25rem;">
+          <button type="button" id="btn-cancel-reset" class="btn btn-secondary" style="flex: 1;">Batal</button>
+          <button type="submit" class="btn btn-primary" style="flex: 1;">Reset Password</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { getPendaftarList, savePendaftar, hashPassword, isValidPassword } from './utils.js';
+
+    const formLogin = document.getElementById('form-login');
+    const alertMsg = document.getElementById('alert-msg');
+    const modalReset = document.getElementById('modal-reset');
+    const btnForgotPass = document.getElementById('btn-forgot-pass');
+    const btnCancelReset = document.getElementById('btn-cancel-reset');
+    const formReset = document.getElementById('form-reset');
+    const resetAlert = document.getElementById('reset-alert');
+
+    function showAlert(msg, type = 'danger') {
+      alertMsg.className = `alert-box alert-${type}`;
+      alertMsg.innerHTML = msg;
+      alertMsg.style.display = 'block';
+    }
+
+    formLogin.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const identity = document.getElementById('identity').value.trim();
+      const password = document.getElementById('password').value;
+
+      const pendaftarList = getPendaftarList();
+      const user = pendaftarList.find(p => p.nisn === identity || p.email === identity || p.no_wa === identity);
+
+      if (!user) {
+        showAlert('<strong>Login Gagal:</strong> Akun dengan NISN/Email tersebut tidak ditemukan.');
+        return;
+      }
+
+      // Verifikasi Hashed Password
+      const inputHash = await hashPassword(password);
+      if (user.password_hash && user.password_hash !== inputHash && user.password !== password) {
+        showAlert('<strong>Login Gagal:</strong> Password yang Anda masukkan salah!');
+        return;
+      }
+
+      // Check status activation
+      const isActive = (user.status_akun === 'active' || user.status_akun === 'AKTIF');
+      if (!isActive) {
+        showAlert(`<strong>Akun Belum Aktif!</strong><br>Akun Anda (${user.nama_lengkap || user.nama}) masih berstatus <code>pending_activation</code>.<br><br><a href="status-akun.html" style="color: #b45309; font-weight: 700;">Cek Status Aktivasi &rarr;</a>`, 'warning');
+        return;
+      }
+
+      // Store authenticated session
+      localStorage.setItem('m3_spmb_logged_in_user', JSON.stringify(user));
+      showAlert('<strong>Login Berhasil!</strong> Mengalihkan ke Formulir Pendaftaran...', 'success');
+
+      setTimeout(() => {
+        window.location.href = 'formulir.html';
+      }, 1000);
+    });
+
+    // Reset Password Modal Trigger
+    btnForgotPass.addEventListener('click', (e) => {
+      e.preventDefault();
+      modalReset.style.display = 'flex';
+      resetAlert.style.display = 'none';
+    });
+
+    btnCancelReset.addEventListener('click', () => {
+      modalReset.style.display = 'none';
+    });
+
+    formReset.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nisn = document.getElementById('reset-nisn').value.trim();
+      const email = document.getElementById('reset-email').value.trim();
+      const newPass = document.getElementById('reset-new-pass').value;
+
+      if (!isValidPassword(newPass)) {
+        resetAlert.className = 'alert-box alert-danger';
+        resetAlert.textContent = 'Password baru wajib min. 6 karakter & kombinasi huruf + angka!';
+        resetAlert.style.display = 'block';
+        return;
+      }
+
+      const pendaftarList = getPendaftarList();
+      const user = pendaftarList.find(p => p.nisn === nisn && p.email === email);
+
+      if (!user) {
+        resetAlert.className = 'alert-box alert-danger';
+        resetAlert.textContent = 'Data NISN dan Email tidak cocok dengan akun terdaftar!';
+        resetAlert.style.display = 'block';
+        return;
+      }
+
+      // Update Hashed Password
+      const newHash = await hashPassword(newPass);
+      user.password_hash = newHash;
+      delete user.password; // Remove plaintext password if present
+
+      savePendaftar(user);
+
+      resetAlert.className = 'alert-box alert-success';
+      resetAlert.textContent = 'Password berhasil direset! Silakan login dengan password baru.';
+      resetAlert.style.display = 'block';
+
+      setTimeout(() => {
+        modalReset.style.display = 'none';
+        document.getElementById('identity').value = nisn;
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
