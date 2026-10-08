@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modul 04 Penilaian Wawancara & Pemetaan Jurusan - SPMB SMA Muhammadiyah 3 Yogyakarta</title>
+  <link rel="stylesheet" href="../../shared/styles.css">
+  <style>
+    body {
+      background-color: #f8fafc;
+      min-height: 100vh;
+    }
+
+    .standalone-topbar {
+      background: #003d20;
+      color: white;
+      padding: 10px 1.5rem;
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    .standalone-container {
+      max-width: 1280px;
+      margin: 1.5rem auto;
+      padding: 0 1.25rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Navigation Bar for Standalone Mode -->
+  <div class="standalone-topbar">
+    <div>
+      🏫 <strong>SMA Muhammadiyah 3 Yogyakarta</strong> &bull; Modul 04 Penilaian Wawancara & Pemetaan Jurusan (SSoT)
+    </div>
+    <div>
+      <a href="../../index.html" style="color: #f5a623; text-decoration: none; font-weight: 700;">&larr; Kembali ke Navigasi Modul Terintegrasi</a>
+    </div>
+  </div>
+
+  <!-- Main Viewport -->
+  <div class="standalone-container">
+    <div id="wawancara-viewport"></div>
+  </div>
+
+  <script type="module">
+    import { renderWawancara } from './wawancara.js';
+    
+    // Auto render ke viewport standalone
+    renderWawancara('wawancara-viewport');
+  </script>
+</body>
+
+</html>

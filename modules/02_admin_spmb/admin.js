@@ -452,6 +452,11 @@ export function renderAdminSPMB(containerId) {
                     <button type="button" class="filter-btn" data-filter="pending">Belum Aktif</button>
                   </div>
 
+                  <!-- Tombol Input Loket Offline -->
+                  <button type="button" class="btn-refresh" id="btn-add-offline" style="background: var(--admin-primary); color: white; border: none; font-weight: 700;" title="Input Pendaftar Offline Loket">
+                    <span>➕ Catat Pendaftar Loket Offline</span>
+                  </button>
+
                   <!-- Tombol Refresh / Sinkronisasi -->
                   <button type="button" class="btn-refresh" id="btn-refresh-data" title="Muat ulang data terkini">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -517,6 +522,57 @@ export function renderAdminSPMB(containerId) {
           <div class="modal-footer" id="modal-footer-actions">
             <!-- Buttons dynamically populated -->
           </div>
+        </div>
+      </div>
+
+      <!-- Modal Pendaftaran Loket Offline -->
+      <div class="admin-modal-backdrop" id="admin-offline-modal">
+        <div class="admin-modal-card" style="max-width: 520px;">
+          <div class="modal-header">
+            <h3 class="modal-title">
+              <span>🏫 Pencatatan Pendaftar Loket Offline</span>
+            </h3>
+            <button type="button" class="btn-close-modal" id="btn-close-offline-modal" title="Tutup">✕</button>
+          </div>
+          <form id="form-offline-register">
+            <div class="modal-body" style="padding: 1.5rem;">
+              <p style="font-size: 0.85rem; color: var(--admin-text-muted); margin-bottom: 1rem;">
+                Input pendaftar yang datang langsung ke loket pendaftaran SMA Muhammadiyah 3 Yogyakarta. Akun akan otomatis terdaftar dan diaktifkan.
+              </p>
+
+              <div class="form-group" style="margin-bottom: 0.85rem;">
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 4px;">Nama Lengkap Siswa <span style="color:red">*</span></label>
+                <input type="text" id="off-nama" class="search-input-field" style="width: 100%; border: 1.5px solid var(--admin-border); padding: 8px 12px; border-radius: 8px;" placeholder="Contoh: Muhammad Rizky" required>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0.85rem;">
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 4px;">NISN <span style="color:red">*</span></label>
+                <input type="text" id="off-nisn" class="search-input-field" style="width: 100%; border: 1.5px solid var(--admin-border); padding: 8px 12px; border-radius: 8px;" placeholder="10 Digit NISN" maxlength="10" required>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0.85rem;">
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 4px;">No. WhatsApp / HP Ortu <span style="color:red">*</span></label>
+                <input type="text" id="off-wa" class="search-input-field" style="width: 100%; border: 1.5px solid var(--admin-border); padding: 8px 12px; border-radius: 8px;" placeholder="081234567890" required>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0.85rem;">
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 4px;">Asal Sekolah (SMP / MTs) <span style="color:red">*</span></label>
+                <input type="text" id="off-sekolah" class="search-input-field" style="width: 100%; border: 1.5px solid var(--admin-border); padding: 8px 12px; border-radius: 8px;" placeholder="SMPN 1 Yogyakarta" required>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0.85rem;">
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 4px;">Pilihan Jurusan <span style="color:red">*</span></label>
+                <select id="off-jurusan" class="search-input-field" style="width: 100%; border: 1.5px solid var(--admin-border); padding: 8px 12px; border-radius: 8px;" required>
+                  <option value="MIPA">MIPA (Matematika & IPA)</option>
+                  <option value="IPS">IPS (Ilmu Pengetahuan Sosial)</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid var(--admin-border); display: flex; justify-content: flex-end; gap: 10px;">
+              <button type="button" class="btn-action-detail" id="btn-cancel-offline" style="padding: 8px 16px;">Batal</button>
+              <button type="submit" class="btn-action-activate" style="padding: 8px 20px;">💾 Simpan Pendaftar Loket</button>
+            </div>
+          </form>
         </div>
       </div>
 
