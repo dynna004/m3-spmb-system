@@ -341,7 +341,7 @@ export function renderKeuangan(containerId) {
         border-radius: 16px;
         box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         width: 100%;
-        max-width: 600px;
+        max-width: 680px;
         max-height: 90vh;
         overflow-y: auto;
       }
@@ -527,8 +527,104 @@ export function renderKeuangan(containerId) {
                 <input type="text" id="up-catatan-val" class="form-control" placeholder="Catatan angsuran ke-1, nomor resi, dll...">
               </div>
 
+              <!-- Rincian Pos Biaya Daftar Ulang -->
+              <div style="
+                background: linear-gradient(135deg,#f0fdf4 0%,#eff6ff 100%);
+                border: 1.5px solid #bbf7d0; border-radius: 12px;
+                padding: 1.25rem 1.5rem; margin-top: 1.25rem;
+              ">
+                <div style="font-size:0.88rem;font-weight:700;color:#006837;margin-bottom:1rem;
+                  padding-bottom:0.6rem;border-bottom:1px dashed #bbf7d0;
+                  display:flex;align-items:center;gap:7px;">
+                  🧾 Rincian Pos Biaya Daftar Ulang (Uang Pangkal)
+                </div>
+
+                <!-- Helper row builder -->
+                <div style="display:grid;grid-template-columns:1fr;gap:0.65rem;">
+
+                  <!-- Seragam -->
+                  <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;
+                    padding:8px 10px;background:rgba(255,255,255,0.75);
+                    border-radius:8px;border:1px solid rgba(187,247,208,0.6);">
+                    <div style="font-size:0.82rem;font-weight:600;display:flex;align-items:center;gap:7px;">
+                      <div style="width:26px;height:26px;border-radius:6px;background:#fef3c7;color:#d97706;
+                        display:flex;align-items:center;justify-content:center;font-size:0.85rem;">👔</div>
+                      Seragam Sekolah
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;">
+                      <span style="font-size:0.78rem;font-weight:700;color:#64748b;">Rp</span>
+                      <input type="number" id="up-pos-seragam" class="form-control"
+                        style="width:150px;text-align:right;font-weight:600;"
+                        placeholder="0" min="0" oninput="keuanganHitungTotal()">
+                    </div>
+                  </div>
+
+                  <!-- SPP Bulan Pertama -->
+                  <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;
+                    padding:8px 10px;background:rgba(255,255,255,0.75);
+                    border-radius:8px;border:1px solid rgba(187,247,208,0.6);">
+                    <div style="font-size:0.82rem;font-weight:600;display:flex;align-items:center;gap:7px;">
+                      <div style="width:26px;height:26px;border-radius:6px;background:#eff6ff;color:#2563eb;
+                        display:flex;align-items:center;justify-content:center;font-size:0.85rem;">📅</div>
+                      SPP Bulan Pertama
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;">
+                      <span style="font-size:0.78rem;font-weight:700;color:#64748b;">Rp</span>
+                      <input type="number" id="up-pos-spp" class="form-control"
+                        style="width:150px;text-align:right;font-weight:600;"
+                        placeholder="0" min="0" oninput="keuanganHitungTotal()">
+                    </div>
+                  </div>
+
+                  <!-- Sarpras -->
+                  <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;
+                    padding:8px 10px;background:rgba(255,255,255,0.75);
+                    border-radius:8px;border:1px solid rgba(187,247,208,0.6);">
+                    <div style="font-size:0.82rem;font-weight:600;display:flex;align-items:center;gap:7px;">
+                      <div style="width:26px;height:26px;border-radius:6px;background:#f5f3ff;color:#7c3aed;
+                        display:flex;align-items:center;justify-content:center;font-size:0.85rem;">🏗️</div>
+                      Pengembangan Sarana &amp; Prasarana
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;">
+                      <span style="font-size:0.78rem;font-weight:700;color:#64748b;">Rp</span>
+                      <input type="number" id="up-pos-sarpras" class="form-control"
+                        style="width:150px;text-align:right;font-weight:600;"
+                        placeholder="0" min="0" oninput="keuanganHitungTotal()">
+                    </div>
+                  </div>
+
+                  <!-- Kartu Pelajar & Asuransi -->
+                  <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;
+                    padding:8px 10px;background:rgba(255,255,255,0.75);
+                    border-radius:8px;border:1px solid rgba(187,247,208,0.6);">
+                    <div style="font-size:0.82rem;font-weight:600;display:flex;align-items:center;gap:7px;">
+                      <div style="width:26px;height:26px;border-radius:6px;background:#fdf2f8;color:#be185d;
+                        display:flex;align-items:center;justify-content:center;font-size:0.85rem;">🪪</div>
+                      Kartu Pelajar &amp; Asuransi
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;">
+                      <span style="font-size:0.78rem;font-weight:700;color:#64748b;">Rp</span>
+                      <input type="number" id="up-pos-kartu" class="form-control"
+                        style="width:150px;text-align:right;font-weight:600;"
+                        placeholder="0" min="0" oninput="keuanganHitungTotal()">
+                    </div>
+                  </div>
+
+                  <!-- Total Bar -->
+                  <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;
+                    padding:10px 12px;background:#006837;border-radius:9px;margin-top:6px;">
+                    <div style="font-size:0.88rem;font-weight:700;color:rgba(255,255,255,0.9);">💰 Total Keseluruhan</div>
+                    <div id="up-total-display" style="font-size:1rem;font-weight:800;color:#fff;text-align:right;">Rp 0</div>
+                  </div>
+
+                </div>
+                <p style="font-size:0.72rem;color:#64748b;margin-top:0.6rem;font-style:italic;">
+                  * Isi nominal setiap pos. Total otomatis terisi ke field Jumlah Dibayar.
+                </p>
+              </div>
+
               <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end;">
-                <button type="submit" class="btn btn-primary" style="background: #006837; color: white;">💾 Simpan Pembayaran Uang Pangkal</button>
+                <button type="submit" class="btn btn-primary" style="background: #006837; color: white;">✅ Verifikasi Pelunasan &amp; Simpan</button>
               </div>
             </form>
 
@@ -543,6 +639,7 @@ export function renderKeuangan(containerId) {
                     <th>ID Pendaftar</th>
                     <th>Nama Siswa</th>
                     <th>Jumlah Dibayar</th>
+                    <th>Rincian Pos</th>
                     <th>Tgl Bayar</th>
                     <th>Metode</th>
                     <th>Status</th>
@@ -718,12 +815,23 @@ function renderUangPangkalTable() {
     return;
   }
 
-  tbody.innerHTML = allUangPangkal.map((u, idx) => `
+  tbody.innerHTML = allUangPangkal.map((u, idx) => {
+    // Bangun badge rincian jika ada
+    let rincianCell = '<span style="color:#94a3b8;font-size:0.78rem;">—</span>';
+    if (u.rincian_biaya) {
+      const rb = u.rincian_biaya;
+      rincianCell = `<div title="Seragam: Rp ${Number(rb.seragam_sekolah||0).toLocaleString('id-ID')}&#10;SPP: Rp ${Number(rb.spp_bulan_pertama||0).toLocaleString('id-ID')}&#10;Sarpras: Rp ${Number(rb.pengembangan_sarpras||0).toLocaleString('id-ID')}&#10;Kartu: Rp ${Number(rb.kartu_pelajar_asuransi||0).toLocaleString('id-ID')}" style="cursor:help;">
+        <span style="font-size:0.75rem;color:#1e40af;font-weight:600;background:#eff6ff;padding:2px 7px;border-radius:6px;border:1px solid #bfdbfe;">🧾 4 pos</span>
+      </div>`;
+    }
+
+    return `
     <tr>
       <td>${idx + 1}</td>
       <td><code>${u.id_pendaftar}</code></td>
       <td><strong>${u.nama}</strong></td>
       <td><strong style="color: #006837;">${formatRupiah(u.jumlah)}</strong></td>
+      <td>${rincianCell}</td>
       <td>${formatDate(u.tgl_bayar)}</td>
       <td>${u.metode || '-'}</td>
       <td><span class="badge ${u.status === 'lunas' ? 'badge-lunas' : 'badge-cicilan'}">${u.status === 'lunas' ? '✅ Lunas' : '🔄 Cicilan'}</span></td>
@@ -732,7 +840,8 @@ function renderUangPangkalTable() {
         <button class="btn btn-secondary btn-k-del-up" data-id="${u.id}" style="padding: 4px 8px; font-size: 0.78rem; color: #dc2626;">🗑 Hapus</button>
       </td>
     </tr>
-  `).join('');
+  `;
+  }).join('');
 
   document.querySelectorAll('.btn-k-del-up').forEach(b => {
     b.addEventListener('click', (e) => {
@@ -920,18 +1029,24 @@ function attachKeuanganEvents() {
     e.preventDefault();
     const id = document.getElementById('up-id-val').value.trim();
     const nama = document.getElementById('up-nama-val').value.trim();
-    const jumlah = document.getElementById('up-jumlah-val').value;
     const tgl = document.getElementById('up-tgl-val').value;
     const metode = document.getElementById('up-metode-val').value;
     const status = document.getElementById('up-status-val').value;
     const catatan = document.getElementById('up-catatan-val').value.trim();
 
+    // Baca rincian pos biaya
+    const posSeragam = parseFloat(document.getElementById('up-pos-seragam')?.value) || 0;
+    const posSPP     = parseFloat(document.getElementById('up-pos-spp')?.value)     || 0;
+    const posSarpras = parseFloat(document.getElementById('up-pos-sarpras')?.value) || 0;
+    const posKartu   = parseFloat(document.getElementById('up-pos-kartu')?.value)   || 0;
+    const totalPosBiaya = posSeragam + posSPP + posSarpras + posKartu;
+
     if (!id || !nama) {
       showKeuanganAlert('Pilih siswa melalui pencarian terlebih dahulu!', 'error');
       return;
     }
-    if (!jumlah || parseFloat(jumlah) <= 0) {
-      showKeuanganAlert('Masukkan nominal jumlah bayar yang valid!', 'error');
+    if (totalPosBiaya <= 0) {
+      showKeuanganAlert('Isi minimal satu pos biaya dengan nominal yang valid!', 'error');
       return;
     }
 
@@ -939,7 +1054,14 @@ function attachKeuanganEvents() {
       id: 'UP-' + Date.now(),
       id_pendaftar: id,
       nama: nama,
-      jumlah: parseFloat(jumlah),
+      jumlah: totalPosBiaya,
+      rincian_biaya: {
+        seragam_sekolah: posSeragam,
+        spp_bulan_pertama: posSPP,
+        pengembangan_sarpras: posSarpras,
+        kartu_pelajar_asuransi: posKartu,
+        total: totalPosBiaya
+      },
       tgl_bayar: tgl,
       metode: metode,
       status: status,
@@ -956,10 +1078,16 @@ function attachKeuanganEvents() {
     document.getElementById('up-cari-input').value = '';
     document.getElementById('up-id-val').value = '';
     document.getElementById('up-nama-val').value = '';
-    document.getElementById('up-jumlah-val').value = '';
+    // Reset pos biaya
+    ['up-pos-seragam', 'up-pos-spp', 'up-pos-sarpras', 'up-pos-kartu'].forEach(pid => {
+      const el = document.getElementById(pid);
+      if (el) el.value = '';
+    });
+    const dispEl = document.getElementById('up-total-display');
+    if (dispEl) dispEl.textContent = 'Rp 0';
     document.getElementById('up-catatan-val').value = '';
 
-    showKeuanganAlert(`💾 Catatan uang pangkal ${nama} berhasil disimpan!`);
+    showKeuanganAlert(`✅ Pelunasan daftar ulang ${nama} (Total: ${formatRupiah(totalPosBiaya)}) berhasil disimpan!`);
   });
 
   // Autocomplete Autosearch for Uang Pangkal Form
@@ -1048,3 +1176,19 @@ function showKeuanganAlert(msg, type = 'success') {
     area.innerHTML = '';
   }, 3500);
 }
+
+/**
+ * Fungsi global: Hitung total pos biaya daftar ulang secara real-time.
+ * Dipakai oleh form di dalam renderKeuangan() via oninput="keuanganHitungTotal()"
+ */
+window.keuanganHitungTotal = function() {
+  const seragam  = parseFloat(document.getElementById('up-pos-seragam')?.value)  || 0;
+  const spp      = parseFloat(document.getElementById('up-pos-spp')?.value)      || 0;
+  const sarpras  = parseFloat(document.getElementById('up-pos-sarpras')?.value)  || 0;
+  const kartu    = parseFloat(document.getElementById('up-pos-kartu')?.value)    || 0;
+
+  const total = seragam + spp + sarpras + kartu;
+
+  const displayEl = document.getElementById('up-total-display');
+  if (displayEl) displayEl.textContent = 'Rp ' + total.toLocaleString('id-ID');
+};

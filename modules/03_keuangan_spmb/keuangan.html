@@ -816,6 +816,194 @@
       padding: 11px 14px;
     }
 
+    /* === RINCIAN POS BIAYA DAFTAR ULANG === */
+    .pos-biaya-section {
+      background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%);
+      border: 1.5px solid #bbf7d0;
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-top: 1.25rem;
+    }
+
+    .pos-biaya-section-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--green-800);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px dashed #bbf7d0;
+    }
+
+    .pos-biaya-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.65rem;
+    }
+
+    .pos-biaya-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.75);
+      border-radius: 8px;
+      border: 1px solid rgba(187, 247, 208, 0.6);
+      transition: var(--transition);
+    }
+
+    .pos-biaya-row:focus-within {
+      border-color: var(--green-700);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(0, 131, 73, 0.09);
+    }
+
+    .pos-biaya-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .pos-biaya-label .pos-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .pos-biaya-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pos-biaya-prefix {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .pos-biaya-input {
+      width: 160px;
+      padding: 7px 10px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      background: #f8fafc;
+      text-align: right;
+      transition: var(--transition);
+    }
+
+    .pos-biaya-input:focus {
+      outline: none;
+      border-color: var(--green-700);
+      background: #fff;
+    }
+
+    .pos-biaya-total-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 10px;
+      background: var(--green-800);
+      border-radius: 9px;
+      margin-top: 8px;
+    }
+
+    .pos-biaya-total-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .pos-biaya-total-value {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+      text-align: right;
+      letter-spacing: 0.01em;
+    }
+
+    .pos-biaya-note {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.6rem;
+      font-style: italic;
+    }
+
+    /* Tooltip rincian di tabel */
+    .rincian-tooltip-wrap {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .rincian-tooltip-wrap .rincian-tooltip-box {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e293b;
+      color: #fff;
+      border-radius: 9px;
+      padding: 10px 13px;
+      font-size: 0.78rem;
+      white-space: nowrap;
+      z-index: 200;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+      min-width: 220px;
+    }
+
+    .rincian-tooltip-wrap:hover .rincian-tooltip-box {
+      display: block;
+    }
+
+    .rincian-tooltip-box::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #1e293b;
+    }
+
+    .rincian-item-tip {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 2px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .rincian-item-tip:last-child {
+      border-bottom: none;
+    }
+
+    .rincian-item-tip .rtip-label {
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .rincian-item-tip .rtip-val {
+      font-weight: 700;
+      color: #86efac;
+    }
+
     @media (max-width: 640px) {
       .app-header {
         padding: 0.85rem 1rem;
@@ -831,6 +1019,10 @@
 
       .stats-grid {
         grid-template-columns: 1fr 1fr;
+      }
+
+      .pos-biaya-input {
+        width: 130px;
       }
     }
   </style>
@@ -980,20 +1172,90 @@
                   max-height: 180px; overflow-y: auto;
                 "></div>
               </div>
-              <div class="form-group">
-                <label for="up-id-pendaftar">ID Pendaftar</label>
-                <input type="text" id="up-id-pendaftar" class="form-control" readonly
-                  placeholder="Auto-isi dari pencarian">
+              <div class="form-group" style="display:none;">
+                <input type="text" id="up-id-pendaftar">
               </div>
-              <div class="form-group">
-                <label for="up-nama">Nama Siswa</label>
-                <input type="text" id="up-nama" class="form-control" readonly placeholder="Auto-isi dari pencarian">
+              <div class="form-group" style="display:none;">
+                <input type="text" id="up-nama">
               </div>
             </div>
-            <div class="form-row" style="margin-top: 1rem;">
+            <!-- ===== RINCIAN POS BIAYA DAFTAR ULANG ===== -->
+            <div class="pos-biaya-section">
+              <div class="pos-biaya-section-title">
+                🧾 Rincian Pos Biaya Daftar Ulang (Uang Pangkal)
+              </div>
+              <div class="pos-biaya-grid">
+
+                <!-- Pos 1: Seragam Sekolah -->
+                <div class="pos-biaya-row">
+                  <div class="pos-biaya-label">
+                    <div class="pos-icon" style="background:#fef3c7; color:#d97706;">👔</div>
+                    Seragam Sekolah
+                  </div>
+                  <div class="pos-biaya-input-wrap">
+                    <span class="pos-biaya-prefix">Rp</span>
+                    <input type="number" id="pos-seragam" class="pos-biaya-input" placeholder="0" min="0"
+                      oninput="hitungTotalPosBiaya()">
+                  </div>
+                </div>
+
+                <!-- Pos 2: SPP Bulan Pertama -->
+                <div class="pos-biaya-row">
+                  <div class="pos-biaya-label">
+                    <div class="pos-icon" style="background:#eff6ff; color:#2563eb;">📅</div>
+                    SPP Bulan Pertama
+                  </div>
+                  <div class="pos-biaya-input-wrap">
+                    <span class="pos-biaya-prefix">Rp</span>
+                    <input type="number" id="pos-spp" class="pos-biaya-input" placeholder="0" min="0"
+                      oninput="hitungTotalPosBiaya()">
+                  </div>
+                </div>
+
+                <!-- Pos 3: Pengembangan Sarana & Prasarana -->
+                <div class="pos-biaya-row">
+                  <div class="pos-biaya-label">
+                    <div class="pos-icon" style="background:#f5f3ff; color:#7c3aed;">🏗️</div>
+                    Pengembangan Sarana &amp; Prasarana
+                  </div>
+                  <div class="pos-biaya-input-wrap">
+                    <span class="pos-biaya-prefix">Rp</span>
+                    <input type="number" id="pos-sarpras" class="pos-biaya-input" placeholder="0" min="0"
+                      oninput="hitungTotalPosBiaya()">
+                  </div>
+                </div>
+
+                <!-- Pos 4: Kartu Pelajar & Asuransi -->
+                <div class="pos-biaya-row">
+                  <div class="pos-biaya-label">
+                    <div class="pos-icon" style="background:#fdf2f8; color:#be185d;">🪪</div>
+                    Kartu Pelajar &amp; Asuransi
+                  </div>
+                  <div class="pos-biaya-input-wrap">
+                    <span class="pos-biaya-prefix">Rp</span>
+                    <input type="number" id="pos-kartu" class="pos-biaya-input" placeholder="0" min="0"
+                      oninput="hitungTotalPosBiaya()">
+                  </div>
+                </div>
+
+                <!-- Total Otomatis -->
+                <div class="pos-biaya-total-row">
+                  <div class="pos-biaya-total-label">💰 Total Keseluruhan Biaya Daftar Ulang</div>
+                  <div class="pos-biaya-total-value" id="pos-total-display">Rp 0</div>
+                </div>
+
+              </div>
+              <p class="pos-biaya-note">* Isi nominal setiap pos. Total akan dihitung otomatis dan mengisi kolom "Jumlah
+                Dibayar" di bawah.</p>
+            </div>
+            <!-- ===== END RINCIAN POS BIAYA ===== -->
+
+            <div class="form-row" style="margin-top: 1.25rem;">
               <div class="form-group">
                 <label for="up-jumlah">Jumlah Dibayar (Rp) <span class="req">*</span></label>
-                <input type="number" id="up-jumlah" class="form-control" placeholder="Contoh: 5000000" min="1">
+                <input type="number" id="up-jumlah" class="form-control"
+                  placeholder="Otomatis dari rincian pos biaya di atas" min="1" readonly
+                  style="background: #f0fdf4; font-weight: 700; color: var(--green-800);">
               </div>
               <div class="form-group">
                 <label for="up-tgl-bayar">Tanggal Bayar <span class="req">*</span></label>
@@ -1004,7 +1266,8 @@
                 <select id="up-metode" class="form-control">
                   <option value="">-- Pilih Metode --</option>
                   <option value="Tunai">Tunai</option>
-                  <option value="Transfer Bank">Transfer Bank</option>
+                  <option value="Transfer Bank BPD DIY">Transfer Bank BPD DIY Syariah</option>
+                  <option value="Transfer Bank Muamalat">Transfer Bank Muamalat</option>
                   <option value="QRIS">QRIS</option>
                   <option value="Cicilan">Cicilan (Bertahap)</option>
                 </select>
@@ -1025,7 +1288,7 @@
               </div>
             </div>
             <div class="form-actions">
-              <button type="submit" class="btn-primary">💾 Simpan Data Uang Pangkal</button>
+              <button type="submit" class="btn-primary">✅ Verifikasi Pelunasan &amp; Simpan</button>
             </div>
           </form>
         </div>
@@ -1055,6 +1318,7 @@
                   <th>ID Pendaftar</th>
                   <th>Nama Siswa</th>
                   <th>Jumlah Dibayar</th>
+                  <th>Rincian Pos</th>
                   <th>Tgl. Bayar</th>
                   <th>Metode</th>
                   <th>Status</th>
@@ -1540,16 +1804,33 @@
       }
 
       tbody.innerHTML = data.map(function (u, idx) {
+        // Bangun tooltip rincian jika ada
+        var rincianHtml = '—';
+        if (u.rincian_biaya) {
+          var rb = u.rincian_biaya;
+          rincianHtml = '<div class="rincian-tooltip-wrap">'
+            + '<span style="font-size:0.78rem;color:var(--blue-text);font-weight:600;cursor:help;border-bottom:1px dashed var(--blue-text);">🧾 Lihat Rincian</span>'
+            + '<div class="rincian-tooltip-box">'
+            + '<div style="font-weight:700;color:#fff;margin-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.15);padding-bottom:4px;">Rincian Pos Biaya</div>'
+            + '<div class="rincian-item-tip"><span class="rtip-label">👔 Seragam</span><span class="rtip-val">Rp ' + Number(rb.seragam_sekolah || 0).toLocaleString('id-ID') + '</span></div>'
+            + '<div class="rincian-item-tip"><span class="rtip-label">📅 SPP Bln Pertama</span><span class="rtip-val">Rp ' + Number(rb.spp_bulan_pertama || 0).toLocaleString('id-ID') + '</span></div>'
+            + '<div class="rincian-item-tip"><span class="rtip-label">🏗️ Sarpras</span><span class="rtip-val">Rp ' + Number(rb.pengembangan_sarpras || 0).toLocaleString('id-ID') + '</span></div>'
+            + '<div class="rincian-item-tip"><span class="rtip-label">🪪 Kartu &amp; Asuransi</span><span class="rtip-val">Rp ' + Number(rb.kartu_pelajar_asuransi || 0).toLocaleString('id-ID') + '</span></div>'
+            + '<div style="margin-top:6px;border-top:1px solid rgba(255,255,255,0.2);padding-top:5px;display:flex;justify-content:space-between;"><span style="font-weight:700;color:#fff;">Total</span><span style="font-weight:800;color:#86efac;">Rp ' + Number(rb.total || 0).toLocaleString('id-ID') + '</span></div>'
+            + '</div></div>';
+        }
+
         return '<tr>'
           + '<td style="color:var(--text-muted);font-size:0.8rem;">' + (idx + 1) + '</td>'
           + '<td><code style="font-size:0.78rem;background:#f1f5f9;padding:2px 6px;border-radius:4px;">' + u.id_pendaftar + '</code></td>'
           + '<td style="font-weight:600;">' + u.nama + '</td>'
           + '<td style="font-weight:700;color:var(--green-800);">' + formatRupiah(u.jumlah) + '</td>'
+          + '<td>' + rincianHtml + '</td>'
           + '<td style="color:var(--text-muted);font-size:0.82rem;">' + formatDate(u.tgl_bayar) + '</td>'
           + '<td>' + (u.metode || '-') + '</td>'
           + '<td><span class="badge ' + (u.status === 'lunas' ? 'badge-lunas' : 'badge-cicilan') + '">'
           + (u.status === 'lunas' ? '✅ Lunas' : '🔄 Cicilan') + '</span></td>'
-          + '<td style="color:var(--text-muted);font-size:0.82rem;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + (u.catatan || '') + '">' + (u.catatan || '—') + '</td>'
+          + '<td style="color:var(--text-muted);font-size:0.82rem;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + (u.catatan || '') + '">' + (u.catatan || '—') + '</td>'
           + '<td><button class="btn-action btn-reject" onclick="hapusUangPangkal(\'' + u.id + '\')">🗑</button></td>'
           + '</tr>';
       }).join('');
@@ -1558,7 +1839,7 @@
       tfoot.innerHTML = '<tr class="tfoot-total">'
         + '<td colspan="3" style="text-align:right;font-size:0.85rem;">Total Terkumpul:</td>'
         + '<td style="font-size:1rem;">' + formatRupiah(totalJumlah) + '</td>'
-        + '<td colspan="5"></td></tr>';
+        + '<td colspan="6"></td></tr>';
     }
 
     // ============================================================
@@ -1571,22 +1852,37 @@
           e.preventDefault();
           var idPendaftar = document.getElementById('up-id-pendaftar').value.trim();
           var nama = document.getElementById('up-nama').value.trim();
-          var jumlah = document.getElementById('up-jumlah').value.trim();
           var tglBayar = document.getElementById('up-tgl-bayar').value;
           var metode = document.getElementById('up-metode').value;
           var status = document.getElementById('up-status').value;
           var catatan = document.getElementById('up-catatan').value.trim();
 
+          // Baca rincian pos biaya
+          var posSeragam = parseFloat(document.getElementById('pos-seragam').value) || 0;
+          var posSPP = parseFloat(document.getElementById('pos-spp').value) || 0;
+          var posSarpras = parseFloat(document.getElementById('pos-sarpras').value) || 0;
+          var posKartu = parseFloat(document.getElementById('pos-kartu').value) || 0;
+          var totalPosBiaya = posSeragam + posSPP + posSarpras + posKartu;
+
+          // Validasi
           if (!idPendaftar || !nama) { showFormAlert('Pilih siswa terlebih dahulu melalui kolom pencarian!', 'error'); return; }
-          if (!jumlah || Number(jumlah) <= 0) { showFormAlert('Jumlah pembayaran harus diisi dengan angka valid!', 'error'); return; }
+          if (totalPosBiaya <= 0) { showFormAlert('Isi minimal satu pos biaya dengan nominal yang valid!', 'error'); return; }
           if (!tglBayar) { showFormAlert('Tanggal bayar wajib diisi!', 'error'); return; }
           if (!metode) { showFormAlert('Pilih metode pembayaran!', 'error'); return; }
 
+          // Buat record terstruktur dengan rincian pos biaya
           var newRecord = {
             id: 'UP-' + Date.now(),
             id_pendaftar: idPendaftar,
             nama: nama,
-            jumlah: Number(jumlah),
+            jumlah: totalPosBiaya,
+            rincian_biaya: {
+              seragam_sekolah: posSeragam,
+              spp_bulan_pertama: posSPP,
+              pengembangan_sarpras: posSarpras,
+              kartu_pelajar_asuransi: posKartu,
+              total: totalPosBiaya
+            },
             tgl_bayar: tglBayar,
             metode: metode,
             status: status,
@@ -1598,8 +1894,8 @@
           allUangPangkal.push(newRecord);
           saveUangPangkalToStorage(allUangPangkal);
 
-          showGlobalAlert('💾 Data uang pangkal <strong>' + nama + '</strong> berhasil disimpan!', 'success');
-          showFormAlert('Data berhasil disimpan! ✅', 'success');
+          showGlobalAlert('✅ Pelunasan daftar ulang <strong>' + nama + '</strong> (Total: Rp ' + totalPosBiaya.toLocaleString('id-ID') + ') berhasil disimpan!', 'success');
+          showFormAlert('Data berhasil diverifikasi dan disimpan! ✅', 'success');
           clearFormUangPangkal();
           updateStats();
           renderTabelUangPangkal(
@@ -1632,11 +1928,40 @@
         var el = document.getElementById(id);
         if (el) el.value = '';
       });
+      // Reset pos biaya
+      ['pos-seragam', 'pos-spp', 'pos-sarpras', 'pos-kartu'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      var totalDisplay = document.getElementById('pos-total-display');
+      if (totalDisplay) totalDisplay.textContent = 'Rp 0';
       document.getElementById('up-metode').value = '';
       document.getElementById('up-status').value = 'lunas';
       document.getElementById('up-tgl-bayar').value = new Date().toISOString().split('T')[0];
       document.getElementById('up-autocomplete').style.display = 'none';
       document.getElementById('form-alert-area').innerHTML = '';
+    }
+
+    // ============================================================
+    // FUNGSI: HITUNG TOTAL POS BIAYA OTOMATIS (Real-time)
+    // Dipanggil setiap kali nilai input pos biaya berubah.
+    // Hasil total disinkronkan ke field "up-jumlah".
+    // ============================================================
+    function hitungTotalPosBiaya() {
+      var seragam = parseFloat(document.getElementById('pos-seragam').value) || 0;
+      var spp = parseFloat(document.getElementById('pos-spp').value) || 0;
+      var sarpras = parseFloat(document.getElementById('pos-sarpras').value) || 0;
+      var kartu = parseFloat(document.getElementById('pos-kartu').value) || 0;
+
+      var total = seragam + spp + sarpras + kartu;
+
+      // Tampilkan di display total
+      var displayEl = document.getElementById('pos-total-display');
+      if (displayEl) displayEl.textContent = 'Rp ' + total.toLocaleString('id-ID');
+
+      // Sinkronkan ke field jumlah (readonly)
+      var jumlahEl = document.getElementById('up-jumlah');
+      if (jumlahEl) jumlahEl.value = total > 0 ? total : '';
     }
 
     // ============================================================
