@@ -1255,3 +1255,729 @@ body.admin-standalone-body {
   font-size: 0.78rem;
   color: var(--admin-text-muted);
 }
+
+/* ====================================================
+   8. TOMBOL SHORTCUT LOKET WALK-IN (Toolbar & Sidebar)
+   ==================================================== */
+.btn-walkin-add {
+  background: linear-gradient(135deg, #006837 0%, #004d28 100%);
+  color: #ffffff;
+  border: 1px solid #10b981;
+  border-radius: var(--admin-radius-sm);
+  padding: 7px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 104, 55, 0.25);
+  transition: var(--admin-transition);
+  white-space: nowrap;
+}
+
+.btn-walkin-add:hover {
+  background: linear-gradient(135deg, #00582f 0%, #003a1e 100%);
+  border-color: #34d399;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 104, 55, 0.35);
+}
+
+.btn-walkin-add:active {
+  transform: translateY(0);
+}
+
+.btn-walkin-add .badge-hot {
+  background: #f5a623;
+  color: #1e293b;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+/* ====================================================
+   9. MODAL TABS NAVIGATION (Detail Modal)
+   ==================================================== */
+.admin-modal-card.modal-lg {
+  max-width: 780px;
+}
+
+.modal-tabs-bar {
+  display: flex;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--admin-border);
+  padding: 0 1.5rem;
+  gap: 8px;
+}
+
+.modal-tab-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--admin-text-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 12px 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--admin-transition);
+}
+
+.modal-tab-btn:hover {
+  color: var(--admin-primary);
+  background: rgba(0, 104, 55, 0.04);
+}
+
+.modal-tab-btn.active {
+  color: var(--admin-primary);
+  border-bottom-color: var(--admin-primary);
+  background: #ffffff;
+}
+
+.tab-badge-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: var(--admin-primary-light);
+  color: var(--admin-primary);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.modal-tab-pane {
+  display: none;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.modal-tab-pane.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Context Banner in Modal */
+.modal-notice-banner {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: var(--admin-radius-sm);
+  padding: 10px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: #166534;
+  line-height: 1.45;
+  margin-bottom: 1rem;
+}
+
+.modal-notice-banner.warning {
+  background: #fefce8;
+  border-color: #fef08a;
+  color: #854d0e;
+}
+
+.modal-notice-banner.info {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+  color: #0369a1;
+}
+
+/* ====================================================
+   10. PRATINJAU BERKAS DOKUMEN FISIK (Cards & Grid)
+   ==================================================== */
+.doc-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 680px) {
+  .doc-preview-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.doc-card {
+  background: #ffffff;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: var(--admin-transition);
+  position: relative;
+}
+
+.doc-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: var(--admin-shadow-sm);
+  transform: translateY(-2px);
+}
+
+.doc-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.doc-card-title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--admin-text-title);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.doc-type-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.doc-type-badge.pdf {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.doc-type-badge.jpg {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+/* Document Thumbnail Container */
+.doc-thumbnail-frame {
+  height: 130px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: var(--admin-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+}
+
+.doc-thumbnail-frame:hover {
+  border-color: var(--admin-primary);
+  background: #f1f5f9;
+}
+
+.doc-thumbnail-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+
+.doc-thumbnail-frame:hover img {
+  transform: scale(1.04);
+}
+
+.doc-thumbnail-frame svg.doc-svg-mock {
+  width: 100%;
+  height: 100%;
+}
+
+.doc-overlay-zoom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  gap: 6px;
+}
+
+.doc-thumbnail-frame:hover .doc-overlay-zoom {
+  opacity: 1;
+}
+
+/* Document Meta Row */
+.doc-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--admin-text-muted);
+}
+
+.doc-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.doc-status-badge.verified {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.doc-status-badge.pending {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+.doc-status-badge.missing {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.doc-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.doc-btn {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--admin-border);
+  background: #ffffff;
+  color: var(--admin-text-body);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: var(--admin-transition);
+}
+
+.doc-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: var(--admin-primary);
+}
+
+.doc-btn-primary {
+  background: var(--admin-primary-light);
+  border-color: var(--admin-primary-border);
+  color: var(--admin-primary);
+  font-weight: 700;
+}
+
+.doc-btn-primary:hover {
+  background: var(--admin-primary);
+  color: #ffffff;
+}
+
+/* ====================================================
+   11. FORM INPUT PENDAFTAR OFFLINE (LOKET WALK-IN)
+   ==================================================== */
+.walkin-form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.walkin-section-card {
+  background: #ffffff;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-md);
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.walkin-section-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--admin-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--admin-border);
+  margin: 0;
+}
+
+.walkin-fields-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .walkin-fields-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.walkin-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.walkin-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--admin-text-title);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.walkin-label .req {
+  color: #ef4444;
+}
+
+.walkin-input,
+.walkin-select,
+.walkin-textarea {
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-sm);
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: var(--admin-text-body);
+  background: #ffffff;
+  font-family: inherit;
+  transition: var(--admin-transition);
+}
+
+.walkin-input:focus,
+.walkin-select:focus,
+.walkin-textarea:focus {
+  outline: none;
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(0, 104, 55, 0.12);
+}
+
+.walkin-input::placeholder,
+.walkin-textarea::placeholder {
+  color: #94a3b8;
+}
+
+.walkin-textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.walkin-helper-text {
+  font-size: 0.72rem;
+  color: var(--admin-text-muted);
+}
+
+/* Option Cards (Payment & Activation in Walk-in) */
+.walkin-radio-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 500px) {
+  .walkin-radio-group {
+    grid-template-columns: 1fr;
+  }
+}
+
+.walkin-choice-card {
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  background: #f8fafc;
+  transition: var(--admin-transition);
+}
+
+.walkin-choice-card:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+}
+
+.walkin-choice-card.selected {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.walkin-choice-card input[type="radio"],
+.walkin-choice-card input[type="checkbox"] {
+  accent-color: var(--admin-primary);
+  margin-top: 3px;
+  cursor: pointer;
+}
+
+.walkin-choice-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.walkin-choice-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--admin-text-title);
+}
+
+.walkin-choice-desc {
+  font-size: 0.72rem;
+  color: var(--admin-text-muted);
+  line-height: 1.35;
+}
+
+/* Checklist Berkas Fisik Diserahkan */
+.berkas-checklist-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 500px) {
+  .berkas-checklist-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.berkas-check-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  background: #f8fafc;
+  border: 1px solid var(--admin-border);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.berkas-check-item:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+}
+
+.berkas-check-item input[type="checkbox"] {
+  accent-color: var(--admin-primary);
+  cursor: pointer;
+}
+
+/* ====================================================
+   12. LIGHTBOX PREVIEW DOKUMEN (Full Screen Modal)
+   ==================================================== */
+.admin-lightbox-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.admin-lightbox-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lightbox-window {
+  background: #ffffff;
+  border-radius: var(--admin-radius-md);
+  max-width: 860px;
+  width: 100%;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+}
+
+.lightbox-header {
+  padding: 12px 18px;
+  background: #0f172a;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lightbox-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lightbox-view-area {
+  flex: 1;
+  padding: 1.5rem;
+  background: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  min-height: 400px;
+  max-height: 70vh;
+}
+
+.lightbox-view-area img,
+.lightbox-view-area svg {
+  max-width: 100%;
+  max-height: 65vh;
+  object-fit: contain;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  background: #ffffff;
+  border-radius: 4px;
+}
+
+.lightbox-footer {
+  padding: 10px 18px;
+  background: #f8fafc;
+  border-top: 1px solid var(--admin-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ====================================================
+   13. TANDA TERIMA PENDAFTARAN LOKET (Printable Slip)
+   ==================================================== */
+.receipt-slip-card {
+  background: #ffffff;
+  border: 2px dashed #006837;
+  border-radius: var(--admin-radius-md);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.receipt-slip-header {
+  text-align: center;
+  border-bottom: 2px solid #006837;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+}
+
+.receipt-school-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #006837;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.receipt-doc-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #b45309;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.receipt-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+  font-size: 0.82rem;
+}
+
+.receipt-meta-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.receipt-meta-item .lbl {
+  font-size: 0.7rem;
+  color: #64748b;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.receipt-meta-item .val {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.receipt-barcode-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.receipt-stamp-box {
+  border: 2px solid #006837;
+  border-radius: 50%;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.55rem;
+  font-weight: 800;
+  color: #006837;
+  transform: rotate(-12deg);
+  text-transform: uppercase;
+  line-height: 1.1;
+  padding: 4px;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .receipt-slip-card, .receipt-slip-card * {
+    visibility: visible;
+  }
+  .receipt-slip-card {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border: 1px solid #000;
+  }
+}
+
