@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Penetapan & Kelulusan SPMB - SMA Muhammadiyah 3 Yogyakarta</title>
+  <link rel="stylesheet" href="../../shared/styles.css">
+  <link rel="stylesheet" href="./kelulusan.css">
+  <style>
+    body {
+      background-color: #f1f5f9;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .kelulusan-page-container {
+      max-width: 1440px;
+      margin: 1.5rem auto;
+      padding: 0 1.25rem;
+    }
+  </style>
+</head>
+
+<body class="kelulusan-standalone-body">
+
+  <!-- Bilah Navigasi Atas Standalone -->
+  <div
+    style="background: #004d28; color: white; padding: 10px 1.75rem; font-size: 0.82rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.12);">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      🏫 <strong>SMA Muhammadiyah 3 Yogyakarta</strong> &bull; Portal Penetapan & Kelulusan SPMB TA 2026/2027
+    </div>
+    <div>
+      <a href="../../index.html" style="color: #f5a623; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+        &larr; Kembali ke Navigasi Modul Terintegrasi
+      </a>
+    </div>
+  </div>
+
+  <!-- Workspace Konten Kelulusan -->
+  <div class="kelulusan-page-container">
+    <div id="kelulusan-viewport"></div>
+  </div>
+
+  <script type="module">
+    import { renderKelulusan } from './kelulusan.js';
+    renderKelulusan('kelulusan-viewport');
+  </script>
+</body>
+
+</html>
