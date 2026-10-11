@@ -38,6 +38,53 @@ export const initialDummyPendaftar = [
       nama_orang_tua: "Siti Aminah",
       pilihan_jurusan: "MIPA"
     },
+    berkas: {
+      ijazah: {
+        nama_file: "ijazah_smp_budi.pdf",
+        size: "1.4 MB",
+        ukuran_kb: 1400,
+        tgl_unggah: "05 Okt 2026",
+        status: "verified",
+        tipe: "application/pdf",
+        data_url: "data:application/pdf;base64,JVBERi0xLjQKJeLjz9MKMSAwIG9iajw8L1R5cGUvQ2F0YWxvZy9QYWdlcyAyIDAgUj4+ZW5kb2Jq"
+      },
+      kk: {
+        nama_file: "kartu_keluarga_budi.jpg",
+        size: "920 KB",
+        ukuran_kb: 920,
+        tgl_unggah: "05 Okt 2026",
+        status: "verified",
+        tipe: "image/png",
+        data_url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+      },
+      kartu_keluarga: {
+        nama_file: "kartu_keluarga_budi.jpg",
+        size: "920 KB",
+        ukuran_kb: 920,
+        tgl_unggah: "05 Okt 2026",
+        status: "verified",
+        tipe: "image/png",
+        data_url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+      },
+      akta: {
+        nama_file: "akta_kelahiran_budi.jpg",
+        size: "880 KB",
+        ukuran_kb: 880,
+        tgl_unggah: "05 Okt 2026",
+        status: "verified",
+        tipe: "image/png",
+        data_url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+      },
+      akta_kelahiran: {
+        nama_file: "akta_kelahiran_budi.jpg",
+        size: "880 KB",
+        ukuran_kb: 880,
+        tgl_unggah: "05 Okt 2026",
+        status: "verified",
+        tipe: "image/png",
+        data_url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+      }
+    },
     pembayaran: {
       file_bukti: "bukti_bayar_002.png",
       file_data_url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",

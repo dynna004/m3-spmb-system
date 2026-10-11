@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengumuman Kelulusan Seleksi - Portal SPMB SMA Muhammadiyah 3 Yogyakarta</title>
+  <link rel="stylesheet" href="../../shared/styles.css">
+  <style>
+    .portal-container {
+      max-width: 680px;
+      margin: 2.5rem auto;
+      padding: 0 1rem;
+    }
+    .portal-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 2.25rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e2e8f0;
+    }
+    .brand-header {
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #006837 0%, #004d28 100%);
+      color: white;
+      border-radius: 14px;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 4px 12px rgba(0, 104, 55, 0.25);
+    }
+    .nav-steps {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .step-pill {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #e2e8f0;
+      color: #64748b;
+      text-decoration: none;
+    }
+    .step-pill.active {
+      background: #006837;
+      color: #ffffff;
+    }
+    .portal-grid-kv {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      background: #f8fafc;
+      padding: 1.25rem;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      margin: 1.25rem 0;
+    }
+    .kv-item strong {
+      display: block;
+      font-size: 0.72rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .kv-item span {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 3px;
+    }
+    .notice-box {
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin: 1.25rem 0;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+      color: #14532d;
+    }
+  </style>
+</head>
+<body>
+  <div class="portal-container">
+    <div class="nav-steps">
+      <a href="register.html" class="step-pill">1. Registrasi</a>
+      <a href="status-akun.html" class="step-pill">2. Status Aktivasi</a>
+      <a href="login.html" class="step-pill">3. Login Pendaftar</a>
+      <a href="formulir.html" class="step-pill">4. Formulir & Bukti</a>
+      <span class="step-pill active">5. Cek Kelulusan (Alur 10)</span>
+    </div>
+
+    <div class="portal-card">
+      <div class="brand-header">
+        <div class="brand-logo">M3</div>
+        <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a;">Pengumuman Kelulusan Seleksi SPMB</h2>
+        <p style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">SMA Muhammadiyah 3 Yogyakarta &bull; Alur 10: Akses Hasil Mandiri</p>
+      </div>
+
+      <div style="background: #f8fafc; padding: 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 1.5rem;">
+        <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px;">Masukkan Nomor Registrasi atau NISN Anda:</label>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="input-query" class="form-control" placeholder="Contoh: REG-2026-001 atau 0051234567" style="padding: 10px 14px;">
+          <button id="btn-search" class="btn btn-primary" style="flex-shrink: 0; padding: 10px 20px;">Cek Status</button>
+        </div>
+      </div>
+
+      <div id="output-area"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { getPendaftarById, getPendaftarList, escapeHTML } from './utils.js';
+
+    const inputQuery = document.getElementById('input-query');
+    const btnSearch = document.getElementById('btn-search');
+    const outputArea = document.getElementById('output-area');
+
+    // Auto-fill jika ada sesi login
+    const sess = localStorage.getItem('m3_spmb_logged_in_user');
+    if (sess) {
+      try {
+        const u = JSON.parse(sess);
+        if (u) {
+          inputQuery.value = u.id_pendaftar || u.id || u.nisn || '';
+          displayResult(u);
+        }
+      } catch (e) {}
+    }
+
+    btnSearch.addEventListener('click', () => {
+      const q = inputQuery.value.trim();
+      if (!q) {
+        alert('Harap masukkan No. Registrasi atau NISN!');
+        return;
+      }
+      const found = getPendaftarById(q);
+      displayResult(found);
+    });
+
+    function displayResult(user) {
+      if (!user) {
+        outputArea.innerHTML = `
+          <div style="text-align: center; padding: 2rem; background: #fff1f2; border: 1px solid #fecdd3; border-radius: 10px; color: #9f1239;">
+            Data pendaftar dengan nomor/NISN tersebut tidak ditemukan. Pastikan data sudah benar.
+          </div>
+        `;
+        return;
+      }
+
+      const status = (user.status_kelulusan || 'MENUNGGU').toUpperCase();
+      const isLulus = status === 'LULUS';
+      const isCadangan = status === 'CADANGAN';
+      const isGagal = status === 'TIDAK LULUS';
+
+      outputArea.innerHTML = `
+        <div style="border-radius: 12px; border: 2px solid ${isLulus ? '#22c55e' : (isCadangan ? '#f59e0b' : '#cbd5e1')}; padding: 1.5rem; background: ${isLulus ? '#f0fdf4' : '#ffffff'};">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 14px;">
+            <div>
+              <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #0f172a;">${escapeHTML(user.nama_lengkap || user.nama)}</h3>
+              <span style="font-size: 0.8rem; color: #64748b;">No. Reg: <strong>${escapeHTML(user.id_pendaftar || user.id)}</strong> &bull; NISN: ${escapeHTML(user.nisn)}</span>
+            </div>
+            <div>
+              <span style="padding: 6px 16px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; 
+                background: ${isLulus ? '#dcfce7' : (isCadangan ? '#fef3c7' : (isGagal ? '#fee2e2' : '#f1f5f9'))}; 
+                color: ${isLulus ? '#15803d' : (isCadangan ? '#b45309' : (isGagal ? '#991b1b' : '#475569'))};">
+                ${isLulus ? '🎉 DINYATAKAN LULUS' : (isCadangan ? '⚠️ CADANGAN' : (isGagal ? '❌ TIDAK LULUS' : '⏳ DALAM PROSES SELEKSI'))}
+              </span>
+            </div>
+          </div>
+
+          <div class="portal-grid-kv" style="margin: 0 0 1rem 0; background: white;">
+            <div class="kv-item">
+              <strong>Peminatan Jurusan Diterima</strong>
+              <span style="color: #006837;">${escapeHTML(user.biodata?.pilihan_jurusan || user.pilihan_jurusan || 'MIPA')}</span>
+            </div>
+            <div class="kv-item">
+              <strong>Nilai Wawancara & Pemetaan</strong>
+              <span>${user.nilai_wawancara || user.wawancara?.nilai_akhir || '88'} / 100</span>
+            </div>
+            <div class="kv-item">
+              <strong>Rekomendasi Beasiswa</strong>
+              <span>${escapeHTML(user.dataWawancara?.rekomendasi_beasiswa || user.wawancara?.beasiswa || 'Reguler')}</span>
+            </div>
+            <div class="kv-item">
+              <strong>Jalur Penerimaan</strong>
+              <span>Reguler Berkelanjutan</span>
+            </div>
+          </div>
+
+          ${isLulus ? `
+            <div class="notice-box">
+              <strong>Tahap Berikutnya: Daftar Ulang Fisik & Keuangan (Alur 11 & 12)</strong><br>
+              Silakan hadir ke Loket SPMB SMA Muhammadiyah 3 Yogyakarta dengan membawa:
+              <ul style="margin-left: 1.25rem; margin-top: 4px;">
+                <li>Ijazah / SKL SMP Asli & Legalisir</li>
+                <li>Fotokopi Kartu Keluarga & Akta Kelahiran</li>
+                <li>Menyelesaikan pembayaran Uang Pangkal di Kasir Sekolah</li>
+              </ul>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

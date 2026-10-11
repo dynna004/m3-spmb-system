@@ -16,7 +16,7 @@ Seluruh data pendaftar disimpan di `localStorage` menggunakan key baku: **`spmb_
   "email": "budi@email.com",
   "no_wa": "081234567890",
   "nisn": "1234567890",
-  "status_akun": "pending_activation",
+  "status_akun": "active",
   "created_at": "2026-10-05T08:00:00Z",
   "biodata": {
     "nik": "3171012345678901",
@@ -25,8 +25,46 @@ Seluruh data pendaftar disimpan di `localStorage` menggunakan key baku: **`spmb_
     "nama_orang_tua": "Siti Aminah",
     "pilihan_jurusan": "MIPA"
   },
+  "berkas": {
+    "ijazah": {
+      "nama_file": "ijazah_smp_budi.pdf",
+      "size": "1.4 MB",
+      "ukuran_kb": 1400,
+      "tipe": "application/pdf",
+      "tgl_unggah": "05 Okt 2026",
+      "status": "verified",
+      "data_url": "data:application/pdf;base64,..."
+    },
+    "kk": {
+      "nama_file": "kartu_keluarga_budi.jpg",
+      "size": "920 KB",
+      "ukuran_kb": 920,
+      "tipe": "image/jpeg",
+      "tgl_unggah": "05 Okt 2026",
+      "status": "verified",
+      "data_url": "data:image/png;base64,..."
+    },
+    "kartu_keluarga": { /* Alias kk untuk kompatibilitas */ },
+    "akta": {
+      "nama_file": "akta_kelahiran_budi.jpg",
+      "size": "880 KB",
+      "ukuran_kb": 880,
+      "tipe": "image/jpeg",
+      "tgl_unggah": "05 Okt 2026",
+      "status": "verified",
+      "data_url": "data:image/png;base64,..."
+    },
+    "akta_kelahiran": { /* Alias akta untuk kompatibilitas */ },
+    "bukti_bayar": {
+      "nama_file": "bukti_bayar_001.png",
+      "size": "450 KB",
+      "ukuran_kb": 450,
+      "data_url": "data:image/png;base64,..."
+    }
+  },
   "pembayaran": {
     "file_bukti": "bukti_bayar_001.png",
+    "file_data_url": "data:image/png;base64,...",
     "status_pembayaran": "pending_verification"
   }
 }
@@ -75,9 +113,12 @@ Seluruh data pendaftar disimpan di `localStorage` menggunakan key baku: **`spmb_
 
 ---
 
-## 🛠️ File Utama Modul 01
-* [`dummy-data.js`](file:///c:/Users/raudh/.gemini/antigravity-ide/scratch/m3-spmb-system/modules/01_portal_spmb/dummy-data.js): Inisialisasi seed data awal pendaftar sampel A & B.
-* [`utils.js`](file:///c:/Users/raudh/.gemini/antigravity-ide/scratch/m3-spmb-system/modules/01_portal_spmb/utils.js): Fungsi pembantu CRUD & update status untuk dikonsumsi modul lain.
-* [`register.html`](file:///c:/Users/raudh/.gemini/antigravity-ide/scratch/m3-spmb-system/modules/01_portal_spmb/register.html): Interface Registrasi Akun Awal.
-* [`status-akun.html`](file:///c:/Users/raudh/.gemini/antigravity-ide/scratch/m3-spmb-system/modules/01_portal_spmb/status-akun.html): Interface Cek Status Aktivasi.
-* [`formulir.html`](file:///c:/Users/raudh/.gemini/antigravity-ide/scratch/m3-spmb-system/modules/01_portal_spmb/formulir.html): Interface Formulir Biodata & Upload Bukti.
+## 🛠️ File Utama Modul 01: Portal SPMB
+* [`portal.js`](file:///c:/Users/raudh/.gemini/antigravity-ide/scratch/m3-spmb-system/modules/01_portal_spmb/portal.js): SPA Component Terpadu (Alur 1a, 4, 5, 10) saat dijalankan di `index.html`.
+* [`utils.js`](file:///c:/Users/raudh/.gemini/antigravity-ide/scratch/m3-spmb-system/modules/01_portal_spmb/utils.js): Sinkronisasi dua arah SSoT (`spmb_pendaftar_db` & `m3_spmb_tu_db`), escapeHTML XSS, CRUD, & Event Dispatcher.
+* [`dummy-data.js`](file:///c:/Users/raudh/.gemini/antigravity-ide/scratch/m3-spmb-system/modules/01_portal_spmb/dummy-data.js): Inisialisasi seed data awal pendaftar sampel.
+* [`register.html`](file:///c:/Users/raudh/.gemini/antigravity-ide/scratch/m3-spmb-system/modules/01_portal_spmb/register.html): Interface Standalone Registrasi Akun Mandiri (Alur 1a).
+* [`status-akun.html`](file:///c:/Users/raudh/.gemini/antigravity-ide/scratch/m3-spmb-system/modules/01_portal_spmb/status-akun.html): Interface Standalone Status & Notifikasi Aktivasi (Alur 4).
+* [`login.html`](file:///c:/Users/raudh/.gemini/antigravity-ide/scratch/m3-spmb-system/modules/01_portal_spmb/login.html): Interface Standalone Login Pendaftar.
+* [`formulir.html`](file:///c:/Users/raudh/.gemini/antigravity-ide/scratch/m3-spmb-system/modules/01_portal_spmb/formulir.html): Interface Standalone Formulir Biodata & Upload Bukti Bayar (Alur 5).
+* [`pengumuman.html`](file:///c:/Users/raudh/.gemini/antigravity-ide/scratch/m3-spmb-system/modules/01_portal_spmb/pengumuman.html): Interface Standalone Cek Pengumuman Kelulusan Mandiri (Alur 10).

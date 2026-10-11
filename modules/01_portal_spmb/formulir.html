@@ -64,14 +64,18 @@
     .file-dropzone {
       border: 2px dashed #cbd5e1;
       border-radius: 12px;
-      padding: 1.5rem;
+      padding: 1.25rem 1rem;
       text-align: center;
       background-color: #f8fafc;
       cursor: pointer;
       transition: all 0.2s ease;
+      position: relative;
     }
-    .file-dropzone:hover { border-color: #006837; background-color: #f0fdf4; }
-    .file-info { margin-top: 0.5rem; font-size: 0.85rem; color: #006837; font-weight: 600; }
+    .file-dropzone:hover { border-color: #006837; background-color: #f0fdf4; transform: translateY(-2px); }
+    .file-dropzone.is-uploaded { border-color: #22c55e; background-color: #f0fdf4; }
+    .file-info { margin-top: 0.5rem; font-size: 0.8rem; color: #0284c7; font-weight: 700; word-break: break-all; }
+    .doc-preview-thumb { max-height: 80px; max-width: 100%; border-radius: 6px; margin-top: 6px; border: 1px solid #bbf7d0; object-fit: contain; }
+    .doc-preview-pdf { margin-top: 6px; font-size: 0.75rem; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; padding: 4px 8px; border-radius: 6px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
     .section-title {
       font-size: 0.95rem;
       font-weight: 700;
@@ -83,17 +87,23 @@
     }
     .section-title::before { content: ""; display: inline-block; width: 4px; height: 16px; background: #006837; border-radius: 2px; }
     .access-denied-box { text-align: center; padding: 3rem 1.5rem; }
-    .preview-container { margin-top: 8px; max-height: 160px; overflow: hidden; border-radius: 8px; border: 1px solid #cbd5e1; display: none; }
-    .preview-container img { width: 100%; height: auto; object-fit: contain; }
+    .preview-container { margin-top: 6px; text-align: center; }
+    .files-grid-2x2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 14px;
+      margin-top: 0.75rem;
+    }
   </style>
 </head>
 <body>
   <div class="portal-container">
     <div class="nav-steps">
-      <span class="step-pill">1. Registrasi</span>
-      <span class="step-pill">2. Status Aktivasi</span>
-      <span class="step-pill">3. Login Pendaftar</span>
+      <a href="register.html" class="step-pill" style="text-decoration: none;">1. Registrasi</a>
+      <a href="status-akun.html" class="step-pill" style="text-decoration: none;">2. Status Aktivasi</a>
+      <a href="login.html" class="step-pill" style="text-decoration: none;">3. Login Pendaftar</a>
       <span class="step-pill active">4. Formulir & Bukti</span>
+      <a href="pengumuman.html" class="step-pill" style="text-decoration: none;">5. Cek Kelulusan</a>
     </div>
 
     <div class="portal-card">
@@ -130,7 +140,12 @@
         <div id="alert-msg" class="alert-box"></div>
 
         <form id="form-biodata">
-          <div class="section-title">Objek Biodata Calon Siswa</div>
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin: 1.5rem 0 1rem 0;">
+            <div class="section-title" style="margin: 0;">Objek Biodata Calon Siswa</div>
+            <button type="button" id="btn-fill-demo-bio" class="btn btn-secondary" style="font-size: 0.75rem; padding: 4px 10px;">
+              💡 Isi Contoh Biodata (Demo)
+            </button>
+          </div>
 
           <div class="form-group">
             <label for="nama" class="form-label-req">Nama Lengkap</label>
@@ -161,36 +176,60 @@
             <input type="text" id="data_ortu" class="form-control" placeholder="Siti Aminah" required>
           </div>
 
-          <div class="section-title">Objek Pembayaran & Upload Media</div>
-
-          <div class="form-group">
-            <label for="jurusan" class="form-label-req">Pilihan Jurusan / Peminatan</label>
-            <select id="jurusan" class="form-control" required>
-              <option value="">-- Pilih Jurusan --</option>
-              <option value="MIPA">MIPA (Matematika & Ilmu Pengetahuan Alam)</option>
-              <option value="IPS">IPS (Ilmu Pengetahuan Sosial)</option>
-            </select>
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 1.5rem; margin-bottom: 0.5rem;">
+            <div class="section-title" style="margin: 0;">Objek Berkas Dokumen Digital & Bukti Bayar</div>
+            <button type="button" id="btn-fill-demo-files" class="btn btn-secondary" style="font-size: 0.75rem; padding: 4px 10px;">
+              ⚡ Muat Contoh Berkas Demo
+            </button>
           </div>
+          <p style="font-size: 0.8rem; color: #64748b; margin-top: 2px; margin-bottom: 0.75rem;">
+            Unggah berkas foto (.jpg, .png) atau .pdf asli (maksimal 3 MB per dokumen) untuk diverifikasi oleh Panitia SPMB.
+          </p>
 
-          <div class="form-group">
-            <label class="form-label-req">Upload Bukti Pembayaran (Konversi DataURL Base64)</label>
-            <div class="file-dropzone" id="dropzone">
-              <span style="font-size: 1.75rem; display: block; margin-bottom: 0.25rem;">📄</span>
-              <span style="font-size: 0.85rem; font-weight: 600; color: #334155;">Klik untuk pilih file bukti bayar</span>
-              <span style="display: block; font-size: 0.75rem; color: #64748b; margin-top: 4px;">
-                Format: <strong>.jpg, .png, .pdf</strong> (Otomatis di-convert ke Base64 DataURL)
-              </span>
+          <div class="files-grid-2x2">
+            <!-- 1. Ijazah / SKL SMP -->
+            <div class="file-dropzone" id="dropzone_ijazah">
+              <span style="font-size: 1.5rem; display: block;">🎓</span>
+              <span style="font-size: 0.82rem; font-weight: 700; color: #006837;">Ijazah / SKL SMP/MTs <span style="color:#ef4444;">*</span></span>
+              <span style="display: block; font-size: 0.72rem; color: #64748b;">Foto atau PDF Ijazah/SKL</span>
+              <input type="file" id="file_ijazah" accept=".jpg,.jpeg,.png,.pdf" style="display: none;">
+              <div id="file-name-ijazah" class="file-info">Klik untuk pilih file</div>
+              <div id="preview-box-ijazah" class="preview-container"></div>
+            </div>
+
+            <!-- 2. Kartu Keluarga -->
+            <div class="file-dropzone" id="dropzone_kk">
+              <span style="font-size: 1.5rem; display: block;">👨‍👩‍👧‍👦</span>
+              <span style="font-size: 0.82rem; font-weight: 700; color: #006837;">Kartu Keluarga (KK) <span style="color:#ef4444;">*</span></span>
+              <span style="display: block; font-size: 0.72rem; color: #64748b;">Foto atau PDF Kartu Keluarga</span>
+              <input type="file" id="file_kk" accept=".jpg,.jpeg,.png,.pdf" style="display: none;">
+              <div id="file-name-kk" class="file-info">Klik untuk pilih file</div>
+              <div id="preview-box-kk" class="preview-container"></div>
+            </div>
+
+            <!-- 3. Akta Kelahiran -->
+            <div class="file-dropzone" id="dropzone_akta">
+              <span style="font-size: 1.5rem; display: block;">📜</span>
+              <span style="font-size: 0.82rem; font-weight: 700; color: #006837;">Akta Kelahiran Siswa <span style="color:#ef4444;">*</span></span>
+              <span style="display: block; font-size: 0.72rem; color: #64748b;">Foto atau PDF Akta Kelahiran</span>
+              <input type="file" id="file_akta" accept=".jpg,.jpeg,.png,.pdf" style="display: none;">
+              <div id="file-name-akta" class="file-info">Klik untuk pilih file</div>
+              <div id="preview-box-akta" class="preview-container"></div>
+            </div>
+
+            <!-- 4. Bukti Bayar Formulir -->
+            <div class="file-dropzone" id="dropzone_bayar">
+              <span style="font-size: 1.5rem; display: block;">💳</span>
+              <span style="font-size: 0.82rem; font-weight: 700; color: #006837;">Bukti Bayar Formulir <span style="color:#ef4444;">*</span></span>
+              <span style="display: block; font-size: 0.72rem; color: #64748b;">Struk transfer / kuitansi bank</span>
               <input type="file" id="file_bukti" accept=".jpg,.jpeg,.png,.pdf" style="display: none;">
-              <div id="file-selected-name" class="file-info"></div>
-            </div>
-            
-            <div id="preview-box" class="preview-container">
-              <img id="image-preview" src="" alt="Preview Bukti Bayar">
+              <div id="file-name-bayar" class="file-info">Klik untuk pilih file</div>
+              <div id="preview-box-bayar" class="preview-container"></div>
             </div>
           </div>
 
-          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem; padding: 12px; font-size: 1rem;">
-            Simpan Formulir & Kirim Bukti Bayar
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.75rem; padding: 12px; font-size: 1rem;">
+            💾 Simpan Formulir & Kirim Seluruh Dokumen
           </button>
         </form>
       </div>
@@ -258,50 +297,160 @@
       });
     }
 
-    // File Upload & Base64 DataURL Conversion
-    const dropzone = document.getElementById('dropzone');
-    const fileInput = document.getElementById('file_bukti');
-    const fileSelectedName = document.getElementById('file-selected-name');
-    const previewBox = document.getElementById('preview-box');
-    const imagePreview = document.getElementById('image-preview');
-
-    let base64DataUrl = currentInDb && currentInDb.pembayaran ? currentInDb.pembayaran.file_data_url : null;
-    let fileNameStr = currentInDb && currentInDb.pembayaran ? currentInDb.pembayaran.file_bukti : null;
-
-    if (fileNameStr) {
-      fileSelectedName.textContent = `✓ File Terupload: ${fileNameStr}`;
-      if (base64DataUrl && base64DataUrl.startsWith('data:image')) {
-        imagePreview.src = base64DataUrl;
-        previewBox.style.display = 'block';
-      }
+    // Tombol muat contoh biodata demo
+    const btnDemoBio = document.getElementById('btn-fill-demo-bio');
+    if (btnDemoBio) {
+      btnDemoBio.addEventListener('click', () => {
+        document.getElementById('nik').value = '3171012345678901';
+        if (nikCounter) nikCounter.textContent = '16 / 16';
+        document.getElementById('alamat').value = 'Jl. Merdeka No. 10, RT 01 / RW 02, Gambir, Jakarta Pusat';
+        document.getElementById('asal_sekolah').value = 'SMP Negeri 1 Jakarta';
+        document.getElementById('data_ortu').value = 'Siti Aminah / Budi Darmawan';
+        document.getElementById('jurusan').value = 'MIPA';
+        showAlert('✓ Contoh isian biodata lengkap berhasil dimuat ke formulir!', false);
+      });
     }
 
-    if (dropzone && fileInput) {
+    // Multi-File Upload & Base64 DataURL Conversion (Akta Kelahiran, KK, Ijazah, Bukti Bayar)
+    const berkasExisting = currentInDb?.berkas || {};
+    const bayarExisting = currentInDb?.pembayaran || {};
+
+    const uploadState = {
+      ijazah: {
+        nama_file: berkasExisting.ijazah?.nama_file || null,
+        data_url: berkasExisting.ijazah?.data_url || null,
+        size: berkasExisting.ijazah?.size || null,
+        tipe: berkasExisting.ijazah?.tipe || null
+      },
+      kk: {
+        nama_file: berkasExisting.kk?.nama_file || berkasExisting.kartu_keluarga?.nama_file || null,
+        data_url: berkasExisting.kk?.data_url || berkasExisting.kartu_keluarga?.data_url || null,
+        size: berkasExisting.kk?.size || berkasExisting.kartu_keluarga?.size || null,
+        tipe: berkasExisting.kk?.tipe || berkasExisting.kartu_keluarga?.tipe || null
+      },
+      akta: {
+        nama_file: berkasExisting.akta?.nama_file || berkasExisting.akta_kelahiran?.nama_file || null,
+        data_url: berkasExisting.akta?.data_url || berkasExisting.akta_kelahiran?.data_url || null,
+        size: berkasExisting.akta?.size || berkasExisting.akta_kelahiran?.size || null,
+        tipe: berkasExisting.akta?.tipe || berkasExisting.akta_kelahiran?.tipe || null
+      },
+      bayar: {
+        nama_file: bayarExisting.file_bukti || null,
+        data_url: bayarExisting.file_data_url || null,
+        size: bayarExisting.size || null,
+        tipe: bayarExisting.tipe || null
+      }
+    };
+
+    function bindUpload(dropId, inputId, nameId, previewId, stateKey) {
+      const dropzone = document.getElementById(dropId);
+      const fileInput = document.getElementById(inputId);
+      const nameEl = document.getElementById(nameId);
+      const prevEl = document.getElementById(previewId);
+
+      if (!dropzone || !fileInput) return;
+
+      // Render initial file jika ada
+      if (uploadState[stateKey].nama_file) {
+        dropzone.classList.add('is-uploaded');
+        nameEl.textContent = `✓ Terunggah: ${uploadState[stateKey].nama_file}`;
+        nameEl.style.color = '#15803d';
+        if (uploadState[stateKey].data_url) {
+          if (uploadState[stateKey].data_url.startsWith('data:image')) {
+            prevEl.innerHTML = `<img src="${uploadState[stateKey].data_url}" class="doc-preview-thumb" alt="Preview">`;
+            prevEl.style.display = 'block';
+          } else {
+            prevEl.innerHTML = `<div class="doc-preview-pdf">📄 PDF Dokumen Terlampir</div>`;
+            prevEl.style.display = 'block';
+          }
+        }
+      }
+
       dropzone.addEventListener('click', () => fileInput.click());
 
       fileInput.addEventListener('change', async (e) => {
         const file = e.target.files[0];
-        if (file) {
-          const ext = file.name.split('.').pop().toLowerCase();
-          const validTypes = ['jpg', 'jpeg', 'png', 'pdf'];
-          if (!validTypes.includes(ext)) {
-            alert('Format file tidak didukung! Harap unggah file .jpg, .png, atau .pdf.');
-            fileInput.value = '';
-            return;
-          }
+        if (!file) return;
 
-          fileNameStr = file.name;
-          base64DataUrl = await fileToDataURL(file);
-
-          fileSelectedName.textContent = `✓ File Terpilih: ${file.name} (${(file.size / 1024).toFixed(1)} KB) - Base64 Ready`;
-
-          if (file.type.startsWith('image/')) {
-            imagePreview.src = base64DataUrl;
-            previewBox.style.display = 'block';
-          } else {
-            previewBox.style.display = 'none';
-          }
+        const ext = file.name.split('.').pop().toLowerCase();
+        const validTypes = ['jpg', 'jpeg', 'png', 'webp', 'pdf'];
+        if (!validTypes.includes(ext)) {
+          alert(`Format file .${ext} tidak didukung! Harap unggah file .jpg, .png, atau .pdf.`);
+          fileInput.value = '';
+          return;
         }
+
+        if (file.size > 3 * 1024 * 1024) {
+          alert(`Ukuran file "${file.name}" terlalu besar (${(file.size / (1024 * 1024)).toFixed(1)} MB)! Maksimal 3 MB.`);
+          fileInput.value = '';
+          return;
+        }
+
+        const sizeKb = Math.round(file.size / 1024);
+        const sizeStr = sizeKb > 1024 ? `${(sizeKb / 1024).toFixed(1)} MB` : `${sizeKb} KB`;
+        const base64 = await fileToDataURL(file);
+
+        uploadState[stateKey] = {
+          nama_file: file.name,
+          data_url: base64,
+          size: sizeStr,
+          ukuran_kb: sizeKb,
+          tipe: file.type || (ext === 'pdf' ? 'application/pdf' : 'image/jpeg')
+        };
+
+        dropzone.classList.add('is-uploaded');
+        nameEl.textContent = `✓ Terpilih: ${file.name} (${sizeStr})`;
+        nameEl.style.color = '#15803d';
+
+        if (file.type.startsWith('image/')) {
+          prevEl.innerHTML = `<img src="${base64}" class="doc-preview-thumb" alt="Preview">`;
+          prevEl.style.display = 'block';
+        } else {
+          prevEl.innerHTML = `<div class="doc-preview-pdf">📄 PDF Siap Kirim (${sizeStr})</div>`;
+          prevEl.style.display = 'block';
+        }
+      });
+    }
+
+    bindUpload('dropzone_ijazah', 'file_ijazah', 'file-name-ijazah', 'preview-box-ijazah', 'ijazah');
+    bindUpload('dropzone_kk', 'file_kk', 'file-name-kk', 'preview-box-kk', 'kk');
+    bindUpload('dropzone_akta', 'file_akta', 'file-name-akta', 'preview-box-akta', 'akta');
+    bindUpload('dropzone_bayar', 'file_bukti', 'file-name-bayar', 'preview-box-bayar', 'bayar');
+
+    // Demo Autofill Button
+    const btnDemoFiles = document.getElementById('btn-fill-demo-files');
+    if (btnDemoFiles) {
+      btnDemoFiles.addEventListener('click', () => {
+        const mockImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+        const mockPdf = 'data:application/pdf;base64,JVBERi0xLjQKJeLjz9MKMSAwIG9iajw8L1R5cGUvQ2F0YWxvZy9QYWdlcyAyIDAgUj4+ZW5kb2Jq';
+
+        const nisn = currentInDb?.nisn || '0051234567';
+        uploadState.ijazah = { nama_file: `Ijazah_SMP_${nisn}.pdf`, data_url: mockPdf, size: '1.4 MB', ukuran_kb: 1400, tipe: 'application/pdf' };
+        uploadState.kk = { nama_file: `Kartu_Keluarga_${nisn}.jpg`, data_url: mockImg, size: '920 KB', ukuran_kb: 920, tipe: 'image/jpeg' };
+        uploadState.akta = { nama_file: `Akta_Kelahiran_${nisn}.jpg`, data_url: mockImg, size: '880 KB', ukuran_kb: 880, tipe: 'image/jpeg' };
+        uploadState.bayar = { nama_file: `Bukti_Bayar_${nisn}.png`, data_url: mockImg, size: '450 KB', ukuran_kb: 450, tipe: 'image/png' };
+
+        const items = [
+          { drop: 'dropzone_ijazah', name: 'file-name-ijazah', prev: 'preview-box-ijazah', doc: uploadState.ijazah, isPdf: true },
+          { drop: 'dropzone_kk', name: 'file-name-kk', prev: 'preview-box-kk', doc: uploadState.kk, isPdf: false },
+          { drop: 'dropzone_akta', name: 'file-name-akta', prev: 'preview-box-akta', doc: uploadState.akta, isPdf: false },
+          { drop: 'dropzone_bayar', name: 'file-name-bayar', prev: 'preview-box-bayar', doc: uploadState.bayar, isPdf: false }
+        ];
+
+        items.forEach(it => {
+          const drop = document.getElementById(it.drop);
+          const name = document.getElementById(it.name);
+          const prev = document.getElementById(it.prev);
+          drop.classList.add('is-uploaded');
+          name.textContent = `✓ Terpilih: ${it.doc.nama_file} (${it.doc.size})`;
+          name.style.color = '#15803d';
+          prev.innerHTML = it.isPdf 
+            ? `<div class="doc-preview-pdf">📄 PDF Dokumen Terlampir (${it.doc.size})</div>` 
+            : `<img src="${it.doc.data_url}" class="doc-preview-thumb" alt="Demo">`;
+          prev.style.display = 'block';
+        });
+
+        showAlert('✓ 4 Dokumen demo (Ijazah SMP PDF, Kartu Keluarga, Akta Kelahiran, dan Bukti Bayar) berhasil dimuat siap simpan!', false);
       });
     }
 
@@ -325,35 +474,115 @@
           return;
         }
 
-        if (!fileNameStr) {
-          showAlert('Harap unggah file bukti pembayaran (.jpg, .png, .pdf)!');
+        // Validasi kelengkapan 4 dokumen
+        if (!uploadState.ijazah.data_url) {
+          showAlert('Harap unggah Ijazah / SKL SMP/MTs (foto atau PDF)!', true);
           return;
         }
+        if (!uploadState.kk.data_url) {
+          showAlert('Harap unggah Kartu Keluarga (KK) calon peserta didik!', true);
+          return;
+        }
+        if (!uploadState.akta.data_url) {
+          showAlert('Harap unggah Akta Kelahiran resmi calon peserta didik!', true);
+          return;
+        }
+        if (!uploadState.bayar.data_url) {
+          showAlert('Harap unggah Bukti Transfer pembayaran formulir pendaftaran!', true);
+          return;
+        }
+
+        const nowIso = new Date().toISOString();
+        const dateStr = new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
 
         const updatedAccount = {
           ...currentInDb,
           nama_lengkap: document.getElementById('nama').value.trim(),
           biodata: {
+            ...(currentInDb.biodata || {}),
             nik: nik,
             alamat: document.getElementById('alamat').value.trim(),
             asal_sekolah: document.getElementById('asal_sekolah').value.trim(),
             nama_orang_tua: document.getElementById('data_ortu').value.trim(),
             pilihan_jurusan: document.getElementById('jurusan').value
           },
+          berkas: {
+            ...(currentInDb.berkas || {}),
+            ijazah: {
+              nama_file: uploadState.ijazah.nama_file,
+              data_url: uploadState.ijazah.data_url,
+              size: uploadState.ijazah.size || '1.4 MB',
+              ukuran_kb: uploadState.ijazah.ukuran_kb || 1400,
+              tipe: uploadState.ijazah.tipe || 'application/pdf',
+              tgl_unggah: dateStr,
+              status: currentInDb.berkas?.ijazah?.status || 'verified',
+              uploaded_at: nowIso
+            },
+            kk: {
+              nama_file: uploadState.kk.nama_file,
+              data_url: uploadState.kk.data_url,
+              size: uploadState.kk.size || '920 KB',
+              ukuran_kb: uploadState.kk.ukuran_kb || 920,
+              tipe: uploadState.kk.tipe || 'image/jpeg',
+              tgl_unggah: dateStr,
+              status: currentInDb.berkas?.kk?.status || 'verified',
+              uploaded_at: nowIso
+            },
+            kartu_keluarga: {
+              nama_file: uploadState.kk.nama_file,
+              data_url: uploadState.kk.data_url,
+              size: uploadState.kk.size || '920 KB',
+              ukuran_kb: uploadState.kk.ukuran_kb || 920,
+              tipe: uploadState.kk.tipe || 'image/jpeg',
+              tgl_unggah: dateStr,
+              status: currentInDb.berkas?.kartu_keluarga?.status || 'verified',
+              uploaded_at: nowIso
+            },
+            akta: {
+              nama_file: uploadState.akta.nama_file,
+              data_url: uploadState.akta.data_url,
+              size: uploadState.akta.size || '880 KB',
+              ukuran_kb: uploadState.akta.ukuran_kb || 880,
+              tipe: uploadState.akta.tipe || 'image/jpeg',
+              tgl_unggah: dateStr,
+              status: currentInDb.berkas?.akta?.status || 'verified',
+              uploaded_at: nowIso
+            },
+            akta_kelahiran: {
+              nama_file: uploadState.akta.nama_file,
+              data_url: uploadState.akta.data_url,
+              size: uploadState.akta.size || '880 KB',
+              ukuran_kb: uploadState.akta.ukuran_kb || 880,
+              tipe: uploadState.akta.tipe || 'image/jpeg',
+              tgl_unggah: dateStr,
+              status: currentInDb.berkas?.akta_kelahiran?.status || 'verified',
+              uploaded_at: nowIso
+            },
+            bukti_bayar: {
+              nama_file: uploadState.bayar.nama_file,
+              data_url: uploadState.bayar.data_url,
+              size: uploadState.bayar.size || '450 KB',
+              ukuran_kb: uploadState.bayar.ukuran_kb || 450,
+              tgl_unggah: dateStr,
+              status: currentInDb.pembayaran?.status_pembayaran === 'lunas' ? 'verified' : 'pending',
+              uploaded_at: nowIso
+            }
+          },
           pembayaran: {
-            file_bukti: fileNameStr,
-            file_data_url: base64DataUrl,
-            status_pembayaran: 'pending_verification'
+            ...(currentInDb.pembayaran || {}),
+            file_bukti: uploadState.bayar.nama_file || currentInDb.pembayaran?.file_bukti || 'bukti_transfer.jpg',
+            file_data_url: uploadState.bayar.data_url || currentInDb.pembayaran?.file_data_url || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+            status_pembayaran: currentInDb.pembayaran?.status_pembayaran || 'pending_verification'
           }
         };
 
         savePendaftar(updatedAccount);
         localStorage.setItem('m3_spmb_logged_in_user', JSON.stringify(updatedAccount));
 
-        showAlert('<strong>Pendaftaran Berhasil!</strong> Data biodata & file bukti bayar Base64 tersimpan dengan status <code>pending_verification</code>.', false);
+        showAlert('<strong>Pendaftaran Berhasil!</strong> Biodata dan 4 dokumen resmi (Akta Kelahiran, KK, Ijazah/SKL, dan Bukti Bayar) telah tersimpan ke SSoT.', false);
 
         setTimeout(() => {
-          alert('Selamat! Pendaftaran berhasil disimpan. Status pembayaran diset: pending_verification.');
+          alert('Selamat! Pendaftaran & unggah 4 berkas digital berhasil disimpan.');
           window.location.href = 'status-akun.html';
         }, 1200);
       });

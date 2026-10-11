@@ -84,41 +84,160 @@ export function isValidPassword(password) {
 }
 
 /**
- * Sync data ke DB Legacy m3_spmb_tu_db
+ * Escape HTML Helper untuk mencegah XSS injection
+ */
+export function escapeHTML(str) {
+  if (!str && str !== 0) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+/**
+ * Sync data ke DB Terpadu SSoT m3_spmb_tu_db secara Non-Destructive (Preserve Fields)
  */
 function syncToLegacyDB(list) {
   try {
     const tuDbRaw = localStorage.getItem(DB_TU_KEY);
-    const tuDb = tuDbRaw ? JSON.parse(tuDbRaw) : { pendaftar: [] };
-    
-    tuDb.pendaftar = list.map(item => ({
-      id: item.id_pendaftar,
-      nama: item.nama_lengkap,
-      nisn: item.nisn,
-      pilihan_jurusan: item.biodata ? item.biodata.pilihan_jurusan : 'MIPA',
-      status_akun: (item.status_akun === 'active' || item.status_akun === 'AKTIF') ? 'AKTIF' : 'PENDING',
-      status_pembayaran: item.pembayaran ? (item.pembayaran.status_pembayaran === 'verified' ? 'LUNAS' : 'PENDING') : 'BELUM_BAYAR',
-      created_at: item.created_at
-    }));
+    const tuDb = tuDbRaw ? JSON.parse(tuDbRaw) : { pendaftar: [], pengaturan: {} };
+    if (!Array.isArray(tuDb.pendaftar)) {
+      tuDb.pendaftar = [];
+    }
 
+    const tuMap = new Map();
+    tuDb.pendaftar.forEach(item => {
+      const key = item.id || item.id_pendaftar || item.nisn;
+      if (key) tuMap.set(key, item);
+    });
+
+    list.forEach(item => {
+      const key = item.id_pendaftar || item.id || item.nisn;
+      const existing = tuMap.get(key) || {};
+
+      const merged = {
+        ...existing,
+        id: item.id_pendaftar || existing.id || `REG-2026-${String(list.indexOf(item) + 1).padStart(3, '0')}`,
+        nama: item.nama_lengkap || existing.nama || 'Tanpa Nama',
+        nisn: item.nisn || existing.nisn || '',
+        email: item.email || existing.email || '',
+        no_wa: item.no_wa || existing.no_wa || '',
+        pilihan_jurusan: item.biodata?.pilihan_jurusan || existing.pilihan_jurusan || 'MIPA',
+        status_akun: (item.status_akun === 'active' || item.status_akun === 'AKTIF') ? 'AKTIF' : 'MENUNGGU',
+        status_pembayaran: item.pembayaran?.status_pembayaran === 'lunas' || item.pembayaran?.status_pembayaran === 'LUNAS' || existing.status_pembayaran === 'LUNAS' ? 'LUNAS' : (item.pembayaran?.status_pembayaran || existing.status_pembayaran || 'BELUM_BAYAR'),
+        created_at: item.created_at || existing.created_at || new Date().toISOString()
+      };
+
+      // Simpan referensi biodata jika ada
+      if (item.biodata) {
+        merged.biodata = { ...(existing.biodata || {}), ...item.biodata };
+        if (item.biodata.asal_sekolah) merged.asal_sekolah = item.biodata.asal_sekolah;
+      }
+
+      // Simpan referensi pembayaran jika ada
+      if (item.pembayaran) {
+        merged.pembayaran = { ...(existing.pembayaran || {}), ...item.pembayaran };
+      }
+
+      // Simpan referensi berkas dokumen (Ijazah, KK, Akta, Pasfoto)
+      if (item.berkas) {
+        merged.berkas = { ...(existing.berkas || {}), ...item.berkas };
+      }
+
+      tuMap.set(key, merged);
+    });
+
+    tuDb.pendaftar = Array.from(tuMap.values());
     localStorage.setItem(DB_TU_KEY, JSON.stringify(tuDb));
   } catch (e) {
-    console.warn('Sync to legacy DB failed:', e);
+    console.warn('Sync to SSoT DB failed:', e);
   }
 }
 
 /**
- * Mengambil seluruh array data pendaftar dari spmb_pendaftar_db
+ * Mengambil seluruh array data pendaftar dari spmb_pendaftar_db & menyinkronkan dengan SSoT
  */
 export function getPendaftarList() {
   initDummyData();
-  const raw = localStorage.getItem(STORAGE_KEY);
+  let list = [];
   try {
-    return raw ? JSON.parse(raw) : [];
+    const raw = localStorage.getItem(STORAGE_KEY);
+    list = raw ? JSON.parse(raw) : [];
   } catch (e) {
     console.error('Error parsing spmb_pendaftar_db:', e);
-    return [];
+    list = [];
   }
+
+  // Cek apakah ada pembaruan status dari SSoT (misal aktivasi akun dari Admin atau kelulusan)
+  try {
+    const tuDbRaw = localStorage.getItem(DB_TU_KEY);
+    if (tuDbRaw) {
+      const tuDb = JSON.parse(tuDbRaw);
+      if (Array.isArray(tuDb.pendaftar)) {
+        let changed = false;
+        tuDb.pendaftar.forEach(ssotItem => {
+          const id = ssotItem.id || ssotItem.id_pendaftar;
+          const matchIdx = list.findIndex(p => (p.id_pendaftar === id || p.id === id || p.nisn === ssotItem.nisn));
+          if (matchIdx !== -1) {
+            const p = list[matchIdx];
+            // Sinkronkan status akun
+            if (ssotItem.status_akun === 'AKTIF' && p.status_akun !== 'active') {
+              p.status_akun = 'active';
+              changed = true;
+            }
+            // Sinkronkan status pembayaran
+            if (ssotItem.status_pembayaran === 'LUNAS' && p.pembayaran?.status_pembayaran !== 'lunas') {
+              if (!p.pembayaran) p.pembayaran = {};
+              p.pembayaran.status_pembayaran = 'lunas';
+              changed = true;
+            }
+            // Sinkronkan status kelulusan (Alur 10)
+            if (ssotItem.status_kelulusan && p.status_kelulusan !== ssotItem.status_kelulusan) {
+              p.status_kelulusan = ssotItem.status_kelulusan;
+              p.nilai_wawancara = ssotItem.nilai_wawancara;
+              changed = true;
+            }
+            // Sinkronkan berkas dokumen jika ada pembaruan dari Modul 02/06
+            if (ssotItem.berkas) {
+              p.berkas = { ...(p.berkas || {}), ...ssotItem.berkas };
+            }
+          } else {
+            // Data pendaftar ada di SSoT tapi belum ada di portal db -> tambahkan
+            list.push({
+              id_pendaftar: ssotItem.id || `REG-2026-${String(list.length + 1).padStart(3, '0')}`,
+              nama_lengkap: ssotItem.nama || 'Tanpa Nama',
+              email: ssotItem.email || `${(ssotItem.nama || 'siswa').toLowerCase().replace(/\s+/g, '')}@spmb.id`,
+              no_wa: ssotItem.no_wa || '081234567890',
+              nisn: ssotItem.nisn || '',
+              password_hash: '',
+              status_akun: ssotItem.status_akun === 'AKTIF' ? 'active' : 'pending_activation',
+              status_kelulusan: ssotItem.status_kelulusan || null,
+              created_at: ssotItem.created_at || new Date().toISOString(),
+              biodata: {
+                asal_sekolah: ssotItem.asal_sekolah || 'SMP Muhammadiyah 1 Yogyakarta',
+                pilihan_jurusan: ssotItem.pilihan_jurusan || 'MIPA'
+              },
+              berkas: ssotItem.berkas || null,
+              pembayaran: {
+                status_pembayaran: ssotItem.status_pembayaran === 'LUNAS' ? 'lunas' : 'pending_verification'
+              }
+            });
+            changed = true;
+          }
+        });
+
+        if (changed) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('Sync from SSoT failed:', err);
+  }
+
+  return list;
 }
 
 /**
@@ -126,15 +245,16 @@ export function getPendaftarList() {
  */
 export function getPendaftarById(idOrNisn) {
   const list = getPendaftarList();
-  return list.find(item => item.id_pendaftar === idOrNisn || item.nisn === idOrNisn || item.email === idOrNisn) || null;
+  return list.find(item => item.id_pendaftar === idOrNisn || item.id === idOrNisn || item.nisn === idOrNisn || item.email === idOrNisn) || null;
 }
 
 /**
- * Menambahkan / mengupdate data pendaftar ke spmb_pendaftar_db
+ * Menambahkan / mengupdate data pendaftar ke spmb_pendaftar_db & SSoT
  */
 export function savePendaftar(data) {
   const list = getPendaftarList();
-  const existingIdx = list.findIndex(item => item.id_pendaftar === data.id_pendaftar || item.nisn === data.nisn);
+  const searchId = data.id_pendaftar || data.id;
+  const existingIdx = list.findIndex(item => (searchId && (item.id_pendaftar === searchId || item.id === searchId)) || (data.nisn && item.nisn === data.nisn));
 
   if (existingIdx !== -1) {
     list[existingIdx] = { ...list[existingIdx], ...data };
@@ -153,7 +273,7 @@ export function savePendaftar(data) {
  */
 export function updateStatusAkun(id, newStatus) {
   const list = getPendaftarList();
-  const idx = list.findIndex(item => item.id_pendaftar === id || item.nisn === id);
+  const idx = list.findIndex(item => item.id_pendaftar === id || item.id === id || item.nisn === id);
 
   if (idx !== -1) {
     list[idx].status_akun = newStatus;
