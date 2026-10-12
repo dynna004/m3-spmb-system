@@ -158,7 +158,7 @@
   </div>
 
   <script type="module">
-    import { getPendaftarList, updateStatusAkun, logoutUser } from './utils.js';
+    import { getPendaftarList, updateStatusAkun, savePendaftar, logoutUser } from './utils.js?v=20261012_v5';
 
     let user = JSON.parse(localStorage.getItem('m3_spmb_logged_in_user')) || JSON.parse(localStorage.getItem('m3_spmb_current_user'));
 
@@ -172,9 +172,33 @@
       }
     }
 
+    function showInlineToast(msg, type = 'success') {
+      let toastEl = document.getElementById('status-inline-toast');
+      if (!toastEl) {
+        toastEl = document.createElement('div');
+        toastEl.id = 'status-inline-toast';
+        toastEl.style.cssText = 'padding: 10px 14px; border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem; font-weight: 600; text-align: center; transition: all 0.3s ease;';
+        const card = document.querySelector('.portal-card');
+        if (card) card.insertBefore(toastEl, card.children[1] || card.firstChild);
+      }
+      toastEl.style.background = type === 'success' ? '#dcfce7' : '#fef3c7';
+      toastEl.style.color = type === 'success' ? '#15803d' : '#92400e';
+      toastEl.style.border = type === 'success' ? '1.5px solid #86efac' : '1.5px solid #fde68a';
+      toastEl.innerHTML = msg;
+      toastEl.style.display = 'block';
+
+      setTimeout(() => {
+        if (toastEl) toastEl.style.display = 'none';
+      }, 4000);
+    }
+
     function renderStatus() {
       const pendaftarList = getPendaftarList();
-      const currentInDb = pendaftarList.find(p => p.nisn === user.nisn || p.id_pendaftar === user.id_pendaftar) || user;
+      const currentInDb = pendaftarList.find(p => (
+        (user && user.id_pendaftar && (p.id_pendaftar === user.id_pendaftar || p.id === user.id_pendaftar)) ||
+        (user && user.id && (p.id === user.id || p.id_pendaftar === user.id)) ||
+        (user && user.nisn && p.nisn === user.nisn)
+      )) || user;
       
       const badge = document.getElementById('badge-status');
       const notice = document.getElementById('notice-container');
@@ -218,34 +242,48 @@
     });
 
     // Toggle status demo button handler
-    document.getElementById('btn-toggle-status').addEventListener('click', () => {
+    document.getElementById('btn-toggle-status').addEventListener('click', (e) => {
+      e.preventDefault();
       const pendaftarList = getPendaftarList();
-      const currentInDb = pendaftarList.find(p => (
-        user && (p.nisn === user.nisn || p.id_pendaftar === user.id_pendaftar || p.id === user.id)
+      let currentInDb = pendaftarList.find(p => (
+        (user && user.id_pendaftar && (p.id_pendaftar === user.id_pendaftar || p.id === user.id_pendaftar)) ||
+        (user && user.id && (p.id === user.id || p.id_pendaftar === user.id)) ||
+        (user && user.nisn && p.nisn === user.nisn)
       )) || user;
+
+      if (!currentInDb) {
+        currentInDb = pendaftarList.length > 0 ? pendaftarList[0] : user;
+      }
       
       const isCurrentlyActive = (currentInDb.status_akun === 'active' || currentInDb.status_akun === 'AKTIF');
       const nextStatus = isCurrentlyActive ? 'pending_activation' : 'active';
       
       const targetId = currentInDb.id_pendaftar || currentInDb.id || currentInDb.nisn;
-      const updated = updateStatusAkun(targetId, nextStatus);
-      if (updated) {
-        user = updated;
-        localStorage.setItem('m3_spmb_current_user', JSON.stringify(updated));
+      let updated = updateStatusAkun(targetId, nextStatus);
 
-        // Sinkronkan juga jika akun ini ada di m3_spmb_logged_in_user
-        const loggedIn = JSON.parse(localStorage.getItem('m3_spmb_logged_in_user'));
-        if (loggedIn && (loggedIn.nisn === updated.nisn || loggedIn.id_pendaftar === updated.id_pendaftar || loggedIn.id === updated.id)) {
-          loggedIn.status_akun = nextStatus;
-          localStorage.setItem('m3_spmb_logged_in_user', JSON.stringify(loggedIn));
-        }
-
-        renderStatus();
-        alert(`⚡ Status akun berhasil diubah menjadi: ${nextStatus === 'active' ? 'ACTIVE (Akun Aktif)' : 'PENDING ACTIVATION (Menunggu Persetujuan Admin)'}`);
-      } else {
-        alert('Gagal mengubah status akun pendaftar.');
+      if (!updated) {
+        currentInDb.status_akun = nextStatus;
+        savePendaftar(currentInDb);
+        updated = currentInDb;
       }
+
+      user = updated;
+      localStorage.setItem('m3_spmb_current_user', JSON.stringify(updated));
+
+      // Sinkronkan juga jika akun ini ada di m3_spmb_logged_in_user
+      const loggedIn = JSON.parse(localStorage.getItem('m3_spmb_logged_in_user'));
+      if (loggedIn && (loggedIn.nisn === updated.nisn || loggedIn.id_pendaftar === updated.id_pendaftar || loggedIn.id === updated.id)) {
+        loggedIn.status_akun = nextStatus;
+        localStorage.setItem('m3_spmb_logged_in_user', JSON.stringify(loggedIn));
+      }
+
+      renderStatus();
+      showInlineToast(`⚡ Status akun berhasil diubah menjadi: <strong>${nextStatus === 'active' ? 'ACTIVE (Akun Aktif)' : 'PENDING ACTIVATION (Menunggu Persetujuan Admin)'}</strong>`, nextStatus === 'active' ? 'success' : 'warning');
     });
+
+    // Event listener real-time
+    window.addEventListener('spmb_db_updated', () => renderStatus());
+    window.addEventListener('storage', () => renderStatus());
 
     renderStatus();
   </script>

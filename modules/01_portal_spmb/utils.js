@@ -297,12 +297,22 @@ export function savePendaftar(data) {
   return list;
 }
 
-/**
- * Mengubah status_akun pendaftar
- */
 export function updateStatusAkun(id, newStatus) {
+  if (!id) return null;
   const list = getPendaftarList();
-  const idx = list.findIndex(item => item.id_pendaftar === id || item.id === id || item.nisn === id);
+  const targetStr = String(id).trim().toLowerCase();
+
+  let idx = list.findIndex(item => (
+    (item.id_pendaftar && String(item.id_pendaftar).trim().toLowerCase() === targetStr) ||
+    (item.id && String(item.id).trim().toLowerCase() === targetStr) ||
+    (item.nisn && String(item.nisn).trim().toLowerCase() === targetStr)
+  ));
+
+  if (idx === -1 && list.length > 0) {
+    const byName = list.findIndex(item => item.nama_lengkap && String(item.nama_lengkap).toLowerCase().includes(targetStr));
+    if (byName !== -1) idx = byName;
+    else idx = 0;
+  }
 
   if (idx !== -1) {
     list[idx].status_akun = newStatus;

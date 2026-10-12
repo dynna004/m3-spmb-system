@@ -166,6 +166,14 @@ body {
   color: #000;
 }
 
+.btn:disabled,
+.btn[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(30%);
+  pointer-events: none;
+}
+
 /* Table */
 .table-responsive {
   overflow-x: auto;
