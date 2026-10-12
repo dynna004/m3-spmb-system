@@ -1,11 +1,7 @@
 /**
- * Modul 06: Loket Daftar Ulang & Penyerahan Berkas (Developer: Yosa)
+ * Modul 06: Loket Daftar Ulang & Penyerahan Berkas
+ * Developer: Yosa
+ * 
+ * Re-export dari implementation engine verifikasi.js
  */
-export function renderLoketDaftarUlang(containerId) {
-  document.getElementById(containerId).innerHTML = `
-    <div class="card">
-      <div class="card-header"><h2 class="card-title">📋 Verification Loket & Daftar Ulang</h2></div>
-      <p style="color: var(--text-muted);">Status: Modul siap dikembangkan oleh Developer Yosa.</p>
-    </div>
-  `;
-}
+export { renderVerifikasiLoket as renderLoketDaftarUlang, renderVerifikasiLoket } from './verifikasi.js';

@@ -1,0 +1,945 @@
+/* ==========================================================================
+   Modul 06: Verifikasi Loket & Daftar Ulang (Hybrid Implementation)
+   SMA Muhammadiyah 3 Yogyakarta - SPMB System
+   Design System: Bold, Clean High-Density Loket Dashboard (WCAG AA Compliant)
+   ========================================================================== */
+
+:root {
+  --loket-primary: #006837;
+  --loket-primary-dark: #004d28;
+  --loket-primary-light: #e8f5e9;
+  --loket-accent: #f5a623;
+  --loket-accent-dark: #d48806;
+  --loket-danger: #dc2626;
+  --loket-danger-bg: #fef2f2;
+  --loket-success: #16a34a;
+  --loket-success-bg: #f0fdf4;
+  --loket-warning: #ea580c;
+  --loket-warning-bg: #fff7ed;
+  --loket-info: #0284c7;
+  --loket-info-bg: #f0f9ff;
+  
+  --loket-bg: #f8fafc;
+  --loket-card-bg: #ffffff;
+  --loket-border: #e2e8f0;
+  --loket-border-strong: #cbd5e1;
+  --loket-text: #0f172a;
+  --loket-text-muted: #64748b;
+  --loket-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+  --loket-shadow-lg: 0 10px 25px -3px rgba(15, 23, 42, 0.09), 0 4px 10px -2px rgba(15, 23, 42, 0.05);
+  --loket-radius: 12px;
+  --loket-radius-sm: 8px;
+}
+
+/* Base Wrapper */
+.loket-wrapper {
+  color: var(--loket-text);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin: 0 auto;
+  max-width: 1400px;
+}
+
+/* Header Banner Khusus Loket */
+.loket-top-bar {
+  background: linear-gradient(135deg, #004d28 0%, #006837 100%);
+  color: #ffffff;
+  border-radius: var(--loket-radius);
+  padding: 1.25rem 1.75rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--loket-shadow-lg);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.loket-title-group h1 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: -0.02em;
+}
+
+.loket-title-group p {
+  margin: 4px 0 0 0;
+  font-size: 0.85rem;
+  color: #d1fae5;
+}
+
+.loket-meta-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.loket-chip {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(4px);
+}
+
+.loket-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.35);
+  display: inline-block;
+  animation: pulseDot 2s infinite;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+/* Quick Stat Counters */
+.loket-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.loket-stat-card {
+  background: var(--loket-card-bg);
+  border: 1px solid var(--loket-border);
+  border-radius: var(--loket-radius);
+  padding: 1.1rem 1.25rem;
+  box-shadow: var(--loket-shadow);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.loket-stat-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--loket-border-strong);
+}
+
+.loket-stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.loket-stat-icon.total { background: #e0f2fe; color: #0284c7; }
+.loket-stat-icon.ready { background: #fef3c7; color: #d97706; }
+.loket-stat-icon.verified { background: #dcfce7; color: #16a34a; }
+.loket-stat-icon.pending { background: #fee2e2; color: #dc2626; }
+
+.loket-stat-val {
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.loket-stat-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--loket-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Simulator Switcher Banner */
+.loket-tester-bar {
+  background: #f8fafc;
+  border: 1px dashed #94a3b8;
+  border-radius: var(--loket-radius-sm);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.loket-tester-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.loket-tester-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-tester {
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--loket-border-strong);
+  background: #ffffff;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-tester:hover {
+  background: #f1f5f9;
+  border-color: #64748b;
+}
+
+/* Main Two-Column Layout (Bento Grid) */
+.loket-main-grid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .loket-main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Left Column: Search & Queue Panel */
+.loket-sidebar-panel {
+  background: var(--loket-card-bg);
+  border: 1px solid var(--loket-border);
+  border-radius: var(--loket-radius);
+  box-shadow: var(--loket-shadow);
+  padding: 1.25rem;
+  position: sticky;
+  top: 1rem;
+}
+
+.loket-search-box {
+  margin-bottom: 1rem;
+}
+
+.loket-input-group {
+  position: relative;
+  display: flex;
+  gap: 8px;
+}
+
+.loket-search-input {
+  flex: 1;
+  padding: 10px 14px 10px 38px;
+  font-size: 0.875rem;
+  border: 1.5px solid var(--loket-border);
+  border-radius: var(--loket-radius-sm);
+  background: #f8fafc;
+  color: var(--loket-text);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.loket-search-input:focus {
+  background: #ffffff;
+  border-color: var(--loket-primary);
+  box-shadow: 0 0 0 3px rgba(0, 104, 55, 0.15);
+}
+
+.loket-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 0.95rem;
+  pointer-events: none;
+}
+
+.loket-filter-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--loket-border);
+}
+
+.btn-filter {
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #475569;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.btn-filter.active {
+  background: var(--loket-primary);
+  color: #ffffff;
+}
+
+.btn-filter:hover:not(.active) {
+  background: #e2e8f0;
+}
+
+/* Queue List Container */
+.loket-queue-list {
+  max-height: 520px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 4px;
+}
+
+.loket-queue-card {
+  padding: 12px;
+  border-radius: var(--loket-radius-sm);
+  border: 1.5px solid var(--loket-border);
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+
+.loket-queue-card:hover {
+  border-color: var(--loket-primary);
+  transform: translateX(3px);
+  box-shadow: 0 2px 8px rgba(0, 104, 55, 0.08);
+}
+
+.loket-queue-card.selected {
+  border-color: var(--loket-primary);
+  background: #f0fdf4;
+  box-shadow: 0 0 0 2px rgba(0, 104, 55, 0.2);
+}
+
+.loket-queue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.loket-reg-id {
+  font-family: 'Space Grotesk', monospace, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--loket-primary);
+  background: var(--loket-primary-light);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.loket-queue-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--loket-text);
+  margin-top: 2px;
+}
+
+.loket-queue-sub {
+  font-size: 0.78rem;
+  color: var(--loket-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.loket-queue-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+/* Badges */
+.badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.badge-tag.lulus { background: #dcfce7; color: #15803d; }
+.badge-tag.tidak-lulus { background: #fee2e2; color: #b91c1c; }
+.badge-tag.cadangan { background: #fef3c7; color: #b45309; }
+
+.badge-tag.lunas { background: #dbeafe; color: #1d4ed8; }
+.badge-tag.belum-lunas { background: #ffedd5; color: #c2410c; }
+
+.badge-tag.verified { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.badge-tag.ready { background: #fef08a; color: #854d0e; }
+.badge-tag.blocked { background: #f1f5f9; color: #64748b; }
+
+/* Right Column: Workbench / Workspace */
+.loket-workbench {
+  background: var(--loket-card-bg);
+  border: 1px solid var(--loket-border);
+  border-radius: var(--loket-radius);
+  box-shadow: var(--loket-shadow);
+  padding: 1.5rem;
+  min-height: 600px;
+}
+
+/* 5 UI States: Empty State */
+.loket-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: var(--loket-text-muted);
+}
+
+.loket-empty-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  margin-bottom: 1.25rem;
+  color: #94a3b8;
+}
+
+.loket-empty-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--loket-text);
+  margin-bottom: 0.5rem;
+}
+
+.loket-empty-desc {
+  font-size: 0.88rem;
+  max-width: 440px;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+/* Loading Skeleton State */
+.loket-skeleton-state {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: pulseSkeleton 1.5s infinite ease-in-out;
+}
+
+@keyframes pulseSkeleton {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.skeleton-box {
+  background: #e2e8f0;
+  border-radius: 8px;
+}
+
+/* Workbench Sections */
+.wb-section {
+  border-bottom: 1px solid var(--loket-border);
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.wb-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.wb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.wb-student-name {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--loket-text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wb-student-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: var(--loket-text-muted);
+}
+
+.wb-student-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Pre-condition Verification Cards (Kelulusan & Keuangan) */
+.pre-conditions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .pre-conditions-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.condition-card {
+  border: 1.5px solid var(--loket-border);
+  border-radius: var(--loket-radius-sm);
+  padding: 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #fafafa;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.condition-card.passed {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.condition-card.failed {
+  border-color: #fca5a5;
+  background: #fef2f2;
+}
+
+.condition-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.condition-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--loket-text-muted);
+}
+
+.condition-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.condition-desc {
+  font-size: 0.78rem;
+  color: #475569;
+  line-height: 1.4;
+}
+
+/* Checklist Dokumen Fisik */
+.doc-checklist-container {
+  background: #ffffff;
+  border: 1px solid var(--loket-border);
+  border-radius: var(--loket-radius-sm);
+  padding: 1.25rem;
+}
+
+.doc-checklist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--loket-border);
+}
+
+.doc-checklist-header h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.doc-checklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.doc-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--loket-border);
+  background: #f8fafc;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.doc-item-row:hover {
+  background: #f1f5f9;
+  border-color: var(--loket-border-strong);
+}
+
+.doc-item-row.checked {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.doc-label-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.custom-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 2px solid #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  background: white;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.doc-item-row.checked .custom-checkbox {
+  background: var(--loket-primary);
+  border-color: var(--loket-primary);
+}
+
+.doc-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--loket-text);
+}
+
+.doc-tag-req {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #dc2626;
+  background: #fee2e2;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.doc-tag-opt {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #475569;
+  background: #e2e8f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Notes & Officer Area */
+.officer-notes-area {
+  margin-top: 1rem;
+}
+
+.officer-notes-area label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--loket-text-muted);
+}
+
+.officer-notes-area textarea {
+  width: 100%;
+  border: 1px solid var(--loket-border);
+  border-radius: var(--loket-radius-sm);
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  outline: none;
+  resize: vertical;
+}
+
+.officer-notes-area textarea:focus {
+  border-color: var(--loket-primary);
+  box-shadow: 0 0 0 3px rgba(0, 104, 55, 0.1);
+}
+
+/* Action Area (Selesaikan Verifikasi) */
+.wb-action-bar {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--loket-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.wb-action-status-info {
+  font-size: 0.85rem;
+  color: var(--loket-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-complete-verification {
+  background: var(--loket-primary);
+  color: #ffffff;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: var(--loket-radius-sm);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 104, 55, 0.25);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-complete-verification:hover:not(:disabled) {
+  background: var(--loket-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 104, 55, 0.35);
+}
+
+.btn-complete-verification:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-complete-verification:disabled {
+  background: #cbd5e1;
+  color: #64748b;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Locked Card State */
+.locked-banner {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  color: #f8fafc;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--loket-radius-sm);
+  margin-bottom: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border: 1px solid #334155;
+}
+
+.locked-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+/* Modal Popup Tanda Terima / Bukti Cetak */
+.loket-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+
+.loket-modal-card {
+  background: #ffffff;
+  border-radius: var(--loket-radius);
+  max-width: 680px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--loket-shadow-lg);
+  display: flex;
+  flex-direction: column;
+}
+
+.loket-modal-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--loket-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.loket-modal-header h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--loket-primary);
+  margin: 0;
+}
+
+.loket-modal-body {
+  padding: 1.5rem;
+  line-height: 1.5;
+}
+
+.receipt-sheet {
+  border: 2px dashed #94a3b8;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background: #fafaf9;
+}
+
+.receipt-header {
+  text-align: center;
+  border-bottom: 2px solid #006837;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.receipt-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #006837;
+  text-transform: uppercase;
+}
+
+.receipt-sub {
+  font-size: 0.8rem;
+  color: #475569;
+}
+
+.receipt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.receipt-table td {
+  padding: 6px 4px;
+  vertical-align: top;
+}
+
+.receipt-table td:first-child {
+  width: 160px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.receipt-table td:nth-child(2) {
+  width: 12px;
+}
+
+.receipt-table td:last-child {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.receipt-docs-box {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.receipt-docs-box ul {
+  padding-left: 18px;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.receipt-sign-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+}
+
+.receipt-sign-box {
+  padding-top: 40px;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.loket-modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--loket-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  background: #f8fafc;
+}
+
+/* Print Styles */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .loket-modal-card, .receipt-sheet, .receipt-sheet * {
+    visibility: visible;
+  }
+  .loket-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: transparent;
+  }
+  .loket-modal-card {
+    box-shadow: none;
+    border: none;
+    width: 100%;
+    max-width: 100%;
+  }
+  .loket-modal-header, .loket-modal-footer {
+    display: none !important;
+  }
+}
