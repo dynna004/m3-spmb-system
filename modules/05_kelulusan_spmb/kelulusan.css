@@ -53,13 +53,17 @@
 .kelulusan-shell {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: var(--kel-text-body);
-  background: var(--kel-bg-page);
+  background: transparent;
   border-radius: var(--kel-radius-lg);
-  border: 1px solid var(--kel-border);
-  box-shadow: var(--kel-shadow-md);
-  overflow: hidden;
+  border: none;
+  box-shadow: none;
+  overflow: visible;
   display: flex;
   flex-direction: column;
+  gap: 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
   transition: var(--kel-transition);
 }
 
@@ -73,89 +77,55 @@ body.kelulusan-standalone-body {
 }
 
 .kelulusan-standalone-container {
-  max-width: 1440px;
+  max-width: 1200px;
   margin: 1.5rem auto;
   padding: 0 1.25rem;
 }
 
-/* Main Dashboard 2-Column Layout */
+/* Main Dashboard 1-Column Layout (Single Column Centered) */
 .kelulusan-dashboard-layout {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  min-height: 820px;
-  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: transparent;
+  gap: 1.25rem;
 }
 
 @media (max-width: 1024px) {
   .kelulusan-dashboard-layout {
-    grid-template-columns: 1fr;
+    width: 100%;
   }
 }
 
 /* ====================================================
-   1. SIDEBAR (Kiri - Identik dengan Modul 02)
+   1. HORIZONTAL NAVIGATION MENU (Eks-Sidebar)
+   Bentuk Pill-Tabs Horizontal di Bawah Header / Atas Konten
    ==================================================== */
 .kelulusan-sidebar {
   background: #ffffff;
-  border-right: 1px solid var(--kel-border);
+  border-right: none;
+  border: 1px solid var(--kel-border);
+  border-radius: var(--kel-radius-lg);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 1rem;
+  padding: 0.85rem 1.25rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   transition: var(--kel-transition);
 }
 
+/* Sembunyikan Logo Brand Sidebar jika sudah ada di Header */
 .sidebar-brand-kel {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0.5rem 0.5rem 1.25rem 0.5rem;
-  border-bottom: 1px solid var(--kel-border);
-  margin-bottom: 1.25rem;
-}
-
-.brand-icon-box-kel {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #006837 0%, #004d28 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-size: 1.35rem;
-  font-weight: 800;
-  box-shadow: 0 4px 12px rgba(0, 104, 55, 0.25);
-  flex-shrink: 0;
-}
-
-.brand-info-kel {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.brand-name-kel {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: var(--kel-primary);
-  line-height: 1.2;
-}
-
-.brand-tagline-kel {
-  font-size: 0.72rem;
-  color: var(--kel-text-muted);
-  font-weight: 500;
-  white-space: nowrap;
+  display: none !important;
 }
 
 .sidebar-section-title {
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--kel-text-muted);
-  margin: 0.75rem 0.5rem 0.5rem 0.5rem;
+  display: none !important;
 }
 
 .sidebar-menu-list {
@@ -163,101 +133,130 @@ body.kelulusan-standalone-body {
   padding: 0;
   margin: 0;
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .sidebar-menu-item {
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
 }
 
+/* Nav Item Link: Bentuk "Pill" (Kapsul) Utuh */
 .sidebar-menu-link {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 12px;
-  border-radius: var(--kel-radius-sm);
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 9999px; /* Pill kapsul utuh */
+  border: 1px solid var(--kel-border);
+  background: #ffffff;
   color: var(--kel-text-body);
-  text-decoration: none;
   font-size: 0.85rem;
   font-weight: 600;
+  text-decoration: none;
   cursor: pointer;
   transition: var(--kel-transition);
+  user-select: none;
+  white-space: nowrap;
 }
 
 .sidebar-menu-link:hover {
-  background: #f1f5f9;
+  background: #f8fafc;
+  border-color: #cbd5e1;
   color: var(--kel-primary);
 }
 
 .sidebar-menu-link.parent-active {
-  background: var(--kel-primary-light);
-  color: var(--kel-primary);
+  background: var(--kel-primary);
+  border-color: var(--kel-primary);
+  color: #ffffff;
   font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 104, 55, 0.25);
 }
 
+.sidebar-menu-link.parent-active svg {
+  color: #ffffff;
+}
+
+.sidebar-menu-link.parent-active span {
+  color: #ffffff;
+}
+
+/* Sub-Menu List Horizontal Pills */
 .sidebar-submenu-list {
   list-style: none;
-  padding: 4px 0 6px 14px;
+  padding: 0;
   margin: 0;
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  border-left: 2px solid var(--kel-border);
-  margin-left: 20px;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  border-left: none;
+  flex-wrap: wrap;
 }
 
 .sidebar-submenu-item a {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 7px 10px;
-  border-radius: 6px;
-  color: var(--kel-text-muted);
-  text-decoration: none;
-  font-size: 0.8rem;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 9999px; /* Pill kapsul utuh */
+  border: 1px solid var(--kel-border);
+  background: #ffffff;
+  color: var(--kel-text-body);
+  font-size: 0.82rem;
   font-weight: 600;
+  text-decoration: none;
   transition: var(--kel-transition);
+  white-space: nowrap;
 }
 
 .sidebar-submenu-item a:hover {
-  color: var(--kel-primary);
   background: #f8fafc;
+  border-color: #cbd5e1;
+  color: var(--kel-primary);
 }
 
+/* State Aktif Submenu: Hijau Solid #006837 & Teks Putih */
 .sidebar-submenu-item.active a {
-  color: var(--kel-primary);
-  background: #ffffff;
-  font-weight: 800;
-  box-shadow: var(--kel-shadow-xs);
-  border: 1px solid var(--kel-primary-border);
+  background: var(--kel-primary); /* #006837 */
+  border-color: var(--kel-primary);
+  color: #ffffff;
+  font-weight: 700;
+  border-left: none;
+  box-shadow: 0 2px 8px rgba(0, 104, 55, 0.25);
 }
 
 .sidebar-active-badge {
   font-size: 0.65rem;
   font-weight: 800;
-  background: var(--kel-primary);
-  color: #ffffff;
-  padding: 2px 6px;
-  border-radius: 12px;
+  background: #ffffff;
+  color: var(--kel-primary);
+  padding: 2px 8px;
+  border-radius: 9999px;
 }
 
-/* Sidebar Footer */
+/* Sidebar Footer / Badge Status Server Horizontal */
 .sidebar-footer-kel {
-  border-top: 1px solid var(--kel-border);
-  padding-top: 1rem;
-  margin-top: 1.5rem;
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
 }
 
 .status-indicator-box {
   background: #f8fafc;
   border: 1px solid var(--kel-border);
-  border-radius: var(--kel-radius-sm);
-  padding: 10px 12px;
+  border-radius: 9999px;
+  padding: 6px 14px;
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
 }
 
 .pulse-dot-kel {
@@ -277,24 +276,29 @@ body.kelulusan-standalone-body {
 }
 
 /* ====================================================
-   2. TOP HEADER (Atas)
+   2. TOP HEADER (Atas) - TEMA HIJAU SOLID (#006837)
+   Ujung membulat konsisten dengan Modul 03 (Keuangan)
    ==================================================== */
 .kelulusan-main-area {
   display: flex;
   flex-direction: column;
-  background: var(--kel-bg-page);
+  background: transparent;
   overflow-x: hidden;
+  width: 100%;
 }
 
 .kelulusan-top-header {
-  background: #ffffff;
-  border-bottom: 1px solid var(--kel-border);
+  background-color: var(--kel-primary); /* #006837 */
+  color: #ffffff;
+  border-radius: var(--kel-radius-lg); /* 16px melengkung rapi */
+  border: 1px solid rgba(0, 104, 55, 0.4);
   padding: 1.25rem 1.75rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
   flex-wrap: wrap;
+  box-shadow: 0 4px 16px rgba(0, 104, 55, 0.22);
 }
 
 .header-left-box {
@@ -308,20 +312,25 @@ body.kelulusan-standalone-body {
   align-items: center;
   gap: 6px;
   font-size: 0.78rem;
-  color: var(--kel-text-muted);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.header-breadcrumbs span:last-child {
+  color: #ffffff !important;
+  font-weight: 700;
 }
 
 .header-main-title {
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   font-weight: 800;
-  color: var(--kel-text-title);
+  color: #ffffff;
   margin: 0;
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-/* Prominent Publication Status Pill */
+/* Prominent Publication Status Pill di Header Hijau */
 .header-pub-badge {
   display: inline-flex;
   align-items: center;
@@ -329,28 +338,29 @@ body.kelulusan-standalone-body {
   font-size: 0.76rem;
   font-weight: 800;
   padding: 5px 12px;
-  border-radius: 20px;
+  border-radius: 9999px;
   letter-spacing: 0.02em;
   transition: var(--kel-transition);
 }
 
 .header-pub-badge.draft {
-  background: #f1f5f9;
-  color: #475569;
-  border: 1px solid #cbd5e1;
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(4px);
 }
 
 .header-pub-badge.draft .dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #f59e0b;
+  background: #fcd34d;
 }
 
 .header-pub-badge.published {
-  background: var(--kel-success-light);
-  color: var(--kel-success-text);
-  border: 1px solid var(--kel-success-border);
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
   box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
 }
 
@@ -368,59 +378,68 @@ body.kelulusan-standalone-body {
   gap: 12px;
 }
 
+/* Search Bar di Atas Latar Hijau */
 .header-search-wrap {
   position: relative;
-  width: 260px;
+  width: 270px;
 }
 
 .header-search-input {
   width: 100%;
-  padding: 8px 12px 8px 34px;
-  border: 1px solid var(--kel-border);
-  border-radius: var(--kel-radius-sm);
-  font-size: 0.82rem;
-  color: var(--kel-text-body);
-  background: #f8fafc;
+  padding: 9px 14px 9px 36px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  color: var(--kel-text-title);
+  background: #ffffff;
   outline: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: var(--kel-transition);
+}
+
+.header-search-input::placeholder {
+  color: #94a3b8;
 }
 
 .header-search-input:focus {
   background: #ffffff;
-  border-color: var(--kel-primary);
-  box-shadow: 0 0 0 3px rgba(0, 104, 55, 0.1);
+  border-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35), 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .header-search-icon {
   position: absolute;
-  left: 10px;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--kel-text-muted);
+  color: var(--kel-primary);
   pointer-events: none;
 }
 
+/* Administrator Profile Box di Atas Latar Hijau */
 .admin-profile-box {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 4px 10px;
-  border-radius: 30px;
-  background: #f8fafc;
-  border: 1px solid var(--kel-border);
+  padding: 4px 14px 4px 5px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
 }
 
 .admin-avatar-circle {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #006837 0%, #004d28 100%);
-  color: #ffffff;
-  font-size: 0.78rem;
+  background: #ffffff;
+  color: var(--kel-primary);
+  font-size: 0.8rem;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 .admin-meta-text {
@@ -429,22 +448,22 @@ body.kelulusan-standalone-body {
 }
 
 .admin-name-text {
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  color: var(--kel-text-title);
+  color: #ffffff;
   line-height: 1.1;
 }
 
 .admin-role-text {
   font-size: 0.68rem;
-  color: var(--kel-text-muted);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 /* ====================================================
    3. KONTEN UTAMA: SECTION 1 (KUOTA & PERANKINGAN)
    ==================================================== */
 .kelulusan-content-body {
-  padding: 1.75rem;
+  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -453,9 +472,9 @@ body.kelulusan-standalone-body {
 .quota-control-card {
   background: #ffffff;
   border: 1px solid var(--kel-border);
-  border-radius: var(--kel-radius-md);
+  border-radius: var(--kel-radius-lg);
   padding: 1.25rem 1.5rem;
-  box-shadow: var(--kel-shadow-sm);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -576,8 +595,8 @@ body.kelulusan-standalone-body {
   background: linear-gradient(135deg, #006837 0%, #004d28 100%);
   color: #ffffff;
   border: 1px solid #10b981;
-  border-radius: var(--kel-radius-sm);
-  padding: 12px 20px;
+  border-radius: 9999px; /* Pill kapsul */
+  padding: 12px 22px;
   font-size: 0.88rem;
   font-weight: 800;
   display: inline-flex;
@@ -604,11 +623,14 @@ body.kelulusan-standalone-body {
 
 /* ====================================================
    4. KONTEN UTAMA: SECTION 2 (SUMMARY CARDS STATISTIK)
+   - Tanpa pseudo-element ::before garis tebal
+   - Background putih, border tipis abu-abu
+   - Icon di sebelah kiri teks angka
    ==================================================== */
 .kelulusan-summary-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 @media (max-width: 1024px) {
@@ -626,41 +648,58 @@ body.kelulusan-standalone-body {
 .summary-stat-card {
   background: #ffffff;
   border: 1px solid var(--kel-border);
-  border-radius: var(--kel-radius-md);
-  padding: 1.15rem 1.25rem;
-  box-shadow: var(--kel-shadow-xs);
+  border-radius: var(--kel-radius-lg); /* 16px */
+  padding: 1.25rem 1.4rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  justify-content: flex-start;
+  gap: 1.15rem;
   position: relative;
   overflow: hidden;
   transition: var(--kel-transition);
 }
 
+/* Hapus pseudo-element ::before garis tebal di pinggir kartu */
+.summary-stat-card::before,
+.summary-stat-card.card-total::before,
+.summary-stat-card.card-lulus::before,
+.summary-stat-card.card-cadangan::before,
+.summary-stat-card.card-tidak-lulus::before {
+  display: none !important;
+  content: none !important;
+}
+
 .summary-stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: var(--kel-shadow-sm);
+  box-shadow: var(--kel-shadow-md);
+  border-color: #cbd5e1;
 }
 
-.summary-stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
+.stat-icon-wrapper-kel {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  flex-shrink: 0;
+  order: 1; /* Posisi icon di sebelah kiri */
+  transition: var(--kel-transition);
 }
-
-.summary-stat-card.card-total::before { background: #3b82f6; }
-.summary-stat-card.card-lulus::before { background: #16a34a; }
-.summary-stat-card.card-cadangan::before { background: #f59e0b; }
-.summary-stat-card.card-tidak-lulus::before { background: #ef4444; }
 
 .stat-info-col {
   display: flex;
   flex-direction: column;
+  order: 2; /* Posisi teks di sebelah kanan icon */
 }
+
+.card-total .stat-icon-wrapper-kel { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+.card-lulus .stat-icon-wrapper-kel { background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
+.card-cadangan .stat-icon-wrapper-kel { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+.card-tidak-lulus .stat-icon-wrapper-kel { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
 
 .stat-label-text {
   font-size: 0.78rem;
@@ -684,30 +723,14 @@ body.kelulusan-standalone-body {
   margin-top: 4px;
 }
 
-.stat-icon-wrapper-kel {
-  width: 46px;
-  height: 46px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.35rem;
-  flex-shrink: 0;
-}
-
-.card-total .stat-icon-wrapper-kel { background: #eff6ff; color: #2563eb; }
-.card-lulus .stat-icon-wrapper-kel { background: #dcfce7; color: #16a34a; }
-.card-cadangan .stat-icon-wrapper-kel { background: #fef3c7; color: #b45309; }
-.card-tidak-lulus .stat-icon-wrapper-kel { background: #fee2e2; color: #dc2626; }
-
 /* ====================================================
-   5. KONTEN UTAMA: SECTION 3 (DATA TABLE CARD)
+   5. KONTEN UTAMA: SECTION 3 (DATA TABLE CARD & FILTER PILLS)
    ==================================================== */
 .kelulusan-table-card {
   background: #ffffff;
   border: 1px solid var(--kel-border);
-  border-radius: var(--kel-radius-md);
-  box-shadow: var(--kel-shadow-sm);
+  border-radius: var(--kel-radius-lg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -737,35 +760,45 @@ body.kelulusan-standalone-body {
   margin: 0;
 }
 
+/* Filter Pills: Bentuk "Pill" (Kapsul) Utuh */
 .table-filter-pills {
   display: flex;
   align-items: center;
-  background: #f1f5f9;
-  padding: 3px;
-  border-radius: 8px;
-  gap: 3px;
+  background: transparent;
+  padding: 0;
+  border-radius: 9999px;
+  gap: 6px;
 }
 
 .filter-pill-btn {
-  border: none;
-  background: transparent;
-  padding: 5px 12px;
-  font-size: 0.78rem;
-  font-weight: 700;
+  border: 1px solid var(--kel-border);
+  background: #ffffff;
+  padding: 6px 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
   color: var(--kel-text-muted);
-  border-radius: 6px;
+  border-radius: 9999px; /* Pill kapsul utuh */
   cursor: pointer;
   transition: var(--kel-transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
 .filter-pill-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
   color: var(--kel-primary);
 }
 
+/* State Aktif: Hijau Solid #006837 & Teks Putih */
 .filter-pill-btn.active {
-  background: #ffffff;
-  color: var(--kel-primary);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  background: var(--kel-primary); /* #006837 */
+  color: #ffffff;
+  border-color: var(--kel-primary);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 104, 55, 0.25);
 }
 
 .toolbar-right-actions {
@@ -778,11 +811,11 @@ body.kelulusan-standalone-body {
 /* Global Action 1: Cetak Draf Hasil (PDF) */
 .btn-draft-pdf {
   background: #ffffff;
-  color: #334155;
-  border: 1px solid #cbd5e1;
-  border-radius: var(--kel-radius-sm);
-  padding: 8px 14px;
-  font-size: 0.82rem;
+  color: var(--kel-text-body);
+  border: 1px solid var(--kel-border);
+  border-radius: 9999px; /* Pill kapsul */
+  padding: 7px 16px;
+  font-size: 0.8rem;
   font-weight: 700;
   display: inline-flex;
   align-items: center;
@@ -793,17 +826,17 @@ body.kelulusan-standalone-body {
 
 .btn-draft-pdf:hover {
   background: #f8fafc;
-  border-color: #94a3b8;
-  color: var(--kel-text-title);
+  border-color: #cbd5e1;
+  color: var(--kel-primary);
 }
 
 /* Global Action 2: Publikasikan ke Portal (Prominent Primary #006837) */
 .btn-publish-portal {
   background: linear-gradient(135deg, #006837 0%, #004d28 100%);
   color: #ffffff;
-  border: 1px solid #006837;
-  border-radius: var(--kel-radius-sm);
-  padding: 8px 18px;
+  border: 1px solid #10b981;
+  border-radius: 9999px; /* Pill kapsul */
+  padding: 7px 18px;
   font-size: 0.82rem;
   font-weight: 800;
   display: inline-flex;

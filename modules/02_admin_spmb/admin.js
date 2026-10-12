@@ -368,9 +368,9 @@ export function renderAdminSPMB(containerId) {
     <div class="admin-shell" id="admin-spmb-root">
       
       <!-- Top Sub-Navigation Banner for Context -->
-      <div style="background: #ffffff; padding: 0.75rem 1.75rem; border-bottom: 1px solid var(--admin-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+      <div style="background: #ffffff; padding: 0.75rem 1.75rem; border: 1px solid var(--admin-border); border-radius: var(--admin-radius-lg); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
         <div style="display: flex; align-items: center; gap: 10px;">
-          <span style="font-size: 0.82rem; font-weight: 700; color: var(--admin-primary); background: var(--admin-primary-light); padding: 4px 10px; border-radius: 20px;">
+          <span style="font-size: 0.82rem; font-weight: 700; color: var(--admin-primary); background: var(--admin-primary-light); padding: 4px 12px; border-radius: 9999px;">
             🛡️ Modul 02: Admin SPMB
           </span>
           <span style="font-size: 0.8rem; color: var(--admin-text-muted);">
@@ -383,186 +383,184 @@ export function renderAdminSPMB(containerId) {
         </div>
       </div>
 
-      <!-- Main Dashboard 2-Column Layout -->
+      <!-- Main Dashboard Single Column Centered Layout -->
       <div class="admin-dashboard-layout">
         
         <!-- ==============================================
-             1. SIDEBAR (Kiri)
+             1. HEADER MODUL (Tema Hijau Solid #006837)
              ============================================== -->
-        <aside class="admin-sidebar">
-          <div>
-            <!-- Sidebar Brand Logo -->
-            <div class="sidebar-brand">
-              <div class="brand-icon-box">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                </svg>
-              </div>
-              <div class="brand-info">
-                <span class="brand-name">SPMB Admin</span>
-                <span class="brand-tagline">SMA Muhammadiyah 3 Ygy</span>
-              </div>
+        <header class="admin-top-header">
+          <div class="header-left">
+            <div class="header-breadcrumb">
+              <span>Administrasi SPMB</span>
+              <span class="breadcrumb-separator">/</span>
+              <span>Pengelolaan Akun</span>
             </div>
-
-            <!-- Navigasi Utama -->
-            <div class="nav-section-title">Navigasi Utama</div>
-            <ul class="nav-menu-list">
-              
-              <!-- Menu Aktif: Menu Administrasi SPMB -->
-              <li class="nav-menu-item">
-                <div class="nav-item-link parent-active" id="nav-parent-administrasi">
-                  <div class="nav-link-content">
-                    <span class="nav-link-icon">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="4" width="18" height="16" rx="3"/>
-                        <line x1="9" y1="9" x2="15" y2="9"/>
-                        <line x1="9" y1="13" x2="15" y2="13"/>
-                        <line x1="9" y1="17" x2="11" y2="17"/>
-                      </svg>
-                    </span>
-                    <span>Menu Administrasi SPMB</span>
-                  </div>
-                  <span class="nav-chevron">▶</span>
-                </div>
-
-                <!-- Sub-Menu: Pengelolaan Akun (ACTIVE) -->
-                <ul class="nav-submenu-list">
-                  <li class="nav-submenu-item active">
-                    <a href="javascript:void(0)" id="sub-pengelolaan-akun">
-                      <span>👥 Pengelolaan Akun</span>
-                      <span class="sub-badge">Aktif</span>
-                    </a>
-                  </li>
-                  <li class="nav-submenu-item">
-                    <a href="javascript:void(0)" onclick="alert('Menu Verifikasi Berkas terintegrasi pada Modul 06 (Verifikasi Loket & Berkas).')">
-                      <span>📑 Verifikasi Berkas</span>
-                    </a>
-                  </li>
-                  <li class="nav-submenu-item">
-                    <a href="javascript:void(0)" onclick="alert('Menu Jadwal Wawancara terintegrasi pada Modul 04 (Wawancara).')">
-                      <span>🎤 Jadwal Wawancara</span>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <!-- Menu Tambahan Pendukung -->
-              <li class="nav-menu-item" style="margin-top: 6px;">
-                <div class="nav-item-link" onclick="alert('Fitur Statistik & Laporan tersedia di Modul 10 (Executive Report).')">
-                  <div class="nav-link-content">
-                    <span class="nav-link-icon">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="20" x2="18" y2="10"/>
-                        <line x1="12" y1="20" x2="12" y2="4"/>
-                        <line x1="6" y1="20" x2="6" y2="14"/>
-                      </svg>
-                    </span>
-                    <span>Laporan & Statistik</span>
-                  </div>
-                </div>
-              </li>
-
-              <li class="nav-menu-item">
-                <div class="nav-item-link" onclick="alert('Pengaturan Kuota Sekolah terintegrasi pada Schema Tata Usaha (Modul 08).')">
-                  <div class="nav-link-content">
-                    <span class="nav-link-icon">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3"/>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                      </svg>
-                    </span>
-                    <span>Pengaturan Kuota</span>
-                  </div>
-                </div>
-              </li>
-            </ul>
+            <h1 class="header-title">
+              <span>Pengelolaan Akun Peserta</span>
+            </h1>
           </div>
 
-          <!-- Sidebar Footer: Status Sistem -->
+          <div class="header-right">
+            <!-- Search Bar di Atas Header Hijau -->
+            <div class="search-bar-wrapper">
+              <svg class="search-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input 
+                type="text" 
+                id="admin-search-input" 
+                class="search-input-field" 
+                placeholder="Cari nama, no. pendaftaran, email..." 
+                autocomplete="off"
+              />
+              <button type="button" id="admin-search-clear" class="search-clear-btn" title="Hapus pencarian">✕</button>
+            </div>
+
+            <!-- Notification Icon -->
+            <button type="button" class="header-action-btn" id="btn-admin-notif" title="Notifikasi Baru">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+              <span class="notif-badge-pill" id="badge-notif-count">3</span>
+            </button>
+
+            <!-- Profil Admin -->
+            <div class="admin-profile-pill" id="admin-profile-card" title="Profil Administrator">
+              <div class="admin-avatar">AP</div>
+              <div class="admin-profile-meta">
+                <span class="admin-name">Admin SPMB</span>
+                <span class="admin-role">Superadmin IT</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- ==============================================
+             2. MENU NAVIGASI HORIZONTAL (Pill-Tabs)
+             Terletak di Bawah Header Modul
+             ============================================== -->
+        <aside class="admin-sidebar">
+          <!-- Logo Brand Sidebar Disembunyikan (Sudah di Header Utama) -->
+          <div class="sidebar-brand">
+            <div class="brand-icon-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <div class="brand-info">
+              <span class="brand-name">SPMB Admin</span>
+              <span class="brand-tagline">SMA Muhammadiyah 3 Ygy</span>
+            </div>
+          </div>
+
+          <div class="nav-section-title">Navigasi Utama</div>
+
+          <!-- Navigasi Pill-Tabs Horizontal -->
+          <ul class="nav-menu-list">
+            <!-- Menu Aktif: Administrasi SPMB -->
+            <li class="nav-menu-item">
+              <div class="nav-item-link parent-active" id="nav-parent-administrasi">
+                <div class="nav-link-content">
+                  <span class="nav-link-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="16" rx="3"/>
+                      <line x1="9" y1="9" x2="15" y2="9"/>
+                      <line x1="9" y1="13" x2="15" y2="13"/>
+                      <line x1="9" y1="17" x2="11" y2="17"/>
+                    </svg>
+                  </span>
+                  <span>Menu Administrasi SPMB</span>
+                </div>
+              </div>
+            </li>
+
+            <!-- Sub-Menu: Pengelolaan Akun (ACTIVE) -->
+            <li class="nav-menu-item">
+              <ul class="nav-submenu-list">
+                <li class="nav-submenu-item active">
+                  <a href="javascript:void(0)" id="sub-pengelolaan-akun">
+                    <span>👥 Pengelolaan Akun</span>
+                    <span class="sub-badge">Aktif</span>
+                  </a>
+                </li>
+                <li class="nav-submenu-item">
+                  <a href="javascript:void(0)" onclick="alert('Menu Verifikasi Berkas terintegrasi pada Modul 06 (Verifikasi Loket & Berkas).')">
+                    <span>📑 Verifikasi Berkas</span>
+                  </a>
+                </li>
+                <li class="nav-submenu-item">
+                  <a href="javascript:void(0)" onclick="alert('Menu Jadwal Wawancara terintegrasi pada Modul 04 (Wawancara).')">
+                    <span>🎤 Jadwal Wawancara</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            <!-- Menu Tambahan Pendukung -->
+            <li class="nav-menu-item">
+              <div class="nav-item-link" onclick="alert('Fitur Statistik & Laporan tersedia di Modul 10 (Executive Report).')">
+                <div class="nav-link-content">
+                  <span class="nav-link-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="20" x2="18" y2="10"/>
+                      <line x1="12" y1="20" x2="12" y2="4"/>
+                      <line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                  </span>
+                  <span>Laporan & Statistik</span>
+                </div>
+              </div>
+            </li>
+
+            <li class="nav-menu-item">
+              <div class="nav-item-link" onclick="alert('Pengaturan Kuota Sekolah terintegrasi pada Schema Tata Usaha (Modul 08).')">
+                <div class="nav-link-content">
+                  <span class="nav-link-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="3"/>
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                  </span>
+                  <span>Pengaturan Kuota</span>
+                </div>
+              </div>
+            </li>
+
+            <!-- Shortcut Loket Walk-in di Pill Bar -->
+            <li class="nav-menu-item">
+              <div class="nav-item-link" id="sidebar-shortcut-walkin" style="cursor: pointer;">
+                <div class="nav-link-content">
+                  <span>➕ Loket Walk-in</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+
+          <!-- Status Sistem di Sisi Kanan Horizontal Menu -->
           <div class="sidebar-footer">
             <div class="system-status-box">
               <div class="status-indicator-row">
                 <span class="pulse-dot"></span>
                 <span>Server SPMB Aktif</span>
               </div>
-              <div style="color: var(--admin-text-muted); font-size: 0.7rem; line-height: 1.4;">
-                Data Terhubung: <strong>spmb_pendaftar_db</strong><br>
-                Tahun Ajaran: 2026/2027
-              </div>
             </div>
           </div>
         </aside>
 
         <!-- ==============================================
-             2. MAIN AREA (Header + Konten Utama)
+             3. MAIN AREA (Area Konten Utama)
              ============================================== -->
         <main class="admin-main-area">
-          
-          <!-- Top Header (Atas) -->
-          <header class="admin-top-header">
-            <div class="header-left">
-              <div class="header-breadcrumb">
-                <span>Administrasi SPMB</span>
-                <span class="breadcrumb-separator">/</span>
-                <span style="color: var(--admin-primary); font-weight: 600;">Pengelolaan Akun</span>
-              </div>
-              <h1 class="header-title">
-                <span>Pengelolaan Akun Peserta</span>
-              </h1>
-            </div>
-
-            <div class="header-right">
-              <!-- Search Bar -->
-              <div class="search-bar-wrapper">
-                <svg class="search-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="11" cy="11" r="8"/>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                </svg>
-                <input 
-                  type="text" 
-                  id="admin-search-input" 
-                  class="search-input-field" 
-                  placeholder="Cari nama, no. pendaftaran, email..." 
-                  autocomplete="off"
-                />
-                <button type="button" id="admin-search-clear" class="search-clear-btn" title="Hapus pencarian">✕</button>
-              </div>
-
-              <!-- Notification Icon -->
-              <button type="button" class="header-action-btn" id="btn-admin-notif" title="Notifikasi Baru">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                  <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                </svg>
-                <span class="notif-badge-pill" id="badge-notif-count">3</span>
-              </button>
-
-              <!-- Profil Admin -->
-              <div class="admin-profile-pill" id="admin-profile-card" title="Profil Administrator">
-                <div class="admin-avatar">AP</div>
-                <div class="admin-profile-meta">
-                  <span class="admin-name">Admin SPMB</span>
-                  <span class="admin-role">Superadmin IT</span>
-                </div>
-              </div>
-            </div>
-          </header>
-
-          <!-- Konten Utama (Main Content Area) -->
           <div class="admin-content-body">
             
-            <!-- Summary Cards (Kartu Ringkasan) -->
+            <!-- Summary Cards (Kartu Ringkasan - Desain Bersih & Icon di Kiri) -->
             <section class="summary-cards-grid">
               
               <!-- Card 1: Total Pendaftar -->
               <div class="summary-card card-total">
-                <div class="stat-info">
-                  <span class="stat-label">Total Pendaftar</span>
-                  <span class="stat-value" id="stat-total-pendaftar">1,250</span>
-                  <span class="stat-subtext">
-                    <span style="color: var(--admin-primary); font-weight: 700;">+12%</span> dari minggu lalu
-                  </span>
-                </div>
                 <div class="stat-icon-wrapper">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -571,10 +569,23 @@ export function renderAdminSPMB(containerId) {
                     <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                   </svg>
                 </div>
+                <div class="stat-info">
+                  <span class="stat-label">Total Pendaftar</span>
+                  <span class="stat-value" id="stat-total-pendaftar">1,250</span>
+                  <span class="stat-subtext">
+                    <span style="color: var(--admin-primary); font-weight: 700;">+12%</span> dari minggu lalu
+                  </span>
+                </div>
               </div>
 
               <!-- Card 2: Akun Aktif -->
               <div class="summary-card card-active">
+                <div class="stat-icon-wrapper">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                  </svg>
+                </div>
                 <div class="stat-info">
                   <span class="stat-label">Akun Aktif</span>
                   <span class="stat-value" id="stat-akun-aktif" style="color: #15803d;">1,200</span>
@@ -582,28 +593,22 @@ export function renderAdminSPMB(containerId) {
                     <span style="color: #15803d; font-weight: 700;">✓ Siap</span> mengisi formulir
                   </span>
                 </div>
-                <div class="stat-icon-wrapper">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                    <polyline points="22 4 12 14.01 9 11.01"/>
-                  </svg>
-                </div>
               </div>
 
               <!-- Card 3: Menunggu Aktivasi -->
               <div class="summary-card card-pending">
+                <div class="stat-icon-wrapper">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                </div>
                 <div class="stat-info">
                   <span class="stat-label">Menunggu Aktivasi</span>
                   <span class="stat-value" id="stat-menunggu-aktivasi" style="color: #b45309;">50</span>
                   <span class="stat-subtext">
                     <span style="color: #b45309; font-weight: 700;">⚡ Perlu</span> tindakan segera
                   </span>
-                </div>
-                <div class="stat-icon-wrapper">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polyline points="12 6 12 12 16 14"/>
-                  </svg>
                 </div>
               </div>
 

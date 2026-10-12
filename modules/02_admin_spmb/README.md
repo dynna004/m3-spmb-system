@@ -133,5 +133,5 @@ Fitur pelayanan bagi calon siswa yang datang langsung mendaftar di loket SPMB SM
 
 * [`admin.js`](file:///modules/02_admin_spmb/admin.js): Kode logika modul, perenderan dashboard, tabel akun, multi-tab modal detail (biodata & berkas), form loket walk-in, modal tanda terima struk, lightbox viewer, dan event dispatcher.
 * [`admin.css`](file:///modules/02_admin_spmb/admin.css): Desain antarmuka modern, tabs navigation, kartu pratinjau dokumen, badge verifikasi, form walk-in, slip tanda terima cetak, lightbox, dan toast feedback.
-* [`standalone.html`](file:///modules/02_admin_spmb/standalone.html): Halaman portal mandiri (*standalone*) khusus petugas admin/loket SPMB.
+* [`admin.html`](file:///modules/02_admin_spmb/admin.html): Halaman tampilan khusus (*dedicated HTML page*) untuk Modul 02: Admin SPMB & Loket Pendaftaran.
 

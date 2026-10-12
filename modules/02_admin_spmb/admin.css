@@ -41,13 +41,17 @@
 .admin-shell {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: var(--admin-text-body);
-  background: var(--admin-bg-page);
+  background: transparent;
   border-radius: var(--admin-radius-lg);
-  border: 1px solid var(--admin-border);
-  box-shadow: var(--admin-shadow-md);
-  overflow: hidden;
+  border: none;
+  box-shadow: none;
+  overflow: visible;
   display: flex;
   flex-direction: column;
+  gap: 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
   transition: var(--admin-transition);
 }
 
@@ -61,222 +65,206 @@ body.admin-standalone-body {
 }
 
 .admin-standalone-wrapper {
-  max-width: 1440px;
+  max-width: 1200px;
   margin: 1.5rem auto;
   padding: 0 1.25rem;
 }
 
-/* Layout Container */
+/* Layout Container: 1 Kolom Terpusat (Single Column Centered) */
 .admin-dashboard-layout {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  min-height: 780px;
-  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: transparent;
+  gap: 1.25rem;
 }
 
 @media (max-width: 1024px) {
   .admin-dashboard-layout {
-    grid-template-columns: 1fr;
+    width: 100%;
   }
 }
 
 /* ====================================================
-   1. SIDEBAR (Kiri)
+   1. HORIZONTAL NAVIGATION MENU (Eks-Sidebar)
+   Bentuk Pill-Tabs Horizontal di Bawah Header / Atas Konten
    ==================================================== */
 .admin-sidebar {
   background: #ffffff;
-  border-right: 1px solid var(--admin-border);
+  border-right: none;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-lg);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 1rem;
+  padding: 0.85rem 1.25rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   transition: var(--admin-transition);
 }
 
-/* Sidebar Brand */
+/* Sembunyikan Logo Brand Sidebar jika sudah ada di Header */
 .sidebar-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0.5rem 0.5rem 1.25rem 0.5rem;
-  border-bottom: 1px solid var(--admin-border);
-  margin-bottom: 1.25rem;
+  display: none !important;
 }
 
-.brand-icon-box {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #006837 0%, #004d28 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-size: 1.35rem;
-  font-weight: 800;
-  box-shadow: 0 4px 12px rgba(0, 104, 55, 0.25);
-  flex-shrink: 0;
-}
-
-.brand-info {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.brand-name {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: var(--admin-primary);
-  line-height: 1.2;
-  letter-spacing: -0.2px;
-}
-
-.brand-tagline {
-  font-size: 0.72rem;
-  color: var(--admin-text-muted);
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Navigation Section */
 .nav-section-title {
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--admin-text-muted);
-  padding: 0.5rem 0.75rem 0.35rem 0.75rem;
+  display: none !important;
 }
 
 .nav-menu-list {
   list-style: none;
   padding: 0;
-  margin: 0 0 1.25rem 0;
+  margin: 0;
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-/* Main Navigation Item */
-.nav-item-link {
-  display: flex;
+.nav-menu-item {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0.65rem 0.85rem;
-  border-radius: var(--admin-radius-sm);
+  margin: 0;
+}
+
+/* Nav Item Link: Bentuk "Pill" (Kapsul) Utuh */
+.nav-item-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 9999px; /* Pill kapsul utuh */
+  border: 1px solid var(--admin-border);
+  background: #ffffff;
   color: var(--admin-text-body);
-  font-size: 0.86rem;
+  font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
   transition: var(--admin-transition);
   user-select: none;
+  white-space: nowrap;
 }
 
 .nav-item-link:hover {
-  background: #f1f5f9;
+  background: #f8fafc;
+  border-color: #cbd5e1;
   color: var(--admin-primary);
 }
 
-.nav-item-link.parent-active {
-  background: var(--admin-primary-light);
-  color: var(--admin-primary);
+/* State Aktif Navigasi: Hijau Solid #006837 & Teks Putih */
+.nav-item-link.parent-active,
+.nav-item-link.active {
+  background: var(--admin-primary);
+  border-color: var(--admin-primary);
+  color: #ffffff;
   font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 104, 55, 0.25);
 }
 
 .nav-link-content {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .nav-link-icon {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--admin-text-muted);
   transition: var(--admin-transition);
 }
 
-.parent-active .nav-link-icon {
-  color: var(--admin-primary);
+.nav-item-link.parent-active .nav-link-icon,
+.nav-item-link.active .nav-link-icon {
+  color: #ffffff;
 }
 
 .nav-chevron {
-  font-size: 0.7rem;
-  color: var(--admin-text-muted);
-  transition: transform 0.2s ease;
+  display: none;
 }
 
-.parent-active .nav-chevron {
-  transform: rotate(90deg);
-  color: var(--admin-primary);
-}
-
-/* Sub-Menu List */
+/* Sub-Menu List Horizontal Pills */
 .nav-submenu-list {
   list-style: none;
-  padding: 4px 0 6px 1.5rem;
+  padding: 0;
   margin: 0;
   display: flex;
-  flex-direction: column;
-  gap: 3px;
-  border-left: 2px solid #e2e8f0;
-  margin-left: 1.25rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  border-left: none;
+  flex-wrap: wrap;
 }
 
 .nav-submenu-item a {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0.45rem 0.75rem;
-  border-radius: 6px;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 9999px; /* Pill kapsul utuh */
+  border: 1px solid var(--admin-border);
+  background: #ffffff;
+  color: var(--admin-text-body);
   font-size: 0.82rem;
-  color: var(--admin-text-muted);
+  font-weight: 600;
   text-decoration: none;
-  font-weight: 500;
   transition: var(--admin-transition);
+  white-space: nowrap;
 }
 
 .nav-submenu-item a:hover {
-  color: var(--admin-primary);
   background: #f8fafc;
+  border-color: #cbd5e1;
+  color: var(--admin-primary);
 }
 
 .nav-submenu-item.active a {
-  color: var(--admin-primary);
-  background: var(--admin-primary-light);
+  background: var(--admin-primary);
+  border-color: var(--admin-primary);
+  color: #ffffff;
   font-weight: 700;
-  border-left: 3px solid var(--admin-primary);
-  padding-left: 0.65rem;
+  border-left: none;
+  box-shadow: 0 2px 8px rgba(0, 104, 55, 0.25);
 }
 
 .sub-badge {
   font-size: 0.65rem;
-  font-weight: 700;
-  padding: 1px 6px;
-  border-radius: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 9999px;
   background: var(--admin-secondary);
   color: #000;
 }
 
-/* Sidebar Footer / System Badge */
+.nav-submenu-item.active a .sub-badge {
+  background: #ffffff;
+  color: var(--admin-primary);
+}
+
+/* Sidebar Footer / Badge Status Server Horizontal */
 .sidebar-footer {
-  padding-top: 1rem;
-  border-top: 1px solid var(--admin-border);
+  padding: 0;
+  border-top: none;
+  margin: 0;
 }
 
 .system-status-box {
   background: #f8fafc;
   border: 1px solid var(--admin-border);
-  border-radius: var(--admin-radius-sm);
-  padding: 0.75rem;
+  border-radius: 9999px;
+  padding: 6px 14px;
   font-size: 0.75rem;
 }
 
@@ -284,7 +272,7 @@ body.admin-standalone-body {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 4px;
+  margin-bottom: 0;
   font-weight: 700;
   color: var(--admin-text-title);
 }
@@ -305,24 +293,29 @@ body.admin-standalone-body {
 }
 
 /* ====================================================
-   2. TOP HEADER (Atas)
+   2. TOP HEADER (Atas) - TEMA HIJAU SOLID (#006837)
+   Ujung membulat konsisten dengan Modul 03 (Keuangan)
    ==================================================== */
 .admin-main-area {
   display: flex;
   flex-direction: column;
-  background: var(--admin-bg-page);
+  background: transparent;
   min-width: 0;
+  width: 100%;
 }
 
 .admin-top-header {
-  background: #ffffff;
-  border-bottom: 1px solid var(--admin-border);
-  padding: 1.15rem 1.75rem;
+  background-color: var(--admin-primary); /* #006837 */
+  color: #ffffff;
+  border-radius: var(--admin-radius-lg); /* 16px membulat */
+  border: 1px solid rgba(0, 104, 55, 0.4);
+  padding: 1.25rem 1.75rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1.25rem;
   flex-wrap: wrap;
+  box-shadow: 0 4px 16px rgba(0, 104, 55, 0.22);
 }
 
 .header-left {
@@ -334,19 +327,24 @@ body.admin-standalone-body {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.75rem;
-  color: var(--admin-text-muted);
-  margin-bottom: 2px;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 4px;
 }
 
 .breadcrumb-separator {
-  opacity: 0.6;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.header-breadcrumb span:last-child {
+  color: #ffffff;
+  font-weight: 700;
 }
 
 .header-title {
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   font-weight: 800;
-  color: var(--admin-text-title);
+  color: #ffffff;
   letter-spacing: -0.3px;
   margin: 0;
   display: flex;
@@ -360,81 +358,93 @@ body.admin-standalone-body {
   gap: 12px;
 }
 
-/* Search Bar */
+/* Search Bar di Atas Latar Hijau */
 .search-bar-wrapper {
   position: relative;
-  min-width: 260px;
+  min-width: 270px;
 }
 
 .search-input-field {
   width: 100%;
-  padding: 9px 14px 9px 36px;
-  background: #f8fafc;
-  border: 1px solid var(--admin-border);
-  border-radius: 20px;
+  padding: 9px 16px 9px 40px;
+  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 9999px;
   font-size: 0.85rem;
   font-family: inherit;
   color: var(--admin-text-title);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: var(--admin-transition);
+}
+
+.search-input-field::placeholder {
+  color: #94a3b8;
 }
 
 .search-input-field:focus {
   outline: none;
   background: #ffffff;
-  border-color: var(--admin-primary);
-  box-shadow: 0 0 0 3px rgba(0, 104, 55, 0.12);
+  border-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35), 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .search-icon-svg {
   position: absolute;
-  left: 12px;
+  left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  color: var(--admin-text-muted);
+  width: 17px;
+  height: 17px;
+  color: var(--admin-primary);
   pointer-events: none;
 }
 
 .search-clear-btn {
   position: absolute;
-  right: 10px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  background: none;
+  background: #e2e8f0;
   border: none;
-  color: var(--admin-text-muted);
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  color: #475569;
   cursor: pointer;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   display: none;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
-/* Notification Button */
+/* Notification Button di Atas Latar Hijau */
 .header-action-btn {
   position: relative;
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  background: #f8fafc;
-  border: 1px solid var(--admin-border);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--admin-text-body);
+  color: #ffffff;
   cursor: pointer;
   transition: var(--admin-transition);
+  backdrop-filter: blur(4px);
 }
 
 .header-action-btn:hover {
-  background: #f1f5f9;
-  border-color: #cbd5e1;
-  color: var(--admin-primary);
+  background: rgba(255, 255, 255, 0.28);
+  border-color: #ffffff;
+  color: #ffffff;
 }
 
 .notif-badge-pill {
   position: absolute;
-  top: -4px;
-  right: -4px;
+  top: -3px;
+  right: -3px;
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -445,39 +455,40 @@ body.admin-standalone-body {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #ffffff;
+  border: 2px solid #006837;
 }
 
-/* Admin Profile Card */
+/* Profil Administrator Pill di Atas Latar Hijau */
 .admin-profile-pill {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 4px 10px 4px 4px;
-  background: #f8fafc;
-  border: 1px solid var(--admin-border);
-  border-radius: 30px;
+  padding: 4px 14px 4px 5px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 9999px;
   cursor: pointer;
   transition: var(--admin-transition);
+  backdrop-filter: blur(4px);
 }
 
 .admin-profile-pill:hover {
-  background: #f1f5f9;
-  border-color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.28);
+  border-color: #ffffff;
 }
 
 .admin-avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #006837 0%, #f5a623 100%);
-  color: #ffffff;
+  background: #ffffff;
+  color: var(--admin-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 0.8rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 .admin-profile-meta {
@@ -488,21 +499,25 @@ body.admin-standalone-body {
 }
 
 .admin-name {
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  color: var(--admin-text-title);
+  color: #ffffff;
 }
 
 .admin-role {
   font-size: 0.68rem;
-  color: var(--admin-text-muted);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 /* ====================================================
-   3. KONTEN UTAMA: SUMMARY CARDS
+   3. KONTEN UTAMA: SUMMARY CARDS (Kartu Ringkasan Bersih)
+   - Tanpa pseudo-element ::before garis tebal
+   - Background putih, border tipis abu-abu
+   - Icon di sebelah kiri teks angka
+   - Sudut membulat halus (16px)
    ==================================================== */
 .admin-content-body {
-  padding: 1.75rem;
+  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -522,56 +537,73 @@ body.admin-standalone-body {
 
 .summary-card {
   background: #ffffff;
-  border-radius: var(--admin-radius-md);
+  border-radius: var(--admin-radius-lg); /* 16px */
   border: 1px solid var(--admin-border);
-  padding: 1.25rem 1.5rem;
-  box-shadow: var(--admin-shadow-xs);
+  padding: 1.35rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 1.25rem;
   transition: var(--admin-transition);
   position: relative;
   overflow: hidden;
 }
 
-.summary-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
+/* Hapus pseudo-element ::before garis tebal di pinggir kartu */
+.summary-card::before,
+.card-total::before,
+.card-active::before,
+.card-pending::before {
+  display: none !important;
+  content: none !important;
 }
 
 .summary-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--admin-shadow-md);
+  border-color: #cbd5e1;
 }
 
-/* Card 1: Total Pendaftar */
-.card-total::before { background: var(--admin-primary); }
-.card-total .stat-icon-wrapper {
-  background: var(--admin-primary-light);
-  color: var(--admin-primary);
-}
-
-/* Card 2: Akun Aktif */
-.card-active::before { background: #16a34a; }
-.card-active .stat-icon-wrapper {
-  background: #dcfce7;
-  color: #15803d;
-}
-
-/* Card 3: Menunggu Aktivasi */
-.card-pending::before { background: var(--admin-secondary); }
-.card-pending .stat-icon-wrapper {
-  background: #fef3c7;
-  color: #b45309;
+.stat-icon-wrapper {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  flex-shrink: 0;
+  order: 1; /* Posisi icon di sebelah kiri */
+  transition: var(--admin-transition);
 }
 
 .stat-info {
   display: flex;
   flex-direction: column;
+  order: 2; /* Posisi teks angka di sebelah kanan icon */
+}
+
+/* Card 1: Total Pendaftar */
+.card-total .stat-icon-wrapper {
+  background: var(--admin-primary-light);
+  color: var(--admin-primary);
+  border: 1px solid var(--admin-primary-border);
+}
+
+/* Card 2: Akun Aktif */
+.card-active .stat-icon-wrapper {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+/* Card 3: Menunggu Aktivasi */
+.card-pending .stat-icon-wrapper {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
 }
 
 .stat-label {
@@ -600,30 +632,18 @@ body.admin-standalone-body {
   gap: 4px;
 }
 
-.stat-icon-wrapper {
-  width: 50px;
-  height: 50px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.45rem;
-  flex-shrink: 0;
-  transition: var(--admin-transition);
-}
-
 .summary-card:hover .stat-icon-wrapper {
   transform: scale(1.06);
 }
 
 /* ====================================================
-   4. DATA TABLE SECTION
+   4. DATA TABLE SECTION & TAB/FILTER BUTTONS
    ==================================================== */
 .admin-table-card {
   background: #ffffff;
-  border-radius: var(--admin-radius-md);
+  border-radius: var(--admin-radius-lg);
   border: 1px solid var(--admin-border);
-  box-shadow: var(--admin-shadow-xs);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -660,8 +680,8 @@ body.admin-standalone-body {
 .data-count-chip {
   font-size: 0.72rem;
   font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 20px;
+  padding: 3px 10px;
+  border-radius: 9999px;
   background: #f1f5f9;
   color: var(--admin-text-muted);
 }
@@ -673,43 +693,52 @@ body.admin-standalone-body {
   flex-wrap: wrap;
 }
 
-/* Filter Buttons */
+/* Filter Buttons: Bentuk "Pill" (Kapsul) Utuh */
 .filter-btn-group {
   display: flex;
-  background: #f1f5f9;
-  padding: 3px;
-  border-radius: 8px;
-  gap: 2px;
+  background: transparent;
+  padding: 0;
+  border-radius: 9999px;
+  gap: 6px;
+  align-items: center;
 }
 
 .filter-btn {
-  border: none;
-  background: transparent;
-  padding: 5px 12px;
-  border-radius: 6px;
-  font-size: 0.78rem;
+  border: 1px solid var(--admin-border);
+  background: #ffffff;
+  padding: 6px 16px;
+  border-radius: 9999px; /* Pill kapsul utuh */
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--admin-text-muted);
   cursor: pointer;
   transition: var(--admin-transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
 .filter-btn:hover {
-  color: var(--admin-text-title);
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: var(--admin-primary);
 }
 
+/* State Aktif Filter: Hijau Solid #006837 & Teks Putih */
 .filter-btn.active {
-  background: #ffffff;
-  color: var(--admin-primary);
+  background: var(--admin-primary); /* #006837 */
+  color: #ffffff;
+  border-color: var(--admin-primary);
   font-weight: 700;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0, 104, 55, 0.25);
 }
 
 .btn-refresh {
   border: 1px solid var(--admin-border);
   background: #ffffff;
-  padding: 6px 12px;
-  border-radius: 8px;
+  padding: 6px 14px;
+  border-radius: 9999px; /* Pill kapsul */
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--admin-text-body);
@@ -1263,8 +1292,8 @@ body.admin-standalone-body {
   background: linear-gradient(135deg, #006837 0%, #004d28 100%);
   color: #ffffff;
   border: 1px solid #10b981;
-  border-radius: var(--admin-radius-sm);
-  padding: 7px 14px;
+  border-radius: 9999px; /* Pill kapsul utuh */
+  padding: 7px 16px;
   font-size: 0.8rem;
   font-weight: 700;
   display: inline-flex;
@@ -1292,13 +1321,13 @@ body.admin-standalone-body {
   color: #1e293b;
   font-size: 0.65rem;
   font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 20px;
+  padding: 2px 8px;
+  border-radius: 9999px;
   text-transform: uppercase;
 }
 
 /* ====================================================
-   9. MODAL TABS NAVIGATION (Detail Modal)
+   9. MODAL TABS NAVIGATION (Detail Modal - Pill Style)
    ==================================================== */
 .admin-modal-card.modal-lg {
   max-width: 780px;
@@ -1308,18 +1337,19 @@ body.admin-standalone-body {
   display: flex;
   background: #f8fafc;
   border-bottom: 1px solid var(--admin-border);
-  padding: 0 1.5rem;
+  padding: 0.85rem 1.5rem;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .modal-tab-btn {
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid transparent;
+  background: #ffffff;
+  border: 1px solid var(--admin-border);
+  border-radius: 9999px; /* Pill kapsul utuh */
   color: var(--admin-text-muted);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  padding: 12px 14px;
+  padding: 7px 16px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -1329,22 +1359,29 @@ body.admin-standalone-body {
 
 .modal-tab-btn:hover {
   color: var(--admin-primary);
-  background: rgba(0, 104, 55, 0.04);
+  background: #f1f5f9;
+  border-color: #cbd5e1;
 }
 
 .modal-tab-btn.active {
-  color: var(--admin-primary);
-  border-bottom-color: var(--admin-primary);
-  background: #ffffff;
+  color: #ffffff;
+  background: var(--admin-primary); /* #006837 */
+  border-color: var(--admin-primary);
+  box-shadow: 0 2px 8px rgba(0, 104, 55, 0.25);
 }
 
 .tab-badge-pill {
   font-size: 0.7rem;
-  font-weight: 700;
-  background: var(--admin-primary-light);
+  font-weight: 800;
+  background: #f1f5f9;
   color: var(--admin-primary);
   padding: 2px 8px;
-  border-radius: 12px;
+  border-radius: 9999px;
+}
+
+.modal-tab-btn.active .tab-badge-pill {
+  background: #ffffff;
+  color: var(--admin-primary);
 }
 
 .modal-tab-pane {
