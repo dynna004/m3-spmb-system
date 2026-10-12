@@ -107,54 +107,67 @@ function syncToLegacyDB(list) {
       tuDb.pendaftar = [];
     }
 
-    const tuMap = new Map();
-    tuDb.pendaftar.forEach(item => {
-      const key = item.id || item.id_pendaftar || item.nisn;
-      if (key) tuMap.set(key, item);
-    });
-
     list.forEach(item => {
-      const key = item.id_pendaftar || item.id || item.nisn;
-      const existing = tuMap.get(key) || {};
+      // Cari data yang cocok di tuDb berdasarkan NISN atau ID
+      const matchIdx = tuDb.pendaftar.findIndex(t => (
+        (item.nisn && t.nisn && t.nisn === item.nisn) ||
+        (item.id_pendaftar && (t.id === item.id_pendaftar || t.id_pendaftar === item.id_pendaftar)) ||
+        (item.id && (t.id === item.id || t.id_pendaftar === item.id))
+      ));
 
-      const merged = {
-        ...existing,
-        id: item.id_pendaftar || existing.id || `REG-2026-${String(list.indexOf(item) + 1).padStart(3, '0')}`,
-        nama: item.nama_lengkap || existing.nama || 'Tanpa Nama',
-        nisn: item.nisn || existing.nisn || '',
-        email: item.email || existing.email || '',
-        no_wa: item.no_wa || existing.no_wa || '',
-        pilihan_jurusan: item.biodata?.pilihan_jurusan || existing.pilihan_jurusan || 'MIPA',
-        status_akun: (item.status_akun === 'active' || item.status_akun === 'AKTIF') ? 'AKTIF' : 'MENUNGGU',
-        status_pembayaran: item.pembayaran?.status_pembayaran === 'lunas' || item.pembayaran?.status_pembayaran === 'LUNAS' || existing.status_pembayaran === 'LUNAS' ? 'LUNAS' : (item.pembayaran?.status_pembayaran || existing.status_pembayaran || 'BELUM_BAYAR'),
-        created_at: item.created_at || existing.created_at || new Date().toISOString()
-      };
+      const isAccountActive = (item.status_akun === 'active' || item.status_akun === 'AKTIF');
+      const ssotStatusAkun = isAccountActive ? 'AKTIF' : 'MENUNGGU';
 
-      // Simpan referensi biodata jika ada
-      if (item.biodata) {
-        merged.biodata = { ...(existing.biodata || {}), ...item.biodata };
-        if (item.biodata.asal_sekolah) merged.asal_sekolah = item.biodata.asal_sekolah;
+      if (matchIdx !== -1) {
+        const existing = tuDb.pendaftar[matchIdx];
+        tuDb.pendaftar[matchIdx] = {
+          ...existing,
+          id: existing.id || item.id_pendaftar || item.id,
+          id_pendaftar: item.id_pendaftar || existing.id_pendaftar || existing.id,
+          nama: item.nama_lengkap || existing.nama,
+          nisn: item.nisn || existing.nisn,
+          email: item.email || existing.email,
+          no_wa: item.no_wa || existing.no_wa,
+          pilihan_jurusan: item.biodata?.pilihan_jurusan || existing.pilihan_jurusan || 'MIPA',
+          status_akun: ssotStatusAkun,
+          status_pembayaran: item.pembayaran?.status_pembayaran === 'lunas' || item.pembayaran?.status_pembayaran === 'LUNAS' || existing.status_pembayaran === 'LUNAS' ? 'LUNAS' : (item.pembayaran?.status_pembayaran || existing.status_pembayaran || 'BELUM_BAYAR'),
+          biodata: item.biodata ? { ...(existing.biodata || {}), ...item.biodata } : existing.biodata,
+          berkas: item.berkas ? { ...(existing.berkas || {}), ...item.berkas } : existing.berkas,
+          jadwal_wawancara: item.jadwal_wawancara ? { ...(existing.jadwal_wawancara || {}), ...item.jadwal_wawancara } : existing.jadwal_wawancara,
+          pembayaran: item.pembayaran ? { ...(existing.pembayaran || {}), ...item.pembayaran } : existing.pembayaran
+        };
+      } else {
+        tuDb.pendaftar.push({
+          id: item.id_pendaftar || item.id || `REG-2026-${String(tuDb.pendaftar.length + 1).padStart(3, '0')}`,
+          id_pendaftar: item.id_pendaftar || item.id,
+          nama: item.nama_lengkap || 'Tanpa Nama',
+          nisn: item.nisn || '',
+          email: item.email || '',
+          no_wa: item.no_wa || '',
+          pilihan_jurusan: item.biodata?.pilihan_jurusan || 'MIPA',
+          status_akun: ssotStatusAkun,
+          status_pembayaran: item.pembayaran?.status_pembayaran === 'lunas' ? 'LUNAS' : 'BELUM_BAYAR',
+          created_at: item.created_at || new Date().toISOString(),
+          biodata: item.biodata || null,
+          berkas: item.berkas || null,
+          jadwal_wawancara: item.jadwal_wawancara || null,
+          pembayaran: item.pembayaran || null
+        });
       }
-
-      // Simpan referensi pembayaran jika ada
-      if (item.pembayaran) {
-        merged.pembayaran = { ...(existing.pembayaran || {}), ...item.pembayaran };
-      }
-
-      // Simpan referensi berkas dokumen (Ijazah, KK, Akta, Pasfoto)
-      if (item.berkas) {
-        merged.berkas = { ...(existing.berkas || {}), ...item.berkas };
-      }
-
-      // Simpan referensi jadwal_wawancara jika ada
-      if (item.jadwal_wawancara) {
-        merged.jadwal_wawancara = { ...(existing.jadwal_wawancara || {}), ...item.jadwal_wawancara };
-      }
-
-      tuMap.set(key, merged);
     });
 
-    tuDb.pendaftar = Array.from(tuMap.values());
+    // Bersihkan duplikasi NISN di tuDb jika ada data ganda
+    const unique = [];
+    const seen = new Set();
+    tuDb.pendaftar.forEach(item => {
+      const key = item.nisn ? `nisn_${item.nisn}` : (item.id || item.id_pendaftar);
+      if (!seen.has(key)) {
+        seen.add(key);
+        unique.push(item);
+      }
+    });
+    tuDb.pendaftar = unique;
+
     localStorage.setItem(DB_TU_KEY, JSON.stringify(tuDb));
   } catch (e) {
     console.warn('Sync to SSoT DB failed:', e);
@@ -184,12 +197,18 @@ export function getPendaftarList() {
         let changed = false;
         tuDb.pendaftar.forEach(ssotItem => {
           const id = ssotItem.id || ssotItem.id_pendaftar;
-          const matchIdx = list.findIndex(p => (p.id_pendaftar === id || p.id === id || p.nisn === ssotItem.nisn));
+          const matchIdx = list.findIndex(p => (
+            (id && (p.id_pendaftar === id || p.id === id)) ||
+            (ssotItem.nisn && p.nisn && p.nisn === ssotItem.nisn)
+          ));
           if (matchIdx !== -1) {
             const p = list[matchIdx];
-            // Sinkronkan status akun
+            // Sinkronkan status akun dua arah
             if (ssotItem.status_akun === 'AKTIF' && p.status_akun !== 'active') {
               p.status_akun = 'active';
+              changed = true;
+            } else if (ssotItem.status_akun === 'MENUNGGU' && p.status_akun !== 'pending_activation') {
+              p.status_akun = 'pending_activation';
               changed = true;
             }
             // Sinkronkan status pembayaran

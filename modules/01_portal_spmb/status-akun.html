@@ -206,6 +206,7 @@
         notice.innerHTML = '<strong>Akun Anda berhasil dibuat dan sedang menunggu aktivasi dari Admin SPMB.</strong><br>Silakan secara berkala memeriksa halaman ini atau menghubungi Panitia SPMB SMA Muhammadiyah 3 Yogyakarta.';
 
         btnLoginPage.disabled = true;
+        btnLoginPage.onclick = null;
       }
     }
 
@@ -219,14 +220,30 @@
     // Toggle status demo button handler
     document.getElementById('btn-toggle-status').addEventListener('click', () => {
       const pendaftarList = getPendaftarList();
-      const currentInDb = pendaftarList.find(p => p.nisn === user.nisn || p.id_pendaftar === user.id_pendaftar) || user;
-      const nextStatus = (currentInDb.status_akun === 'active' || currentInDb.status_akun === 'AKTIF') ? 'pending_activation' : 'active';
+      const currentInDb = pendaftarList.find(p => (
+        user && (p.nisn === user.nisn || p.id_pendaftar === user.id_pendaftar || p.id === user.id)
+      )) || user;
       
-      const updated = updateStatusAkun(currentInDb.id_pendaftar || currentInDb.id, nextStatus);
+      const isCurrentlyActive = (currentInDb.status_akun === 'active' || currentInDb.status_akun === 'AKTIF');
+      const nextStatus = isCurrentlyActive ? 'pending_activation' : 'active';
+      
+      const targetId = currentInDb.id_pendaftar || currentInDb.id || currentInDb.nisn;
+      const updated = updateStatusAkun(targetId, nextStatus);
       if (updated) {
         user = updated;
         localStorage.setItem('m3_spmb_current_user', JSON.stringify(updated));
+
+        // Sinkronkan juga jika akun ini ada di m3_spmb_logged_in_user
+        const loggedIn = JSON.parse(localStorage.getItem('m3_spmb_logged_in_user'));
+        if (loggedIn && (loggedIn.nisn === updated.nisn || loggedIn.id_pendaftar === updated.id_pendaftar || loggedIn.id === updated.id)) {
+          loggedIn.status_akun = nextStatus;
+          localStorage.setItem('m3_spmb_logged_in_user', JSON.stringify(loggedIn));
+        }
+
         renderStatus();
+        alert(`⚡ Status akun berhasil diubah menjadi: ${nextStatus === 'active' ? 'ACTIVE (Akun Aktif)' : 'PENDING ACTIVATION (Menunggu Persetujuan Admin)'}`);
+      } else {
+        alert('Gagal mengubah status akun pendaftar.');
       }
     });
 
