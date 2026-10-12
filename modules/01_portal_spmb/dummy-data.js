@@ -20,7 +20,18 @@ export const initialDummyPendaftar = [
     status_akun: "pending_activation",
     created_at: "2026-10-05T08:00:00Z",
     biodata: null,
-    pembayaran: null
+    pembayaran: null,
+    jadwal_wawancara: {
+      tanggal: "2026-10-19",
+      hari: "Senin",
+      tipe_hari: "Weekday",
+      jam: "08:00",
+      jam_selesai: "09:00",
+      sesi: "08.00 - 09.00 WIB",
+      metode: "Luring",
+      ruang: "Ruang Wawancara 1 (Gedung Utama)",
+      pewawancara: "Yosa"
+    }
   },
   {
     id_pendaftar: "REG-2026-002",
@@ -31,6 +42,18 @@ export const initialDummyPendaftar = [
     password_hash: DEMO_PASSWORD_HASH,
     status_akun: "active",
     created_at: "2026-10-05T09:15:00Z",
+    jadwal_wawancara: {
+      tanggal: "2026-10-24",
+      hari: "Sabtu",
+      tipe_hari: "Weekend",
+      jam: "09:00",
+      jam_selesai: "10:00",
+      sesi: "09.00 - 10.00 WIB",
+      metode: "Daring",
+      ruang: "Google Meet / Zoom (Daring Online)",
+      link_meet: "https://meet.google.com/spmb-m3-wawancara",
+      pewawancara: "Veli"
+    },
     biodata: {
       nik: "3171012345678901",
       alamat: "Jl. Merdeka No. 10",

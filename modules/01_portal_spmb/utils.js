@@ -146,6 +146,11 @@ function syncToLegacyDB(list) {
         merged.berkas = { ...(existing.berkas || {}), ...item.berkas };
       }
 
+      // Simpan referensi jadwal_wawancara jika ada
+      if (item.jadwal_wawancara) {
+        merged.jadwal_wawancara = { ...(existing.jadwal_wawancara || {}), ...item.jadwal_wawancara };
+      }
+
       tuMap.set(key, merged);
     });
 
@@ -203,6 +208,10 @@ export function getPendaftarList() {
             if (ssotItem.berkas) {
               p.berkas = { ...(p.berkas || {}), ...ssotItem.berkas };
             }
+            // Sinkronkan jadwal wawancara
+            if (ssotItem.jadwal_wawancara) {
+              p.jadwal_wawancara = { ...(p.jadwal_wawancara || {}), ...ssotItem.jadwal_wawancara };
+            }
           } else {
             // Data pendaftar ada di SSoT tapi belum ada di portal db -> tambahkan
             list.push({
@@ -219,6 +228,7 @@ export function getPendaftarList() {
                 asal_sekolah: ssotItem.asal_sekolah || 'SMP Muhammadiyah 1 Yogyakarta',
                 pilihan_jurusan: ssotItem.pilihan_jurusan || 'MIPA'
               },
+              jadwal_wawancara: ssotItem.jadwal_wawancara || null,
               berkas: ssotItem.berkas || null,
               pembayaran: {
                 status_pembayaran: ssotItem.status_pembayaran === 'LUNAS' ? 'lunas' : 'pending_verification'

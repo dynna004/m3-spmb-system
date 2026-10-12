@@ -108,9 +108,14 @@ Berikut merupakan spesifikasi kebutuhan fungsional dan teknis dari masing-masing
 - **Kebutuhan Fitur**:
   - Halaman registrasi & login mandiri siswa.
   - Formulir biodata lengkap (data diri, asal sekolah, NISN, pilihan peminatan MIPA/IPS, data orang tua).
-  - Upload berkas digital (kartu keluarga, pas foto, bukti transfer biaya pendaftaran).
-  - Dasbor pelacak status pendaftaran (Menunggu Aktivasi → Aktif → Wawancara → Pengumuman Kelulusan).
-- **Tujuan & Pemecahan Masalah**: Menyediakan antarmuka pendaftaran *self-service* 24 jam sehingga pendaftar tidak perlu mengantre secara fisik di sekolah.
+  - **Pemilihan Jadwal & Metode Wawancara Mandiri**:
+    - **Pilihan Metode Pelaksanaan**: Fleksibilitas memilih **Luring (Tatap Muka di Kampus)** dengan penempatan ruang wawancara fisik, atau **Daring (Virtual via Google Meet / Zoom)** lengkap dengan tautan konferensi virtual otomatis.
+    - **Aturan Jam Operasional**:
+      - **Hari Kerja (Weekday - Senin s/d Jumat)**: Pukul **08.00 - 15.00 WIB**.
+      - **Akhir Pekan (Weekend - Sabtu s/d Minggu)**: Pukul **09.00 - 15.00 WIB**.
+  - Upload berkas digital (kartu keluarga, ijazah/SKL, akta kelahiran, bukti transfer biaya pendaftaran).
+  - Dasbor pelacak status pendaftaran & tiket konfirmasi jadwal wawancara terintegrasi SSoT (menampilkan badge metode Luring/Daring, lokasi/link virtual, dan panduan kehadiran).
+- **Tujuan & Pemecahan Masalah**: Menyediakan antarmuka pendaftaran *self-service* 24 jam sehingga pendaftar dapat menentukan waktu dan format wawancara (tatap muka langsung atau jarak jauh) secara fleksibel tanpa antre fisik di sekolah.
 - **Strategi & Layer**: **Agile** | *Presentation Layer*.
 
 ---
@@ -151,14 +156,23 @@ Berikut merupakan spesifikasi kebutuhan fungsional dan teknis dari masing-masing
 ### 4. Modul 04: Penilaian Wawancara & Pemetaan Jurusan (`04_wawancara_spmb`)
 - **Entitas Diagram**: Tim Wawancara (Guru & Tenaga Kependidikan).
 - **Nomor Alur Terkait**:
-  - **Alur 8**: Penilaian hasil wawancara diinputkan ke sistem portal setelah tes selesai.
+  - **Alur 8**: Penjadwalan dan penilaian hasil wawancara diinputkan ke sistem portal setelah tes selesai.
 - **Kebutuhan Fitur**:
+  - **Dasbor Jadwal Wawancara Divisi (Tabel Jadwal & Kalender Jadwal)**:
+    - Format jadwal resmi lengkap memuat nama lengkap calon siswa, jam sesi (Weekday: 08.00–15.00 WIB & Weekend: 09.00–15.00 WIB), no. registrasi, asal sekolah, metode pelaksanaan (🏢 Luring / 🌐 Daring), ruang fisik / tautan virtual, penugasan pewawancara spesifik (misal: Yosa atau Veli), dan status wawancara.
+    - Dual mode tampilan: **Tabel Jadwal** (dengan kolom Metode & Platform) dan **Kalender Jadwal Mingguan** (Senin s/d Minggu per slot waktu operasional dengan badge Luring/Daring pada kartu sesi).
+    - Filter multi-dimensi interaktif:
+      - Filter Pewawancara bertugas (Yosa, Veli, atau Semua Penguji).
+      - Filter Metode Pelaksanaan (Semua Metode, 🏢 Wawancara Luring, 🌐 Wawancara Daring).
+      - Filter Hari, Jam, dan Status Kehadiran.
+    - Counter statistik realtime untuk total jadwal, sesi Luring, sesi Daring, dan sesi terselesaikan.
+    - Fitur Cetak / Print dokumen jadwal wawancara resmi divisi.
   - Filter peserta yang telah berstatus `LUNAS` biaya pendaftaran (Alur 7).
-  - Formulir input skor penilaian siswa dan wawancara orang tua/wali.
+  - Formulir input skor penilaian siswa dan wawancara orang tua/wali dengan penetapan pewawancara yang mengesahkan (Yosa / Veli) serta konfirmasi metode pelaksanaan (Luring/Daring).
   - Pemetaan bakat, minat ekstrakurikuler, dan komitmen belajar.
   - Kalkulasi otomatis beasiswa Tahfidz Al-Qur'an (≥15 Juz = Beasiswa Penuh, 1–14 Juz = Beasiswa Parsial).
-  - Rekomendasi kelaikan jurusan (MIPA atau IPS).
-- **Tujuan & Pemecahan Masalah**: Mencatat evaluasi kualitatif dan pemetaan peminatan langsung oleh guru penguji tanpa lembar penilaian kertas yang rentan hilang.
+  - Rekomendasi kelaikan jurusan (MIPA atau IPS) dan rekomendasi yudisium kelulusan.
+- **Tujuan & Pemecahan Masalah**: Menyajikan visualisasi jadwal terstruktur dan transparan (Tabel Jadwal & Kalender Jadwal) bagi divisi pewawancara dengan pemilahan jelas antara peserta tatap muka (Luring) dan virtual (Daring), serta penugasan penguji spesifik (seperti Yosa dan Veli) agar pembagian sesi jelas, tautan meeting siap digunakan, tidak terjadi bentrok jam, serta mencatat evaluasi kualitatif langsung oleh guru penguji tanpa lembar kertas yang rentan hilang.
 - **Strategi & Layer**: **Waterfall** | *Application / Business Logic Layer*.
 
 ---

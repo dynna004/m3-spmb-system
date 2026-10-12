@@ -135,6 +135,28 @@
         </div>
       </div>
 
+      <!-- Tiket Jadwal Wawancara (Jika sudah memilih jadwal di Formulir) -->
+      <div id="jadwal-ticket-container" style="display: none; margin-top: 1.25rem; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 14px; text-align: left;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+          <strong style="color: #166534; font-size: 0.92rem; display: flex; align-items: center; gap: 6px;">
+            <span>🗓️</span> Tiket Sesi Wawancara Pendaftar
+          </strong>
+          <div style="display: flex; gap: 6px;">
+            <span id="badge-jadwal-metode" style="font-size: 0.72rem; padding: 3px 10px; border-radius: 20px; font-weight: 700; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0;">🏢 Luring</span>
+            <span id="badge-jadwal-tipe" style="font-size: 0.72rem; padding: 3px 10px; border-radius: 20px; font-weight: 700; background: #bbf7d0; color: #166534;">Weekday</span>
+          </div>
+        </div>
+        <div style="font-size: 0.84rem; color: #1e293b; line-height: 1.6;">
+          <div><strong>Metode Pelaksanaan:</strong> <span id="display-jadwal-metode" style="font-weight: 700; color: #006837;">Luring (Tatap Muka)</span></div>
+          <div><strong>Hari & Tanggal:</strong> <span id="display-jadwal-hari-tgl">-</span></div>
+          <div><strong>Jam Sesi:</strong> <span id="display-jadwal-jam" style="font-weight: 700; color: #006837;">-</span></div>
+          <div><strong id="label-jadwal-ruang">Ruangan:</strong> <span id="display-jadwal-ruang">Ruang Wawancara 1 (Gedung Utama M3)</span></div>
+          <div id="display-jadwal-instruksi" style="margin-top: 6px; font-size: 0.78rem; color: #64748b;">
+            💡 Harap hadir 10 menit sebelum jam sesi wawancara dimulai dengan membawa berkas pendukung.
+          </div>
+        </div>
+      </div>
+
       <div id="action-area" style="margin-top: 1.5rem;">
         <button id="btn-login-page" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 1rem;" disabled>
           🔑 Ke Halaman Login Pendaftar &rarr;
@@ -205,6 +227,61 @@
         notice.innerHTML = '<strong>Akun Anda berhasil dibuat dan sedang menunggu aktivasi dari Admin SPMB.</strong><br>Silakan secara berkala memeriksa halaman ini atau menghubungi Panitia SPMB SMA Muhammadiyah 3 Yogyakarta.';
 
         btnLoginPage.disabled = true;
+      }
+
+      // Render Tiket Jadwal Wawancara jika sudah ada
+      const ticketBox = document.getElementById('jadwal-ticket-container');
+      if (currentInDb.jadwal_wawancara && currentInDb.jadwal_wawancara.tanggal) {
+        const jw = currentInDb.jadwal_wawancara;
+        if (ticketBox) ticketBox.style.display = 'block';
+        document.getElementById('display-jadwal-hari-tgl').textContent = `${jw.hari || ''}, ${jw.tanggal}`;
+        document.getElementById('display-jadwal-jam').textContent = jw.sesi || `${jw.jam || ''} WIB`;
+
+        const isDaring = (jw.metode || '').toUpperCase() === 'DARING';
+        const badgeMetode = document.getElementById('badge-jadwal-metode');
+        const displayMetode = document.getElementById('display-jadwal-metode');
+        const displayRuang = document.getElementById('display-jadwal-ruang');
+        const labelRuang = document.getElementById('label-jadwal-ruang');
+        const instruksi = document.getElementById('display-jadwal-instruksi');
+
+        if (badgeMetode) {
+          badgeMetode.textContent = isDaring ? '🌐 Daring' : '🏢 Luring';
+          badgeMetode.style.background = isDaring ? '#e0f2fe' : '#ecfdf5';
+          badgeMetode.style.color = isDaring ? '#0369a1' : '#065f46';
+          badgeMetode.style.borderColor = isDaring ? '#7dd3fc' : '#a7f3d0';
+        }
+
+        if (displayMetode) {
+          displayMetode.textContent = isDaring ? '🌐 Daring (Virtual Meet / Online)' : '🏢 Luring (Tatap Muka di Sekolah)';
+          displayMetode.style.color = isDaring ? '#0284c7' : '#006837';
+        }
+
+        if (displayRuang) {
+          displayRuang.textContent = jw.ruang || (isDaring ? 'Google Meet / Zoom (Daring Online)' : 'Ruang Wawancara 1 (Gedung Utama M3)');
+        }
+        if (labelRuang) {
+          labelRuang.textContent = isDaring ? 'Platform / Link:' : 'Ruangan:';
+        }
+
+        if (instruksi) {
+          if (isDaring) {
+            instruksi.innerHTML = '💡 <strong>Sesi Virtual:</strong> Tautan video conference akan dibuka 15 menit sebelum wawancara. Pastikan mikrofon dan kamera berfungsi dengan baik.';
+            instruksi.style.color = '#0369a1';
+          } else {
+            instruksi.innerHTML = '💡 <strong>Sesi Tatap Muka:</strong> Harap hadir di kampus 10 menit sebelum jam sesi dengan membawa berkas pendukung asli.';
+            instruksi.style.color = '#475569';
+          }
+        }
+
+        const badgeTipe = document.getElementById('badge-jadwal-tipe');
+        if (badgeTipe) {
+          const isWeekend = (jw.tipe_hari === 'Weekend' || jw.hari === 'Sabtu' || jw.hari === 'Minggu');
+          badgeTipe.textContent = isWeekend ? 'Weekend (09.00-15.00)' : 'Weekday (08.00-15.00)';
+          badgeTipe.style.background = isWeekend ? '#fef3c7' : '#bbf7d0';
+          badgeTipe.style.color = isWeekend ? '#92400e' : '#166534';
+        }
+      } else {
+        if (ticketBox) ticketBox.style.display = 'none';
       }
     }
 

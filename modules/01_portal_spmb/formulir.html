@@ -94,6 +94,104 @@
       gap: 14px;
       margin-top: 0.75rem;
     }
+    .wawancara-info-card {
+      background: #f0fdf4;
+      border: 1.5px solid #86efac;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 1rem;
+    }
+    .hari-badge-box {
+      margin-top: 6px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hari-badge-weekday {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+    .hari-badge-weekend {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+    .slot-buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+      margin-bottom: 6px;
+    }
+    .slot-btn {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .slot-btn:hover:not(:disabled) {
+      border-color: #006837;
+      background: #f0fdf4;
+      color: #006837;
+    }
+    .slot-btn.active {
+      border-color: #006837;
+      background: #006837;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(0, 104, 55, 0.25);
+    }
+    .slot-btn:disabled {
+      background: #f1f5f9;
+      border-color: #e2e8f0;
+      color: #94a3b8;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    /* Pilihan Metode Wawancara Daring vs Luring */
+    .metode-choice-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .metode-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      background: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .metode-card:hover {
+      border-color: #006837;
+      background: #f8fafc;
+    }
+    .metode-card.selected {
+      border-color: #006837;
+      background: #f0fdf4;
+      box-shadow: 0 2px 8px rgba(0, 104, 55, 0.12);
+    }
+    .metode-card input[type="radio"] {
+      margin-top: 3px;
+      accent-color: #006837;
+      transform: scale(1.15);
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -176,7 +274,81 @@
             <input type="text" id="data_ortu" class="form-control" placeholder="Siti Aminah" required>
           </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 1.5rem; margin-bottom: 0.5rem;">
+          <div class="form-group">
+            <label for="jurusan" class="form-label-req">Pilihan Minat Jurusan</label>
+            <select id="jurusan" class="form-control" required>
+              <option value="MIPA">MIPA (Matematika & Ilmu Pengetahuan Alam)</option>
+              <option value="IPS">IPS (Ilmu Pengetahuan Sosial)</option>
+            </select>
+          </div>
+
+          <!-- Section Jadwal Wawancara Calon Siswa -->
+          <div style="margin-top: 1.75rem; margin-bottom: 0.5rem;">
+            <div class="section-title" style="margin: 0;">🗓️ Pemilihan Hari & Jam Wawancara</div>
+          </div>
+          <div class="wawancara-info-card">
+            <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #006837; font-size: 0.9rem; margin-bottom: 4px;">
+              <span>⏰</span> Aturan Jam Layanan Wawancara SMA Muhammadiyah 3:
+            </div>
+            <div style="font-size: 0.82rem; color: #334155; line-height: 1.6;">
+              &bull; <strong>Hari Kerja (Weekday - Senin s/d Jumat):</strong> Pukul <strong>08.00 - 15.00 WIB</strong><br>
+              &bull; <strong>Akhir Pekan (Weekend - Sabtu s/d Minggu):</strong> Pukul <strong>09.00 - 15.00 WIB</strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label-req">Pilih Metode Wawancara</label>
+            <div class="metode-choice-grid">
+              <label class="metode-card selected" id="label-metode-luring">
+                <input type="radio" name="metode_wawancara" value="Luring" checked>
+                <div>
+                  <div style="font-weight: 700; color: #006837; font-size: 0.92rem; display: flex; align-items: center; gap: 6px;">
+                    <span>🏢</span> Wawancara Luring (Tatap Muka)
+                  </div>
+                  <div style="font-size: 0.78rem; color: #475569; margin-top: 3px; line-height: 1.4;">
+                    Hadir langsung di <strong>Kampus SMA Muhammadiyah 3 Yogyakarta</strong> (Ruang Wawancara Gedung Utama).
+                  </div>
+                </div>
+              </label>
+
+              <label class="metode-card" id="label-metode-daring">
+                <input type="radio" name="metode_wawancara" value="Daring">
+                <div>
+                  <div style="font-weight: 700; color: #0284c7; font-size: 0.92rem; display: flex; align-items: center; gap: 6px;">
+                    <span>🌐</span> Wawancara Daring (Virtual / Online)
+                  </div>
+                  <div style="font-size: 0.78rem; color: #475569; margin-top: 3px; line-height: 1.4;">
+                    Melalui video conference <strong>Google Meet / Zoom</strong> (Tautan aktif pada tiket akun pendaftar).
+                  </div>
+                </div>
+              </label>
+            </div>
+            <div id="metode-hint" class="input-hint" style="margin-top: 6px; font-weight: 600; color: #006837;">
+              📍 Lokasi: <strong>Ruang Wawancara 1 (Gedung Utama M3)</strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="tgl_wawancara" class="form-label-req">Pilih Tanggal Wawancara</label>
+            <input type="date" id="tgl_wawancara" class="form-control" required>
+            <div id="hari-detector-badge" class="hari-badge-box" style="display: none;"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="jam_wawancara" class="form-label-req">Pilih Jam Sesi Wawancara</label>
+            <div id="slot-container" class="slot-buttons-grid">
+              <!-- Tombol slot jam dinamis Weekday / Weekend -->
+            </div>
+            <select id="jam_wawancara" class="form-control" required style="margin-top: 8px;">
+              <option value="">-- Tentukan Tanggal Wawancara Terlebih Dahulu --</option>
+            </select>
+            <div class="input-hint">
+              <span id="slot-hint-text">Pilih tanggal di atas untuk melihat slot jam yang tersedia.</span>
+              <span id="selected-slot-preview" style="font-weight: 700; color: #006837;"></span>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 1.75rem; margin-bottom: 0.5rem;">
             <div class="section-title" style="margin: 0;">Objek Berkas Dokumen Digital & Bukti Bayar</div>
             <button type="button" id="btn-fill-demo-files" class="btn btn-secondary" style="font-size: 0.75rem; padding: 4px 10px;">
               ⚡ Muat Contoh Berkas Demo
@@ -307,8 +479,187 @@
         document.getElementById('asal_sekolah').value = 'SMP Negeri 1 Jakarta';
         document.getElementById('data_ortu').value = 'Siti Aminah / Budi Darmawan';
         document.getElementById('jurusan').value = 'MIPA';
-        showAlert('✓ Contoh isian biodata lengkap berhasil dimuat ke formulir!', false);
+
+        // Set sample date (Jumat / Weekday) jam 09.00
+        const sampleDate = '2026-10-16';
+        if (tglInput) {
+          tglInput.value = sampleDate;
+          updateJadwalSlots(sampleDate, '09:00');
+        }
+
+        // Set sample metode Luring
+        const radioLuring = document.querySelector('input[name="metode_wawancara"][value="Luring"]');
+        if (radioLuring) {
+          radioLuring.checked = true;
+          updateMetodeCardStyle('Luring');
+        }
+
+        showAlert('✓ Contoh isian biodata lengkap & jadwal wawancara berhasil dimuat ke formulir!', false);
       });
+    }
+
+    // Inisialisasi Kontrol Jadwal Wawancara (Weekday 08.00-15.00, Weekend 09.00-15.00)
+    const tglInput = document.getElementById('tgl_wawancara');
+    const jamSelect = document.getElementById('jam_wawancara');
+    const slotContainer = document.getElementById('slot-container');
+    const hariBadge = document.getElementById('hari-detector-badge');
+    const slotHint = document.getElementById('slot-hint-text');
+    const slotPreview = document.getElementById('selected-slot-preview');
+
+    const WEEKDAY_SLOTS = [
+      { jam: '08:00', end: '09:00', label: '08.00 - 09.00 WIB' },
+      { jam: '09:00', end: '10:00', label: '09.00 - 10.00 WIB' },
+      { jam: '10:00', end: '11:00', label: '10.00 - 11.00 WIB' },
+      { jam: '11:00', end: '12:00', label: '11.00 - 12.00 WIB' },
+      { jam: '13:00', end: '14:00', label: '13.00 - 14.00 WIB' },
+      { jam: '14:00', end: '15:00', label: '14.00 - 15.00 WIB' }
+    ];
+
+    const WEEKEND_SLOTS = [
+      { jam: '09:00', end: '10:00', label: '09.00 - 10.00 WIB' },
+      { jam: '10:00', end: '11:00', label: '10.00 - 11.00 WIB' },
+      { jam: '11:00', end: '12:00', label: '11.00 - 12.00 WIB' },
+      { jam: '13:00', end: '14:00', label: '13.00 - 14.00 WIB' },
+      { jam: '14:00', end: '15:00', label: '14.00 - 15.00 WIB' }
+    ];
+
+    function updateJadwalSlots(dateStr, preserveJam = null) {
+      if (!tglInput || !jamSelect) return;
+      if (!dateStr) {
+        if (hariBadge) hariBadge.style.display = 'none';
+        if (slotContainer) slotContainer.innerHTML = '';
+        jamSelect.innerHTML = '<option value="">-- Tentukan Tanggal Wawancara Terlebih Dahulu --</option>';
+        if (slotHint) slotHint.textContent = 'Pilih tanggal di atas untuk melihat slot jam yang tersedia.';
+        if (slotPreview) slotPreview.textContent = '';
+        return;
+      }
+
+      const [y, m, d] = dateStr.split('-').map(Number);
+      const dateObj = new Date(y, m - 1, d);
+      const dayIdx = dateObj.getDay();
+      const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+      const dayName = dayNames[dayIdx];
+      const isWeekend = (dayIdx === 0 || dayIdx === 6);
+
+      if (hariBadge) {
+        hariBadge.style.display = 'flex';
+        if (isWeekend) {
+          hariBadge.className = 'hari-badge-box hari-badge-weekend';
+          hariBadge.innerHTML = `🏖️ <span>Hari <strong>${dayName}</strong> (Akhir Pekan / Weekend) &bull; Jam Layanan: <strong>09.00 - 15.00 WIB</strong></span>`;
+          if (slotHint) slotHint.textContent = 'Slot akhir pekan tersedia: 09.00 s/d 15.00 WIB (08.00 tidak beroperasi).';
+        } else {
+          hariBadge.className = 'hari-badge-box hari-badge-weekday';
+          hariBadge.innerHTML = `📅 <span>Hari <strong>${dayName}</strong> (Hari Kerja / Weekday) &bull; Jam Layanan: <strong>08.00 - 15.00 WIB</strong></span>`;
+          if (slotHint) slotHint.textContent = 'Slot hari kerja tersedia: 08.00 s/d 15.00 WIB.';
+        }
+      }
+
+      const activeSlots = isWeekend ? WEEKEND_SLOTS : WEEKDAY_SLOTS;
+
+      // Update Select Dropdown
+      jamSelect.innerHTML = '<option value="">-- Pilih Jam Wawancara --</option>';
+      activeSlots.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.jam;
+        opt.textContent = s.label;
+        jamSelect.appendChild(opt);
+      });
+
+      // Update Slot Buttons
+      if (slotContainer) {
+        slotContainer.innerHTML = '';
+        activeSlots.forEach(s => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'slot-btn';
+          btn.textContent = s.label;
+          btn.dataset.jam = s.jam;
+          btn.onclick = () => {
+            jamSelect.value = s.jam;
+            highlightSlot(s.jam);
+          };
+          slotContainer.appendChild(btn);
+        });
+      }
+
+      const targetJam = preserveJam || (activeSlots.some(s => s.jam === jamSelect.value) ? jamSelect.value : '');
+      if (targetJam && activeSlots.some(s => s.jam === targetJam)) {
+        jamSelect.value = targetJam;
+        highlightSlot(targetJam);
+      } else {
+        jamSelect.value = '';
+        highlightSlot('');
+      }
+    }
+
+    function highlightSlot(jamVal) {
+      if (!slotContainer) return;
+      slotContainer.querySelectorAll('.slot-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.jam === jamVal);
+      });
+      const allSlots = [...WEEKDAY_SLOTS, ...WEEKEND_SLOTS];
+      const match = allSlots.find(s => s.jam === jamVal);
+      if (slotPreview) {
+        slotPreview.textContent = (match && jamVal) ? `✓ Sesi: ${match.label}` : '';
+      }
+    }
+
+    // Handler Pilihan Metode Wawancara Daring vs Luring
+    function updateMetodeCardStyle(metodeVal) {
+      const cardLuring = document.getElementById('label-metode-luring');
+      const cardDaring = document.getElementById('label-metode-daring');
+      const hint = document.getElementById('metode-hint');
+      const isDaring = metodeVal === 'Daring';
+
+      if (cardLuring) cardLuring.classList.toggle('selected', !isDaring);
+      if (cardDaring) cardDaring.classList.toggle('selected', isDaring);
+
+      if (hint) {
+        if (isDaring) {
+          hint.innerHTML = '🌐 Platform: <strong>Google Meet / Zoom (Daring Online)</strong> &bull; Tautan video conference aktif di tiket akun.';
+          hint.style.color = '#0284c7';
+        } else {
+          hint.innerHTML = '📍 Lokasi: <strong>Ruang Wawancara 1 (Gedung Utama M3)</strong> &bull; Harap hadir langsung di sekolah.';
+          hint.style.color = '#006837';
+        }
+      }
+    }
+
+    document.querySelectorAll('input[name="metode_wawancara"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        updateMetodeCardStyle(e.target.value);
+      });
+    });
+
+    if (tglInput) {
+      // Set min date ke hari ini
+      const todayIso = new Date().toISOString().split('T')[0];
+      tglInput.min = todayIso;
+      tglInput.addEventListener('change', (e) => {
+        updateJadwalSlots(e.target.value);
+      });
+    }
+
+    if (jamSelect) {
+      jamSelect.addEventListener('change', (e) => {
+        highlightSlot(e.target.value);
+      });
+    }
+
+    // Populate existing jadwal jika sudah ada di DB
+    if (currentInDb && currentInDb.jadwal_wawancara) {
+      const jw = currentInDb.jadwal_wawancara;
+      if (jw.metode) {
+        const radioMetode = document.querySelector(`input[name="metode_wawancara"][value="${jw.metode}"]`);
+        if (radioMetode) {
+          radioMetode.checked = true;
+          updateMetodeCardStyle(jw.metode);
+        }
+      }
+      if (jw.tanggal && tglInput) {
+        tglInput.value = jw.tanggal;
+        updateJadwalSlots(jw.tanggal, jw.jam || jw.jam_mulai);
+      }
     }
 
     // Multi-File Upload & Base64 DataURL Conversion (Akta Kelahiran, KK, Ijazah, Bukti Bayar)
@@ -492,19 +843,71 @@
           return;
         }
 
+        // Validasi Jadwal Wawancara (Hari & Jam Weekday 08.00-15.00 vs Weekend 09.00-15.00)
+        if (!tglInput || !tglInput.value) {
+          showAlert('Harap tentukan tanggal wawancara calon siswa!', true);
+          if (tglInput) tglInput.focus();
+          return;
+        }
+
+        if (!jamSelect || !jamSelect.value) {
+          showAlert('Harap pilih jam sesi wawancara yang tersedia!', true);
+          if (jamSelect) jamSelect.focus();
+          return;
+        }
+
+        const dateVal = tglInput.value;
+        const [y, m, d] = dateVal.split('-').map(Number);
+        const dayIdx = new Date(y, m - 1, d).getDay();
+        const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        const dayName = dayNames[dayIdx];
+        const isWeekend = (dayIdx === 0 || dayIdx === 6);
+        const activeSlots = isWeekend ? WEEKEND_SLOTS : WEEKDAY_SLOTS;
+        const slotFound = activeSlots.find(s => s.jam === jamSelect.value) || { jam: jamSelect.value, end: '', label: `${jamSelect.value} WIB` };
+
+        // Validasi batas jam sesuai instruksi
+        const selectedHour = parseInt(jamSelect.value.split(':')[0], 10);
+        if (isWeekend && (selectedHour < 9 || selectedHour > 15)) {
+          showAlert('Wawancara akhir pekan (Weekend) hanya tersedia pukul 09.00 s/d 15.00 WIB!', true);
+          return;
+        }
+        if (!isWeekend && (selectedHour < 8 || selectedHour > 15)) {
+          showAlert('Wawancara hari kerja (Weekday) hanya tersedia pukul 08.00 s/d 15.00 WIB!', true);
+          return;
+        }
+
+        const selectedMetodeRadio = document.querySelector('input[name="metode_wawancara"]:checked');
+        const selectedMetode = selectedMetodeRadio ? selectedMetodeRadio.value : 'Luring';
+        const isDaring = selectedMetode === 'Daring';
+
+        const jadwalWawancaraObj = {
+          tanggal: dateVal,
+          hari: dayName,
+          tipe_hari: isWeekend ? 'Weekend' : 'Weekday',
+          jam: slotFound.jam,
+          jam_mulai: slotFound.jam,
+          jam_selesai: slotFound.end,
+          sesi: slotFound.label,
+          metode: selectedMetode,
+          ruang: isDaring ? 'Google Meet / Zoom (Daring Online)' : 'Ruang Wawancara 1 (Gedung Utama M3)',
+          link_meet: isDaring ? 'https://meet.google.com/spmb-m3-wawancara' : null,
+          pewawancara: 'Divisi Pewawancara SPMB'
+        };
+
         const nowIso = new Date().toISOString();
         const dateStr = new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
 
         const updatedAccount = {
           ...currentInDb,
           nama_lengkap: document.getElementById('nama').value.trim(),
+          jadwal_wawancara: jadwalWawancaraObj,
           biodata: {
             ...(currentInDb.biodata || {}),
             nik: nik,
             alamat: document.getElementById('alamat').value.trim(),
             asal_sekolah: document.getElementById('asal_sekolah').value.trim(),
             nama_orang_tua: document.getElementById('data_ortu').value.trim(),
-            pilihan_jurusan: document.getElementById('jurusan').value
+            pilihan_jurusan: document.getElementById('jurusan') ? document.getElementById('jurusan').value : 'MIPA'
           },
           berkas: {
             ...(currentInDb.berkas || {}),

@@ -17,6 +17,17 @@ const initialSchema = {
       nilai_wawancara: 88,
       status_kelulusan: "LULUS",
       status_daftar_ulang: "VERIFIKASI_LOKET",
+      jadwal_wawancara: {
+        tanggal: "2026-10-19",
+        hari: "Senin",
+        tipe_hari: "Weekday",
+        jam: "08:00",
+        jam_selesai: "09:00",
+        sesi: "08.00 - 09.00 WIB",
+        metode: "Luring",
+        ruang: "Ruang Wawancara 1 (Gedung Utama)",
+        pewawancara: "Yosa"
+      },
       is_locked: false,
       created_at: "2026-03-01T08:00:00Z"
     }
