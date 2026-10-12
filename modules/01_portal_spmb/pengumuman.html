@@ -96,10 +96,10 @@
   <div class="portal-container">
     <div class="nav-steps">
       <a href="register.html" class="step-pill">1. Registrasi</a>
-      <a href="status-akun.html" class="step-pill">2. Status Aktivasi</a>
+      <a href="status-akun.html" class="step-pill">2. Status Aktivasi (Syarat Login)</a>
       <a href="login.html" class="step-pill">3. Login Pendaftar</a>
       <a href="formulir.html" class="step-pill">4. Formulir & Bukti</a>
-      <span class="step-pill active">5. Cek Kelulusan (Alur 10)</span>
+      <a href="dashboard.html" class="step-pill">5. Dashboard Siswa</a>
     </div>
 
     <div class="portal-card">
@@ -107,6 +107,11 @@
         <div class="brand-logo">M3</div>
         <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a;">Pengumuman Kelulusan Seleksi SPMB</h2>
         <p style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">SMA Muhammadiyah 3 Yogyakarta &bull; Alur 10: Akses Hasil Mandiri</p>
+      </div>
+
+      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 10px 14px; margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <span style="font-size: 0.82rem; color: #166534;">💡 Calon siswa terdaftar? Lihat langsung tiket wawancara & SKL di dasbor Anda:</span>
+        <a href="dashboard.html" class="btn btn-primary" style="font-size: 0.75rem; padding: 4px 12px; text-decoration: none;">Buka Dashboard Siswa &rarr;</a>
       </div>
 
       <div style="background: #f8fafc; padding: 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 1.5rem;">
@@ -195,8 +200,16 @@
               <span>${escapeHTML(user.dataWawancara?.rekomendasi_beasiswa || user.wawancara?.beasiswa || 'Reguler')}</span>
             </div>
             <div class="kv-item">
-              <strong>Jalur Penerimaan</strong>
-              <span>Reguler Berkelanjutan</span>
+              <strong>Ruangan Wawancara</strong>
+              <span>${escapeHTML(user.jadwal_wawancara?.ruang || 'Ruang Wawancara 1 (Gedung Utama)')}</span>
+            </div>
+            <div class="kv-item">
+              <strong>Pewawancara Pengesah</strong>
+              <span>${(user.jadwal_wawancara?.pewawancara || user.dataWawancara?.pewawancara || '').includes('Veli') ? '👩‍🏫 Ustadzah Veli, M.Pd' : '👨‍🏫 Ustadz Yosa, S.Pd'}</span>
+            </div>
+            <div class="kv-item">
+              <strong>Metode Pelaksanaan</strong>
+              <span>${(user.jadwal_wawancara?.metode || '').toUpperCase() === 'DARING' ? '🌐 Daring (Virtual Meet)' : '🏢 Luring (Tatap Muka)'}</span>
             </div>
           </div>
 
@@ -209,6 +222,11 @@
                 <li>Fotokopi Kartu Keluarga & Akta Kelahiran</li>
                 <li>Menyelesaikan pembayaran Uang Pangkal di Kasir Sekolah</li>
               </ul>
+            </div>
+            <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+              <button onclick="window.print()" class="btn btn-primary" style="padding: 8px 18px; font-weight: 700; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">
+                📄 Cetak Surat Keterangan Lulus (SKL) Resmi
+              </button>
             </div>
           ` : ''}
         </div>

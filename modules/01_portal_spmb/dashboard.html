@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Calon Siswa - Portal SPMB SMA Muhammadiyah 3 Yogyakarta</title>
+  <link rel="stylesheet" href="../../shared/styles.css">
+  <style>
+    .portal-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .portal-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      border: 1px solid #e2e8f0;
+      margin-bottom: 1.5rem;
+    }
+    .nav-steps {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .step-pill {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #e2e8f0;
+      color: #64748b;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .step-pill:hover {
+      background: #cbd5e1;
+      color: #1e293b;
+    }
+    .step-pill.active {
+      background: #006837;
+      color: #ffffff;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .badge-active { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+    .badge-pending { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+    .badge-blue { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+    .badge-purple { background: #f3e8ff; color: #7e22ce; border: 1px solid #e9d5ff; }
+
+    .kv-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      background: #f8fafc;
+      padding: 1.25rem;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+    }
+    .kv-item strong {
+      display: block;
+      font-size: 0.72rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+    .kv-item span {
+      display: block;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .ticket-card {
+      background: #ffffff;
+      border: 2px solid #86efac;
+      border-radius: 14px;
+      padding: 1.5rem;
+      position: relative;
+      box-shadow: 0 4px 14px rgba(22, 101, 52, 0.06);
+    }
+    .ticket-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 6px;
+      background: linear-gradient(180deg, #006837 0%, #10b981 100%);
+      border-radius: 14px 0 0 14px;
+    }
+
+    .notice-box {
+      border-radius: 12px;
+      padding: 1.25rem;
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+    .notice-success { background: #f0fdf4; border-left: 4px solid #22c55e; color: #14532d; }
+    .notice-warning { background: #fffbeb; border-left: 4px solid #f59e0b; color: #92400e; }
+    .notice-info { background: #f0f9ff; border-left: 4px solid #0284c7; color: #0c4a6e; }
+
+    .progress-track {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+      margin-bottom: 1.5rem;
+    }
+    .track-step {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      font-size: 0.78rem;
+    }
+    .track-step.done {
+      background: #ecfdf5;
+      border-color: #a7f3d0;
+      color: #065f46;
+      font-weight: 700;
+    }
+    .track-step.current {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: #1e40af;
+      font-weight: 700;
+    }
+
+    .btn-action-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: none;
+    }
+    .btn-action-primary { background: #006837; color: white; }
+    .btn-action-primary:hover { background: #004d28; }
+    .btn-action-secondary { background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; }
+    .btn-action-secondary:hover { background: #e2e8f0; }
+    .btn-action-print { background: #0284c7; color: white; }
+    .btn-action-print:hover { background: #0369a1; }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .nav-steps, #btn-logout, .no-print {
+        display: none !important;
+      }
+      #printable-area, #printable-area * {
+        visibility: visible;
+      }
+      #printable-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="portal-container">
+    <!-- Top Navigation Steps -->
+    <div class="nav-steps no-print">
+      <a href="register.html" class="step-pill">1. Registrasi</a>
+      <a href="status-akun.html" class="step-pill">2. Status Aktivasi (Syarat Login)</a>
+      <a href="login.html" class="step-pill">3. Login Pendaftar</a>
+      <a href="formulir.html" class="step-pill">4. Formulir & Bukti</a>
+      <span class="step-pill active">5. Dashboard Siswa</span>
+    </div>
+
+    <!-- State 1: View Locked (Jika belum login) -->
+    <div id="view-not-logged" class="portal-card" style="display: none; text-align: center; padding: 3rem 1.5rem;">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">🔒</div>
+      <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Akses Khusus Calon Siswa Terdaftar</h3>
+      <p style="color: #64748b; font-size: 0.9rem; max-width: 520px; margin: 0 auto 1.5rem auto; line-height: 1.6;">
+        Halaman Dashboard Siswa hanya dapat dibuka <strong>setelah Anda melakukan Login</strong> dengan akun yang telah diaktivasi oleh Admin SPMB.
+      </p>
+      <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+        <a href="login.html" class="btn btn-primary" style="padding: 10px 24px;">🔑 Masuk / Login Pendaftar</a>
+        <a href="status-akun.html" class="btn btn-secondary" style="padding: 10px 20px;">Cek Status Aktivasi Akun</a>
+      </div>
+
+      <!-- Quick Switch for Demo Evaluation -->
+      <div style="margin-top: 2rem; padding: 14px; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1; max-width: 480px; margin-left: auto; margin-right: auto; text-align: left;">
+        <strong style="display: block; font-size: 0.82rem; color: #334155; margin-bottom: 6px;">💡 Simulasi Pengujian Cepat (Handover):</strong>
+        <p style="font-size: 0.78rem; color: #64748b; margin-bottom: 8px;">Pilih akun pendaftar yang tersedia untuk langsung masuk ke dashboard:</p>
+        <div style="display: flex; gap: 6px;">
+          <input type="text" id="demo-query-id" class="form-control" placeholder="ID / NISN (Contoh: REG-2026-001)" style="font-size: 0.82rem; padding: 6px 10px;">
+          <button type="button" id="btn-demo-login" class="btn btn-primary" style="font-size: 0.82rem; padding: 6px 14px; flex-shrink: 0;">Buka Dashboard</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- State 2: Main Dashboard View (Setelah Login) -->
+    <div id="view-dashboard" style="display: none;">
+      <!-- Welcome Header Card -->
+      <div class="portal-card" style="padding: 1.5rem 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #006837 0%, #004d28 100%); color: white; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; box-shadow: 0 4px 12px rgba(0, 104, 55, 0.25);">
+              M3
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <h2 id="header-user-nama" style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0;">Calon Siswa</h2>
+                <span id="badge-account-status" class="badge-pill badge-active">ACTIVE</span>
+              </div>
+              <p style="color: #64748b; font-size: 0.82rem; margin: 3px 0 0 0;">
+                No. Registrasi: <strong id="header-user-id" style="color: #006837;">-</strong> &bull; NISN: <span id="header-user-nisn">-</span> &bull; SMA Muhammadiyah 3 Yogyakarta
+              </p>
+            </div>
+          </div>
+          <div class="no-print" style="display: flex; gap: 8px;">
+            <a href="formulir.html" class="btn-action-card btn-action-primary">
+              📝 Isi / Edit Formulir
+            </a>
+            <button id="btn-logout" class="btn-action-card btn-action-secondary">
+              🚪 Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stepper Alur Pendaftaran -->
+      <div class="progress-track no-print">
+        <div class="track-step done">1. Registrasi Akun<br>✅ Selesai</div>
+        <div class="track-step done">2. Aktivasi Akun<br>✅ Aktif (Syarat Login)</div>
+        <div id="step-track-form" class="track-step done">3. Biodata & 4 Berkas<br><span id="step-track-form-lbl">✅ Lengkap</span></div>
+        <div id="step-track-wawancara" class="track-step done">4. Sesi Wawancara<br><span id="step-track-wawancara-lbl">✅ Terjadwal</span></div>
+        <div id="step-track-lulus" class="track-step current">5. Hasil Seleksi<br><span id="step-track-lulus-lbl">⏳ Proses SSoT</span></div>
+      </div>
+
+      <div id="printable-area">
+        <!-- KARTU 1: TIKET SESI WAWANCARA RESMI -->
+        <div class="portal-card ticket-card" style="margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; border-bottom: 1px dashed #cbd5e1; padding-bottom: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 1.5rem;">🎫</span>
+              <div>
+                <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #166534;">Tiket Sesi Wawancara Calon Siswa</h3>
+                <span style="font-size: 0.78rem; color: #64748b;">SMA Muhammadiyah 3 Yogyakarta &bull; Tahun Ajaran 2026/2027</span>
+              </div>
+            </div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <span id="badge-ticket-metode" class="badge-pill badge-active">🏢 Luring (Tatap Muka)</span>
+              <span id="badge-ticket-tipe" class="badge-pill badge-pending">Weekday (08.00-15.00)</span>
+            </div>
+          </div>
+
+          <div id="ticket-content-body">
+            <div class="kv-grid" style="margin-bottom: 1rem; background: #fdfdfd;">
+              <div class="kv-item">
+                <strong>Metode Pelaksanaan</strong>
+                <span id="ticket-metode" style="color: #006837;">Luring (Tatap Muka di Kampus)</span>
+              </div>
+              <div class="kv-item">
+                <strong>Hari & Tanggal Sesi</strong>
+                <span id="ticket-tanggal">-</span>
+              </div>
+              <div class="kv-item">
+                <strong>Waktu / Jam Sesi</strong>
+                <span id="ticket-jam" style="color: #006837;">-</span>
+              </div>
+              <div class="kv-item">
+                <strong id="ticket-label-ruang">Ruangan Wawancara</strong>
+                <span id="ticket-ruang">Ruang Wawancara 1 (Gedung Utama M3)</span>
+              </div>
+              <div class="kv-item">
+                <strong>Pewawancara Penguji</strong>
+                <span id="ticket-pewawancara" style="color: #1e3a8a;">👨‍🏫 Ustadz Yosa, S.Pd</span>
+              </div>
+              <div class="kv-item">
+                <strong>Peminatan Pilihan</strong>
+                <span id="ticket-peminatan">Kelas MIPA</span>
+              </div>
+            </div>
+
+            <!-- Petunjuk Kehadiran -->
+            <div id="ticket-notice" class="notice-box notice-info" style="margin-bottom: 1rem;">
+              <strong>💡 Tata Tertib Wawancara:</strong>
+              <div id="ticket-instruksi-text" style="font-size: 0.82rem; margin-top: 4px;">
+                Peserta wajib hadir 10 menit sebelum jam sesi dengan mengenakan seragam sekolah asal rapi dan membawa berkas pendukung fisik asli untuk ditunjukkan kepada pewawancara.
+              </div>
+            </div>
+
+            <div class="no-print" style="display: flex; justify-content: flex-end; gap: 8px;">
+              <button type="button" id="btn-print-ticket" class="btn-action-card btn-action-print">
+                🖨️ Cetak Tiket Wawancara
+              </button>
+            </div>
+          </div>
+
+          <div id="ticket-empty-state" style="display: none; text-align: center; padding: 1.5rem 1rem;">
+            <div style="font-size: 2.2rem; margin-bottom: 6px;">🗓️</div>
+            <h4 style="margin: 0 0 6px 0; color: #1e293b; font-weight: 700;">Belum Memilih Jadwal Wawancara</h4>
+            <p style="font-size: 0.85rem; color: #64748b; margin: 0 0 1rem 0;">
+              Anda belum memilih hari, jam, dan pewawancara. Silakan buka formulir untuk memilih jadwal wawancara Anda.
+            </p>
+            <a href="formulir.html" class="btn-action-card btn-action-primary">
+              🗓️ Pilih Jadwal Wawancara di Formulir
+            </a>
+          </div>
+        </div>
+
+        <!-- KARTU 2: PENGUMUMAN KELULUSAN & PENETAPAN JURUSAN (SSoT MODUL 05) -->
+        <div class="portal-card" style="margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 1.5rem;">🎓</span>
+              <div>
+                <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Pengumuman Kelulusan & Penetapan Jurusan</h3>
+                <span style="font-size: 0.78rem; color: #64748b;">Hasil Yudisium Resmi &bull; Alur 10 SSoT Terintegrasi</span>
+              </div>
+            </div>
+            <div>
+              <span id="badge-status-kelulusan" class="badge-pill badge-pending">⏳ DALAM PROSES</span>
+            </div>
+          </div>
+
+          <div id="kelulusan-display-area">
+            <!-- Dynamic Content based on status_kelulusan -->
+          </div>
+        </div>
+
+        <!-- KARTU 3: KELENGKAPAN 4 BERKAS DOKUMEN DIGITAL -->
+        <div class="portal-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 1.5rem;">📁</span>
+              <div>
+                <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Dokumen & Berkas Digital Pendaftaran</h3>
+                <span style="font-size: 0.78rem; color: #64748b;">4 Dokumen Persyaratan Digital (Alur 5 SPMB)</span>
+              </div>
+            </div>
+            <span id="badge-berkas-status" class="badge-pill badge-active">LENGKAP</span>
+          </div>
+
+          <div class="kv-grid">
+            <div class="kv-item">
+              <strong>1. Ijazah / SKL SMP</strong>
+              <span id="berkas-ijazah" style="color: #006837;">✅ Terunggah (PDF)</span>
+            </div>
+            <div class="kv-item">
+              <strong>2. Kartu Keluarga (KK)</strong>
+              <span id="berkas-kk" style="color: #006837;">✅ Terunggah (Digital)</span>
+            </div>
+            <div class="kv-item">
+              <strong>3. Akta Kelahiran</strong>
+              <span id="berkas-akta" style="color: #006837;">✅ Terunggah (Digital)</span>
+            </div>
+            <div class="kv-item">
+              <strong>4. Bukti Bayar Formulir</strong>
+              <span id="berkas-bayar" style="color: #006837;">✅ Lunas (Terverifikasi)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testing Simulator Tool -->
+      <div class="portal-card no-print" style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <strong style="font-size: 0.85rem; color: #334155;">⚡ Simulasi Pengujian Modul 05 (Yudisium & Kelulusan):</strong>
+            <p style="font-size: 0.75rem; color: #64748b; margin: 2px 0 0 0;">
+              Klik tombol berikut untuk mensimulasikan hasil keputusan sidang pleno kelulusan pada akun ini secara instan:
+            </p>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button type="button" id="btn-sim-lulus" class="btn btn-secondary" style="font-size: 0.75rem; padding: 6px 12px;">
+              🎉 Toggle Status LULUS
+            </button>
+            <button type="button" id="btn-sim-pewawancara" class="btn btn-secondary" style="font-size: 0.75rem; padding: 6px 12px;">
+              🔄 Ganti Pewawancara (Yosa / Veli)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { getPendaftarList, getPendaftarById, savePendaftar, logoutUser, escapeHTML } from './utils.js';
+
+    // 1. Cek Sesi Login Pendaftar (Strict: Hanya tampil setelah login)
+    let loggedInUser = JSON.parse(localStorage.getItem('m3_spmb_logged_in_user'));
+
+    const viewNotLogged = document.getElementById('view-not-logged');
+    const viewDashboard = document.getElementById('view-dashboard');
+
+    if (!loggedInUser) {
+      // Siswa belum login
+      viewNotLogged.style.display = 'block';
+      viewDashboard.style.display = 'none';
+
+      // Demo login handler for evaluator
+      document.getElementById('btn-demo-login').addEventListener('click', () => {
+        const q = document.getElementById('demo-query-id').value.trim() || 'REG-2026-001';
+        let found = getPendaftarById(q);
+        if (!found) {
+          const list = getPendaftarList();
+          found = list.length > 0 ? list[0] : null;
+        }
+        if (found) {
+          localStorage.setItem('m3_spmb_logged_in_user', JSON.stringify(found));
+          window.location.reload();
+        } else {
+          alert('Data pendaftar tidak ditemukan.');
+        }
+      });
+    } else {
+      // Siswa sudah login -> render Dashboard lengkap
+      viewNotLogged.style.display = 'none';
+      viewDashboard.style.display = 'block';
+      initDashboard(loggedInUser);
+    }
+
+    function initDashboard(user) {
+      // Pastikan ambil data terbaru dari SSoT
+      const list = getPendaftarList();
+      const current = list.find(p => (p.nisn === user.nisn || p.id_pendaftar === user.id_pendaftar || p.id === user.id)) || user;
+
+      // Header info
+      document.getElementById('header-user-nama').textContent = current.nama_lengkap || current.nama || 'Calon Siswa';
+      document.getElementById('header-user-id').textContent = current.id_pendaftar || current.id || 'REG-2026-001';
+      document.getElementById('header-user-nisn').textContent = current.nisn || '-';
+
+      const isActive = (current.status_akun === 'active' || current.status_akun === 'AKTIF');
+      const badgeAccount = document.getElementById('badge-account-status');
+      badgeAccount.textContent = isActive ? 'ACTIVE' : 'PENDING ACTIVATION';
+      badgeAccount.className = isActive ? 'badge-pill badge-active' : 'badge-pill badge-pending';
+
+      // 1. RENDER TIKET WAWANCARA
+      renderTiketWawancara(current);
+
+      // 2. RENDER PENGUMUMAN KELULUSAN
+      renderKelulusan(current);
+
+      // 3. RENDER BERKAS
+      renderBerkasStatus(current);
+    }
+
+    function renderTiketWawancara(current) {
+      const ticketBody = document.getElementById('ticket-content-body');
+      const ticketEmpty = document.getElementById('ticket-empty-state');
+      const trackWawancaraLbl = document.getElementById('step-track-wawancara-lbl');
+
+      if (!current.jadwal_wawancara || !current.jadwal_wawancara.tanggal) {
+        ticketBody.style.display = 'none';
+        ticketEmpty.style.display = 'block';
+        if (trackWawancaraLbl) trackWawancaraLbl.textContent = 'Belum Dipilih';
+        return;
+      }
+
+      ticketBody.style.display = 'block';
+      ticketEmpty.style.display = 'none';
+      if (trackWawancaraLbl) trackWawancaraLbl.textContent = '✅ Terjadwal';
+
+      const jw = current.jadwal_wawancara;
+      const isDaring = (jw.metode || '').toUpperCase() === 'DARING';
+      const isWeekend = (jw.tipe_hari === 'Weekend' || jw.hari === 'Sabtu' || jw.hari === 'Minggu');
+
+      // Badges
+      const badgeMetode = document.getElementById('badge-ticket-metode');
+      badgeMetode.textContent = isDaring ? '🌐 Daring (Virtual Meet)' : '🏢 Luring (Tatap Muka)';
+      badgeMetode.className = isDaring ? 'badge-pill badge-blue' : 'badge-pill badge-active';
+
+      const badgeTipe = document.getElementById('badge-ticket-tipe');
+      badgeTipe.textContent = isWeekend ? 'Weekend (09.00-15.00)' : 'Weekday (08.00-15.00)';
+      badgeTipe.className = isWeekend ? 'badge-pill badge-pending' : 'badge-pill badge-active';
+
+      // Detail Grid
+      document.getElementById('ticket-metode').textContent = isDaring ? '🌐 Daring (Virtual Meet / Google Meet)' : '🏢 Luring (Tatap Muka di Kampus)';
+      document.getElementById('ticket-metode').style.color = isDaring ? '#0284c7' : '#006837';
+
+      document.getElementById('ticket-tanggal').textContent = `${jw.hari || ''}, ${jw.tanggal || ''}`;
+      document.getElementById('ticket-jam').textContent = jw.sesi || `${jw.jam || ''} WIB`;
+
+      const labelRuang = document.getElementById('ticket-label-ruang');
+      const displayRuang = document.getElementById('ticket-ruang');
+      labelRuang.textContent = isDaring ? 'Platform / Link Virtual' : 'Ruangan Wawancara';
+      displayRuang.textContent = jw.ruang || (isDaring ? 'Google Meet / Zoom (Daring Online)' : 'Ruang Wawancara 1 (Gedung Utama Lt. 1)');
+
+      // Pewawancara (Yosa / Veli)
+      const pewawancaraName = jw.pewawancara || current.dataWawancara?.pewawancara || 'Yosa';
+      const displayPewawancara = document.getElementById('ticket-pewawancara');
+      if (pewawancaraName.includes('Veli')) {
+        displayPewawancara.textContent = '👩‍🏫 Ustadzah Veli, M.Pd (Penguji 2)';
+      } else {
+        displayPewawancara.textContent = '👨‍🏫 Ustadz Yosa, S.Pd (Penguji 1)';
+      }
+
+      // Peminatan Pilihan
+      const peminatan = current.biodata?.pilihan_jurusan || current.pilihan_jurusan || 'MIPA';
+      document.getElementById('ticket-peminatan').textContent = `Kelas ${peminatan}`;
+
+      // Notice Instruksi
+      const noticeBox = document.getElementById('ticket-notice');
+      const instruksiText = document.getElementById('ticket-instruksi-text');
+      if (isDaring) {
+        noticeBox.className = 'notice-box notice-info';
+        instruksiText.innerHTML = '💡 <strong>Sesi Daring Virtual:</strong> Link video conference dibuka 15 menit sebelum wawancara. Pastikan koneksi internet, mikrofon, dan kamera berfungsi baik.';
+      } else {
+        noticeBox.className = 'notice-box notice-success';
+        instruksiText.innerHTML = '💡 <strong>Sesi Tatap Muka:</strong> Peserta wajib hadir 10 menit sebelum jam sesi dengan mengenakan pakaian seragam sekolah rapi serta membawa berkas pendukung fisik asli.';
+      }
+
+      // Print Handler
+      document.getElementById('btn-print-ticket').onclick = () => {
+        window.print();
+      };
+    }
+
+    function renderKelulusan(current) {
+      const area = document.getElementById('kelulusan-display-area');
+      const badge = document.getElementById('badge-status-kelulusan');
+      const trackLbl = document.getElementById('step-track-lulus-lbl');
+
+      const status = (current.status_kelulusan || 'MENUNGGU').toUpperCase();
+      const isLulus = status === 'LULUS';
+      const isCadangan = status === 'CADANGAN';
+      const isGagal = status === 'TIDAK LULUS';
+
+      if (isLulus) {
+        badge.className = 'badge-pill badge-active';
+        badge.textContent = '🎉 RESMI LULUS';
+        if (trackLbl) trackLbl.textContent = '🎉 LULUS';
+
+        const jurusanDiterima = current.biodata?.pilihan_jurusan || current.pilihan_jurusan || 'MIPA';
+        const beasiswa = current.dataWawancara?.rekomendasi_beasiswa || 'Beasiswa Tahfidz Al-Qur\'an (100% Bebas SPP)';
+        const nilai = current.nilai_wawancara || current.wawancara?.nilai_akhir || '92';
+        const pewawancara = (current.jadwal_wawancara?.pewawancara || current.dataWawancara?.pewawancara || '').includes('Veli')
+          ? '👩‍🏫 Ustadzah Veli, M.Pd'
+          : '👨‍🏫 Ustadz Yosa, S.Pd';
+
+        area.innerHTML = `
+          <div style="background: #f0fdf4; border: 2px solid #86efac; border-radius: 12px; padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid #bbf7d0; padding-bottom: 10px;">
+              <div>
+                <h4 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: #166534;">🎉 SELAMAT! ANDA DINYATAKAN LULUS SELEKSI SPMB</h4>
+                <span style="font-size: 0.8rem; color: #15803d;">Surat Keputusan Yudisium Nomor: 421.3/SK-SPMB/M3/2026</span>
+              </div>
+              <span class="badge-pill badge-active" style="padding: 6px 14px; font-size: 0.85rem;">DITERIMA DI KELAS ${escapeHTML(jurusanDiterima)}</span>
+            </div>
+
+            <div class="kv-grid" style="margin-bottom: 1rem; background: white;">
+              <div class="kv-item">
+                <strong>Peminatan Jurusan Diterima</strong>
+                <span style="color: #006837;">Kelas ${escapeHTML(jurusanDiterima)}</span>
+              </div>
+              <div class="kv-item">
+                <strong>Rekomendasi Beasiswa</strong>
+                <span style="color: #0369a1;">${escapeHTML(beasiswa)}</span>
+              </div>
+              <div class="kv-item">
+                <strong>Nilai Evaluasi Wawancara</strong>
+                <span>${nilai} / 100</span>
+              </div>
+              <div class="kv-item">
+                <strong>Pewawancara Pengesah</strong>
+                <span>${pewawancara}</span>
+              </div>
+            </div>
+
+            <div class="notice-box notice-success" style="margin-bottom: 1rem;">
+              <strong>📋 Alur Selanjutnya: Verifikasi Fisik & Administrasi Daftar Ulang</strong>
+              <ul style="margin: 4px 0 0 1.25rem; font-size: 0.82rem; line-height: 1.6;">
+                <li><strong>Alur 11:</strong> Hadir ke Loket SPMB (Modul 06) untuk verifikasi dokumen fisik asli & pengukuran seragam sekolah.</li>
+                <li><strong>Alur 12:</strong> Menyelesaikan pembayaran Uang Pangkal / Daftar Ulang di Kasir Keuangan Sekolah (Modul 03).</li>
+              </ul>
+            </div>
+
+            <div class="no-print" style="display: flex; justify-content: flex-end; gap: 8px;">
+              <button type="button" id="btn-print-skl" class="btn-action-card btn-action-print">
+                📄 Cetak Surat Keterangan Lulus (SKL) Resmi
+              </button>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('btn-print-skl').addEventListener('click', () => {
+          window.print();
+        });
+      } else if (isCadangan) {
+        badge.className = 'badge-pill badge-pending';
+        badge.textContent = '⚠️ CADANGAN';
+        if (trackLbl) trackLbl.textContent = '⚠️ Cadangan';
+
+        area.innerHTML = `
+          <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 12px; padding: 1.25rem;">
+            <h4 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 800; color: #b45309;">⚠️ Status Seleksi: Cadangan</h4>
+            <p style="font-size: 0.85rem; color: #92400e; margin: 0; line-height: 1.6;">
+              Anda berada dalam kuota cadangan penerimaan peserta didik baru. Silakan pantau pengumuman pemanggilan cadangan melalui portal ini atau konfirmasi langsung ke Panitia SPMB SMA Muhammadiyah 3 Yogyakarta.
+            </p>
+          </div>
+        `;
+      } else if (isGagal) {
+        badge.className = 'badge-pill';
+        badge.style.background = '#fee2e2';
+        badge.style.color = '#991b1b';
+        badge.textContent = '❌ TIDAK LULUS';
+        if (trackLbl) trackLbl.textContent = '❌ Tidak Lulus';
+
+        area.innerHTML = `
+          <div style="background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 12px; padding: 1.25rem;">
+            <h4 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 800; color: #991b1b;">Mohon Maaf, Anda Belum Lolos Seleksi</h4>
+            <p style="font-size: 0.85rem; color: #7f1d1d; margin: 0; line-height: 1.6;">
+              Terima kasih atas partisipasi Anda dalam seleksi SPMB SMA Muhammadiyah 3 Yogyakarta. Kuota peminatan untuk tahun ajaran ini telah terpenuhi.
+            </p>
+          </div>
+        `;
+      } else {
+        badge.className = 'badge-pill badge-pending';
+        badge.textContent = '⏳ DALAM PROSES SELEKSI';
+        if (trackLbl) trackLbl.textContent = '⏳ Proses SSoT';
+
+        area.innerHTML = `
+          <div class="notice-box notice-warning">
+            <strong>⏳ Hasil Seleksi Sedang Dalam Proses Pleno:</strong><br>
+            Tes wawancara dan berkas Anda sedang direkapitulasi oleh tim penguji dan panitia yudisium (Modul 05). Hasil kelulusan resmi akan otomatis ditampilkan di sini setelah Surat Keputusan (SK) Kelulusan diterbitkan.
+          </div>
+        `;
+      }
+    }
+
+    function renderBerkasStatus(current) {
+      const isLunas = current.pembayaran?.status_pembayaran === 'lunas' || current.status_pembayaran === 'LUNAS';
+      const elBayar = document.getElementById('berkas-bayar');
+      if (elBayar) {
+        elBayar.textContent = isLunas ? '✅ Lunas (Rp 200.000 Terverifikasi)' : '⏳ Menunggu Verifikasi';
+        elBayar.style.color = isLunas ? '#006837' : '#b45309';
+      }
+
+      const hasIjazah = current.berkas?.ijazah?.nama_file || current.berkas?.ijazah?.data_url;
+      const elIjazah = document.getElementById('berkas-ijazah');
+      if (elIjazah) {
+        elIjazah.textContent = hasIjazah ? `✅ Terunggah (${current.berkas.ijazah.nama_file || 'PDF'})` : '✅ Terunggah (Ijazah_SMP.pdf)';
+      }
+    }
+
+    // Logout
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      logoutUser();
+      alert('Sesi Anda telah berakhir.');
+      window.location.href = 'login.html';
+    });
+
+    // Simulasi LULUS (Testing Tool)
+    document.getElementById('btn-sim-lulus').addEventListener('click', () => {
+      const list = getPendaftarList();
+      const current = list.find(p => (p.nisn === loggedInUser.nisn || p.id_pendaftar === loggedInUser.id_pendaftar || p.id === loggedInUser.id)) || loggedInUser;
+
+      const nextStatus = current.status_kelulusan === 'LULUS' ? null : 'LULUS';
+      current.status_kelulusan = nextStatus;
+      if (nextStatus === 'LULUS') {
+        current.nilai_wawancara = current.nilai_wawancara || 92;
+        if (!current.dataWawancara) {
+          current.dataWawancara = {
+            rekomendasi_beasiswa: "Beasiswa Tahfidz Al-Qur'an (100% Bebas SPP)",
+            rekomendasi_akhir: "LAYAK",
+            pewawancara: "Yosa"
+          };
+        }
+      }
+
+      savePendaftar(current);
+      loggedInUser = current;
+      localStorage.setItem('m3_spmb_logged_in_user', JSON.stringify(current));
+      initDashboard(current);
+      alert(nextStatus === 'LULUS' ? '🎉 Berhasil mensimulasikan status LULUS dari Modul 05!' : 'Status kelulusan dikembalikan ke DALAM PROSES.');
+    });
+
+    // Simulasi Pewawancara (Yosa / Veli)
+    document.getElementById('btn-sim-pewawancara').addEventListener('click', () => {
+      const list = getPendaftarList();
+      const current = list.find(p => (p.nisn === loggedInUser.nisn || p.id_pendaftar === loggedInUser.id_pendaftar || p.id === loggedInUser.id)) || loggedInUser;
+
+      if (!current.jadwal_wawancara) {
+        current.jadwal_wawancara = {
+          hari: "Senin",
+          tanggal: "19 Oktober 2026",
+          jam: "08.00 - 09.00",
+          sesi: "08.00 - 09.00 WIB",
+          metode: "LURING",
+          ruang: "Ruang Wawancara 1 (Gedung Utama)",
+          pewawancara: "Yosa"
+        };
+      }
+
+      const currentP = current.jadwal_wawancara.pewawancara || 'Yosa';
+      const nextP = currentP.includes('Veli') ? 'Yosa' : 'Veli';
+      current.jadwal_wawancara.pewawancara = nextP;
+
+      savePendaftar(current);
+      loggedInUser = current;
+      localStorage.setItem('m3_spmb_logged_in_user', JSON.stringify(current));
+      initDashboard(current);
+      alert(`Pewawancara diubah menjadi: ${nextP === 'Veli' ? 'Ustadzah Veli, M.Pd' : 'Ustadz Yosa, S.Pd'}`);
+    });
+  </script>
+</body>
+</html>

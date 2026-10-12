@@ -87,10 +87,10 @@
   <div class="portal-container">
     <div class="nav-steps">
       <a href="register.html" class="step-pill" style="text-decoration: none;">1. Registrasi</a>
-      <a href="status-akun.html" class="step-pill" style="text-decoration: none;">2. Status Aktivasi</a>
+      <a href="status-akun.html" class="step-pill" style="text-decoration: none;">2. Status Aktivasi (Syarat Login)</a>
       <span class="step-pill active">3. Login Pendaftar</span>
       <a href="formulir.html" class="step-pill" style="text-decoration: none;">4. Formulir & Bukti</a>
-      <a href="pengumuman.html" class="step-pill" style="text-decoration: none;">5. Cek Kelulusan</a>
+      <a href="dashboard.html" class="step-pill" style="text-decoration: none;">5. Dashboard Siswa</a>
     </div>
 
     <div class="portal-card">
@@ -205,10 +205,10 @@
 
       // Store authenticated session
       localStorage.setItem('m3_spmb_logged_in_user', JSON.stringify(user));
-      showAlert('<strong>Login Berhasil!</strong> Mengalihkan ke Formulir Pendaftaran...', 'success');
+      showAlert('<strong>Login Berhasil!</strong> Mengalihkan ke Dashboard Siswa...', 'success');
 
       setTimeout(() => {
-        window.location.href = 'formulir.html';
+        window.location.href = 'dashboard.html';
       }, 1000);
     });
 

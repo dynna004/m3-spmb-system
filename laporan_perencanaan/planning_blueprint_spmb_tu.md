@@ -114,8 +114,13 @@ Berikut merupakan spesifikasi kebutuhan fungsional dan teknis dari masing-masing
       - **Hari Kerja (Weekday - Senin s/d Jumat)**: Pukul **08.00 - 15.00 WIB**.
       - **Akhir Pekan (Weekend - Sabtu s/d Minggu)**: Pukul **09.00 - 15.00 WIB**.
   - Upload berkas digital (kartu keluarga, ijazah/SKL, akta kelahiran, bukti transfer biaya pendaftaran).
-  - Dasbor pelacak status pendaftaran & tiket konfirmasi jadwal wawancara terintegrasi SSoT (menampilkan badge metode Luring/Daring, lokasi/link virtual, dan panduan kehadiran).
-- **Tujuan & Pemecahan Masalah**: Menyediakan antarmuka pendaftaran *self-service* 24 jam sehingga pendaftar dapat menentukan waktu dan format wawancara (tatap muka langsung atau jarak jauh) secara fleksibel tanpa antre fisik di sekolah.
+  - **Halaman Status Aktivasi Akun Pra-Login (`status-akun.html`)**: Khusus memantau status persetujuan aktivasi akun (`pending_activation` -> `active`) oleh Admin SPMB (Modul 02). Aktivasi bertindak sebagai syarat mutlak sebelum calon siswa diizinkan login.
+  - **Dasbor Terpadu Calon Siswa Pasca-Login (`dashboard.html`)**:
+    - **Header & Status Akun**: Menampilkan identitas resmi, NISN, No. Registrasi, status login, dan tombol navigasi pengisian formulir.
+    - **Kartu 1 - Tiket Sesi Wawancara Resmi (Terintegrasi Modul 04)**: Penempatan ruangan fisik (misal: *Ruang Wawancara 1 Gedung Utama*) atau platform virtual (*Google Meet*), penugasan pewawancara spesifik (**Yosa, S.Pd** / **Veli, M.Pd**), hari & jam sesi (Weekday: 08.00–15.00 WIB / Weekend: 09.00–15.00 WIB), tata tertib, serta tombol **Cetak Tiket Sesi Wawancara**.
+    - **Kartu 2 - Pengumuman Kelulusan & Penetapan Jurusan (Terintegrasi Modul 05)**: Status kelulusan resmi (*LULUS* / *CADANGAN* / *TIDAK LULUS*), peminatan kelas diterima (*MIPA* / *IPS*), beasiswa Tahfidz (Bebas SPP / Potongan SPP), tombol **Cetak Surat Keterangan Lulus (SKL) Digital**, serta panduan daftar ulang loket fisik (Modul 06) dan pembayaran uang pangkal (Modul 03).
+    - **Kartu 3 - Kelengkapan 4 Berkas Dokumen Digital**: Pemantauan status 4 berkas digital (Ijazah, KK, Akta, Bukti Bayar).
+- **Tujuan & Pemecahan Masalah**: Memisahkan secara tegas tahap pra-login (aktivasi sebagai syarat otentikasi) dan tahap pasca-login (Dashboard Siswa Terpadu) sehingga alur bisnis SPMB berjalan teratur, aman, dan intuitif bagi calon peserta didik.
 - **Strategi & Layer**: **Agile** | *Presentation Layer*.
 
 ---

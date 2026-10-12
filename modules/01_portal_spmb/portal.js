@@ -34,7 +34,7 @@ export function renderPortalSPMB(containerId) {
           <button class="tab-btn" id="spmb-nav-status" onclick="window.loadSPMBSubPage('status-akun.html')">2. Status Aktivasi</button>
           <button class="tab-btn" id="spmb-nav-login" onclick="window.loadSPMBSubPage('login.html')">3. Login Pendaftar</button>
           <button class="tab-btn" id="spmb-nav-form" onclick="window.loadSPMBSubPage('formulir.html')">4. Formulir & Bukti</button>
-          <button class="tab-btn" id="spmb-nav-ann" onclick="window.loadSPMBSubPage('pengumuman.html')">5. Cek Kelulusan</button>
+          <button class="tab-btn" id="spmb-nav-dash" onclick="window.loadSPMBSubPage('dashboard.html')">5. Dashboard Siswa</button>
         </div>
       </div>
 
@@ -57,7 +57,8 @@ export function renderPortalSPMB(containerId) {
       'status-akun.html': 'spmb-nav-status',
       'login.html': 'spmb-nav-login',
       'formulir.html': 'spmb-nav-form',
-      'pengumuman.html': 'spmb-nav-ann'
+      'dashboard.html': 'spmb-nav-dash',
+      'pengumuman.html': 'spmb-nav-dash'
     };
 
     Object.values(navButtons).forEach(id => {
@@ -85,7 +86,8 @@ export function renderPortalSPMB(containerId) {
           'status-akun.html': 'spmb-nav-status',
           'login.html': 'spmb-nav-login',
           'formulir.html': 'spmb-nav-form',
-          'pengumuman.html': 'spmb-nav-ann'
+          'dashboard.html': 'spmb-nav-dash',
+          'pengumuman.html': 'spmb-nav-dash'
         };
 
         Object.values(navButtons).forEach(id => {
