@@ -35,12 +35,81 @@ let jadwalFilterMetode = 'ALL'; // 'ALL' | 'LURING' | 'DARING'
 let jadwalFilterStatus = 'ALL';
 let jadwalSearch = '';
 
+// Sidebar Navbar State (Bisa dibuka dan ditutup, tersimpan di localStorage)
+const SIDEBAR_STATE_KEY = 'spmb_wawancara_sidebar_open';
+let isSidebarOpen = true;
+let activeNavSection = 'JADWAL'; // 'DASHBOARD' | 'JADWAL' | 'PENILAIAN' | 'LAPORAN'
+
+try {
+  const savedSidebar = localStorage.getItem(SIDEBAR_STATE_KEY);
+  if (savedSidebar !== null) {
+    isSidebarOpen = savedSidebar === 'true';
+  }
+} catch (e) {}
+
 try {
   const savedMode = localStorage.getItem(ROLE_KEY);
   if (savedMode !== null) {
     isEditMode = savedMode === 'true';
   }
 } catch (e) {}
+
+/**
+ * Update active state tombol menu sidebar
+ */
+function updateSidebarNavActive(section) {
+  activeNavSection = section;
+  const navBtns = document.querySelectorAll('.sidebar-nav-btn');
+  navBtns.forEach(btn => btn.classList.remove('active'));
+
+  if (section === 'DASHBOARD') {
+    const el = document.getElementById('side-nav-dashboard');
+    if (el) el.classList.add('active');
+  } else if (section === 'JADWAL') {
+    const el = document.getElementById('side-nav-jadwal');
+    if (el) el.classList.add('active');
+  } else if (section === 'PENILAIAN') {
+    const el = document.getElementById('side-nav-penilaian');
+    if (el) el.classList.add('active');
+  } else if (section === 'LAPORAN') {
+    const el = document.getElementById('side-nav-laporan');
+    if (el) el.classList.add('active');
+  }
+}
+
+/**
+ * Toggle buka dan tutup sidebar (expand / collapse)
+ */
+function toggleSidebarState() {
+  isSidebarOpen = !isSidebarOpen;
+  try {
+    localStorage.setItem(SIDEBAR_STATE_KEY, String(isSidebarOpen));
+  } catch (e) {}
+
+  const sidebar = document.getElementById('wawancara-sidebar');
+  const wrapper = document.getElementById('wawancara-layout-wrapper');
+  const triggerBar = document.getElementById('sidebar-trigger-bar');
+  const toggleBtn = document.getElementById('btn-toggle-sidebar');
+  const labelEl = document.querySelector('.sidebar-collapse-label');
+
+  if (sidebar) {
+    if (isSidebarOpen) {
+      sidebar.classList.remove('collapsed');
+      if (wrapper) wrapper.classList.remove('sidebar-collapsed');
+      if (triggerBar) triggerBar.style.display = 'none';
+      if (toggleBtn) toggleBtn.setAttribute('title', 'Tutup Sidebar');
+      if (labelEl) labelEl.textContent = 'Tutup Menu';
+      showToast('📂 Sidebar Navigasi dibuka');
+    } else {
+      sidebar.classList.add('collapsed');
+      if (wrapper) wrapper.classList.add('sidebar-collapsed');
+      if (triggerBar) triggerBar.style.display = 'flex';
+      if (toggleBtn) toggleBtn.setAttribute('title', 'Buka Sidebar');
+      if (labelEl) labelEl.textContent = '';
+      showToast('📁 Sidebar Navigasi ditutup (Mode Layar Penuh)');
+    }
+  }
+}
 
 /**
  * Helper untuk memastikan setiap pendaftar memiliki jadwal wawancara yang valid
@@ -971,11 +1040,378 @@ export function renderWawancara(containerId) {
         body {
           background: #fff !important;
         }
+        .wawancara-sidebar, .sidebar-collapsed-trigger-bar {
+          display: none !important;
+        }
+        .wawancara-layout-wrapper {
+          display: block !important;
+        }
+      }
+
+      /* =========================================================
+         SIDEBAR NAVBAR LAYOUT UNTUK MODUL 04 (SESUAI WIREFRAME MOCKUP)
+         ========================================================= */
+      .wawancara-layout-wrapper {
+        display: flex;
+        gap: 1.5rem;
+        align-items: flex-start;
+        position: relative;
+        width: 100%;
+        min-height: calc(100vh - 180px);
+        transition: all 0.3s ease;
+      }
+      
+      .wawancara-sidebar {
+        width: 260px;
+        min-width: 260px;
+        background: #cbd5e1; /* Abu-abu rapi terstruktur sesuai gambar mockup */
+        border: 1.5px solid #94a3b8;
+        border-radius: 18px;
+        padding: 1.25rem 1rem;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: sticky;
+        top: 1rem;
+        flex-shrink: 0;
+        z-index: 50;
+      }
+
+      .wawancara-sidebar.collapsed {
+        width: 68px;
+        min-width: 68px;
+        padding: 1.25rem 0.5rem;
+      }
+
+      /* Top Bar Sidebar (Hamburger) */
+      .sidebar-top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+      }
+
+      .sidebar-hamburger-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: #0f172a;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 7px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+      }
+
+      .sidebar-hamburger-btn:hover {
+        background: rgba(0, 0, 0, 0.1);
+        transform: scale(1.05);
+      }
+
+      .sidebar-collapse-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #475569;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      /* Logo SMA Card (Kotak Rounded Gelap Sesuai Mockup) */
+      .sidebar-brand-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        transition: opacity 0.25s ease;
+      }
+
+      .sidebar-logo-card {
+        width: 105px;
+        height: 105px;
+        background: #2b3544; /* Charcoal gelap sesuai mockup */
+        border-radius: 14px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 0.75rem;
+        margin-bottom: 1.1rem;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .sidebar-logo-icon {
+        font-size: 1.6rem;
+      }
+
+      .sidebar-logo-text {
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        text-align: center;
+      }
+
+      /* Title & Subtitle */
+      .sidebar-title-group {
+        margin-bottom: 1.25rem;
+      }
+
+      .sidebar-portal-title {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0;
+        line-height: 1.2;
+        letter-spacing: -0.3px;
+      }
+
+      .sidebar-portal-subtitle {
+        font-size: 0.82rem;
+        color: #475569;
+        margin: 4px 0 0 0;
+        font-weight: 600;
+        line-height: 1.35;
+      }
+
+      /* Navigation Menu List */
+      .sidebar-nav-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        margin-bottom: 1.5rem;
+      }
+
+      .sidebar-nav-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 12px 18px;
+        background: #ffffff;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #334155;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        text-align: left;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+        font-family: inherit;
+        white-space: nowrap;
+        position: relative;
+      }
+
+      .sidebar-nav-btn:hover {
+        background: #f8fafc;
+        border-color: #006837;
+        color: #006837;
+        transform: translateY(-1.5px);
+        box-shadow: 0 4px 10px rgba(0, 104, 55, 0.12);
+      }
+
+      /* Active State (Tombol Gelap Sesuai Mockup 'Keuangan') */
+      .sidebar-nav-btn.active {
+        background: #2b3544; /* Charcoal gelap persis di gambar */
+        color: #ffffff;
+        border-color: #1e293b;
+        box-shadow: 0 6px 16px rgba(43, 53, 68, 0.35);
+      }
+
+      .sidebar-nav-btn.active:hover {
+        background: #1e293b;
+        color: #ffffff;
+        border-color: #0f172a;
+      }
+
+      .side-nav-icon {
+        font-size: 1.15rem;
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .side-nav-text {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* Sidebar Collapsed State Rules */
+      .wawancara-sidebar.collapsed .sidebar-brand-container,
+      .wawancara-sidebar.collapsed .sidebar-team-info,
+      .wawancara-sidebar.collapsed .side-nav-text,
+      .wawancara-sidebar.collapsed .sidebar-collapse-label {
+        display: none !important;
+      }
+
+      .wawancara-sidebar.collapsed .sidebar-nav-btn {
+        justify-content: center;
+        padding: 12px 0;
+        border-radius: 10px;
+      }
+
+      .wawancara-sidebar.collapsed .sidebar-top-bar {
+        justify-content: center;
+      }
+
+      /* Sidebar Team Info Footer */
+      .sidebar-team-info {
+        margin-top: auto;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      .team-info-badge {
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        padding: 8px 12px;
+      }
+
+      /* Main Workspace Area */
+      .wawancara-main-area {
+        flex: 1;
+        min-width: 0;
+        width: 100%;
+        transition: all 0.3s ease;
+      }
+
+      /* Reopen Quick Bar */
+      .sidebar-collapsed-trigger-bar {
+        background: #ffffff;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 12px;
+        padding: 8px 16px;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        animation: fadeInQuick 0.25s ease-out;
+      }
+
+      .btn-reopen-pill {
+        background: #006837;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        padding: 7px 15px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0, 104, 55, 0.25);
+        transition: all 0.2s;
+        font-family: inherit;
+      }
+
+      .btn-reopen-pill:hover {
+        background: #004d28;
+        transform: translateY(-1px);
+      }
+
+      @keyframes fadeInQuick {
+        from { opacity: 0; transform: translateY(-6px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Responsive Rules */
+      @media (max-width: 960px) {
+        .wawancara-layout-wrapper {
+          flex-direction: column;
+        }
+        .wawancara-sidebar {
+          width: 100% !important;
+          min-width: 100% !important;
+          position: static;
+        }
+        .wawancara-sidebar.collapsed {
+          display: none !important;
+        }
       }
     </style>
 
-    <!-- Banner Modul -->
-    <div class="wawancara-header">
+    <div class="wawancara-layout-wrapper ${isSidebarOpen ? '' : 'sidebar-collapsed'}" id="wawancara-layout-wrapper">
+      <!-- 1. SIDEBAR NAVBAR (SESUAI WIREFRAME MOCKUP) -->
+      <aside class="wawancara-sidebar ${isSidebarOpen ? '' : 'collapsed'}" id="wawancara-sidebar">
+        <!-- Top Bar Toggle (Hamburger Button) -->
+        <div class="sidebar-top-bar">
+          <button type="button" id="btn-toggle-sidebar" class="sidebar-hamburger-btn" title="${isSidebarOpen ? 'Tutup Sidebar' : 'Buka Sidebar'}" aria-label="Toggle Sidebar">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <span class="sidebar-collapse-label">${isSidebarOpen ? 'Tutup Menu' : ''}</span>
+        </div>
+
+        <!-- Logo SMA Card (Kotak Rounded Gelap Sesuai Mockup) -->
+        <div class="sidebar-brand-container">
+          <div class="sidebar-logo-card">
+            <div class="sidebar-logo-icon">🏫</div>
+            <div class="sidebar-logo-text">Logo SMA</div>
+          </div>
+          <div class="sidebar-title-group">
+            <h3 class="sidebar-portal-title">Portal SPMB</h3>
+            <p class="sidebar-portal-subtitle">Dashboard Wawancara Pendaftaran</p>
+          </div>
+        </div>
+
+        <!-- Menu Navigasi Vertikal (Pill Buttons Sesuai Mockup) -->
+        <nav class="sidebar-nav-menu">
+          <button type="button" class="sidebar-nav-btn ${activeNavSection === 'DASHBOARD' ? 'active' : ''}" id="side-nav-dashboard" title="Dashboard Ringkasan">
+            <span class="side-nav-icon">📊</span>
+            <span class="side-nav-text">Dashboard</span>
+          </button>
+          <button type="button" class="sidebar-nav-btn ${activeNavSection === 'JADWAL' ? 'active' : ''}" id="side-nav-jadwal" title="Jadwal Wawancara">
+            <span class="side-nav-icon">📅</span>
+            <span class="side-nav-text">Jadwal Wawancara</span>
+          </button>
+          <button type="button" class="sidebar-nav-btn ${activeNavSection === 'PENILAIAN' ? 'active' : ''}" id="side-nav-penilaian" title="Penilaian & Rekapitulasi">
+            <span class="side-nav-icon">📋</span>
+            <span class="side-nav-text">Penilaian</span>
+          </button>
+          <button type="button" class="sidebar-nav-btn ${activeNavSection === 'LAPORAN' ? 'active' : ''}" id="side-nav-laporan" title="Laporan & Cetak">
+            <span class="side-nav-icon">🖨️</span>
+            <span class="side-nav-text">Laporan</span>
+          </button>
+        </nav>
+
+        <!-- Sidebar Footer / Info Tim Penguji -->
+        <div class="sidebar-team-info">
+          <div class="team-info-badge">
+            <div style="font-size: 0.72rem; color: #475569; font-weight: 700; text-transform: uppercase;">Pewawancara Bertugas</div>
+            <div style="font-weight: 800; font-size: 0.82rem; color: #006837; margin-top: 2px;">👨‍🏫 Yosa &bull; 👩‍🏫 Veli</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 2. MAIN WORKSPACE CONTENT AREA -->
+      <main class="wawancara-main-area" id="wawancara-main-area">
+        <!-- Reopen Bar (Tampil saat sidebar ditutup / collapse) -->
+        <div class="sidebar-collapsed-trigger-bar" id="sidebar-trigger-bar" style="display: ${isSidebarOpen ? 'none' : 'flex'};">
+          <button type="button" id="btn-reopen-sidebar" class="btn-reopen-pill" title="Buka Sidebar Navigasi">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+            <span>Buka Menu Sidebar</span>
+          </button>
+          <span style="font-size: 0.82rem; font-weight: 700; color: #006837;">SMA Muhammadiyah 3 Yogyakarta &bull; Modul 04 Wawancara</span>
+        </div>
+
+        <!-- Banner Modul -->
+        <div class="wawancara-header">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px;">
         <div style="flex: 1; min-width: 280px;">
           <h2>🗣️ Modul 04: Penilaian Wawancara & Pemetaan Jurusan</h2>
@@ -1220,6 +1656,8 @@ export function renderWawancara(containerId) {
         </div>
       </div>
     </div>
+  </main>
+</div> <!-- end .wawancara-layout-wrapper -->
 
     <!-- Modal Form Penilaian Wawancara -->
     <div class="modal-wawancara-overlay" id="modal-wawancara">
@@ -1764,15 +2202,87 @@ function renderTableRows() {
  * Attach Event Listeners untuk Subtabs, Filter, dan Modal
  */
 function attachTableEventListeners() {
+  // Sidebar Toggle Buttons (Hamburger Button & Reopen Pill)
+  const btnToggleSidebar = document.getElementById('btn-toggle-sidebar');
+  const btnReopenSidebar = document.getElementById('btn-reopen-sidebar');
+  if (btnToggleSidebar) {
+    btnToggleSidebar.addEventListener('click', toggleSidebarState);
+  }
+  if (btnReopenSidebar) {
+    btnReopenSidebar.addEventListener('click', toggleSidebarState);
+  }
+
   // Subtabs Switchers
   const btnSubtabJadwal = document.getElementById('btn-subtab-jadwal');
   const btnSubtabEval = document.getElementById('btn-subtab-eval');
   const viewJadwal = document.getElementById('view-container-jadwal');
   const viewEval = document.getElementById('view-container-eval');
 
+  // Sidebar Menu Items Navigation
+  const sideNavDashboard = document.getElementById('side-nav-dashboard');
+  const sideNavJadwal = document.getElementById('side-nav-jadwal');
+  const sideNavPenilaian = document.getElementById('side-nav-penilaian');
+  const sideNavLaporan = document.getElementById('side-nav-laporan');
+
+  if (sideNavDashboard) {
+    sideNavDashboard.addEventListener('click', () => {
+      updateSidebarNavActive('DASHBOARD');
+      activeSubTab = 'EVAL';
+      if (btnSubtabEval) btnSubtabEval.classList.add('active');
+      if (btnSubtabJadwal) btnSubtabJadwal.classList.remove('active');
+      if (viewEval) viewEval.style.display = 'block';
+      if (viewJadwal) viewJadwal.style.display = 'none';
+      renderTableRows();
+      const statsEl = document.querySelector('.stats-grid-wawancara');
+      if (statsEl) statsEl.scrollIntoView({ behavior: 'smooth' });
+      showToast('📊 Menampilkan Dashboard & Statistik Wawancara');
+    });
+  }
+
+  if (sideNavJadwal) {
+    sideNavJadwal.addEventListener('click', () => {
+      updateSidebarNavActive('JADWAL');
+      activeSubTab = 'JADWAL';
+      if (btnSubtabJadwal) btnSubtabJadwal.classList.add('active');
+      if (btnSubtabEval) btnSubtabEval.classList.remove('active');
+      if (viewJadwal) viewJadwal.style.display = 'block';
+      if (viewEval) viewEval.style.display = 'none';
+      renderJadwalViewport();
+      const jCard = document.querySelector('.jadwal-card-container');
+      if (jCard) jCard.scrollIntoView({ behavior: 'smooth' });
+      showToast('📅 Menampilkan Tabel Jadwal Wawancara');
+    });
+  }
+
+  if (sideNavPenilaian) {
+    sideNavPenilaian.addEventListener('click', () => {
+      updateSidebarNavActive('PENILAIAN');
+      activeSubTab = 'EVAL';
+      if (btnSubtabEval) btnSubtabEval.classList.add('active');
+      if (btnSubtabJadwal) btnSubtabJadwal.classList.remove('active');
+      if (viewEval) viewEval.style.display = 'block';
+      if (viewJadwal) viewJadwal.style.display = 'none';
+      renderTableRows();
+      const evalTable = document.getElementById('table-wawancara');
+      if (evalTable) evalTable.scrollIntoView({ behavior: 'smooth' });
+      showToast('📋 Menampilkan Lembar Penilaian & Rekapitulasi Wawancara');
+    });
+  }
+
+  if (sideNavLaporan) {
+    sideNavLaporan.addEventListener('click', () => {
+      updateSidebarNavActive('LAPORAN');
+      showToast('🖨️ Membuka jendela Cetak Dokumen Resmi Wawancara SPMB...');
+      setTimeout(() => {
+        window.print();
+      }, 300);
+    });
+  }
+
   if (btnSubtabJadwal && btnSubtabEval) {
     btnSubtabJadwal.addEventListener('click', () => {
       activeSubTab = 'JADWAL';
+      updateSidebarNavActive('JADWAL');
       btnSubtabJadwal.classList.add('active');
       btnSubtabEval.classList.remove('active');
       if (viewJadwal) viewJadwal.style.display = 'block';
@@ -1782,6 +2292,7 @@ function attachTableEventListeners() {
 
     btnSubtabEval.addEventListener('click', () => {
       activeSubTab = 'EVAL';
+      updateSidebarNavActive('PENILAIAN');
       btnSubtabEval.classList.add('active');
       btnSubtabJadwal.classList.remove('active');
       if (viewEval) viewEval.style.display = 'block';

@@ -167,12 +167,13 @@ Berikut merupakan spesifikasi kebutuhan fungsional dan teknis dari masing-masing
       - Filter Hari, Jam, dan Status Kehadiran.
     - Counter statistik realtime untuk total jadwal, sesi Luring, sesi Daring, dan sesi terselesaikan.
     - Fitur Cetak / Print dokumen jadwal wawancara resmi divisi.
+  - **Sidebar Navbar Collapsible (Buka/Tutup)**: Panel navigasi vertikal modular di sisi kiri yang dapat dibuka dan ditutup (*expand / collapse*) menggunakan tombol toggle hamburger `☰`, dilengkapi kartu identitas *Logo SMA*, portal branding *Portal SPMB - Dashboard Wawancara Pendaftaran*, tombol navigasi berpindah instan (*Dashboard*, *Jadwal Wawancara*, *Penilaian*, *Laporan*), info tim pewawancara bertugas (Yosa & Veli), serta status preferensi yang tersimpan otomatis di *localStorage*.
   - Filter peserta yang telah berstatus `LUNAS` biaya pendaftaran (Alur 7).
   - Formulir input skor penilaian siswa dan wawancara orang tua/wali dengan penetapan pewawancara yang mengesahkan (Yosa / Veli) serta konfirmasi metode pelaksanaan (Luring/Daring).
   - Pemetaan bakat, minat ekstrakurikuler, dan komitmen belajar.
   - Kalkulasi otomatis beasiswa Tahfidz Al-Qur'an (≥15 Juz = Beasiswa Penuh, 1–14 Juz = Beasiswa Parsial).
   - Rekomendasi kelaikan jurusan (MIPA atau IPS) dan rekomendasi yudisium kelulusan.
-- **Tujuan & Pemecahan Masalah**: Menyajikan visualisasi jadwal terstruktur dan transparan (Tabel Jadwal & Kalender Jadwal) bagi divisi pewawancara dengan pemilahan jelas antara peserta tatap muka (Luring) dan virtual (Daring), serta penugasan penguji spesifik (seperti Yosa dan Veli) agar pembagian sesi jelas, tautan meeting siap digunakan, tidak terjadi bentrok jam, serta mencatat evaluasi kualitatif langsung oleh guru penguji tanpa lembar kertas yang rentan hilang.
+- **Tujuan & Pemecahan Masalah**: Menyajikan visualisasi jadwal terstruktur dan transparan (Tabel Jadwal & Kalender Jadwal) bagi divisi pewawancara dengan tata letak sidebar yang fleksibel (dapat disembunyikan untuk memperluas area kerja jadwal dan dibuka kembali dengan satu klik), pemilahan jelas antara peserta tatap muka (Luring) dan virtual (Daring), serta penugasan penguji spesifik (seperti Yosa dan Veli) agar pembagian sesi jelas, tautan meeting siap digunakan, tidak terjadi bentrok jam, serta mencatat evaluasi kualitatif langsung oleh guru penguji tanpa lembar kertas yang rentan hilang.
 - **Strategi & Layer**: **Waterfall** | *Application / Business Logic Layer*.
 
 ---
