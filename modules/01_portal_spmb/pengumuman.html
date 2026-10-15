@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
       margin: 2.5rem auto;
       padding: 0 1rem;
     }
+
     .portal-card {
       background: #ffffff;
       border-radius: 16px;
@@ -18,10 +20,12 @@
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
       border: 1px solid #e2e8f0;
     }
+
     .brand-header {
       text-align: center;
       margin-bottom: 1.75rem;
     }
+
     .brand-logo {
       display: inline-flex;
       align-items: center;
@@ -36,6 +40,7 @@
       margin-bottom: 0.75rem;
       box-shadow: 0 4px 12px rgba(0, 104, 55, 0.25);
     }
+
     .nav-steps {
       display: flex;
       justify-content: center;
@@ -43,6 +48,7 @@
       margin-bottom: 1.5rem;
       flex-wrap: wrap;
     }
+
     .step-pill {
       font-size: 0.72rem;
       font-weight: 600;
@@ -52,10 +58,12 @@
       color: #64748b;
       text-decoration: none;
     }
+
     .step-pill.active {
       background: #006837;
       color: #ffffff;
     }
+
     .portal-grid-kv {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -66,6 +74,7 @@
       border: 1px solid #e2e8f0;
       margin: 1.25rem 0;
     }
+
     .kv-item strong {
       display: block;
       font-size: 0.72rem;
@@ -73,6 +82,7 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
+
     .kv-item span {
       display: block;
       font-size: 0.95rem;
@@ -80,6 +90,7 @@
       color: #0f172a;
       margin-top: 3px;
     }
+
     .notice-box {
       border-radius: 10px;
       padding: 1.25rem;
@@ -92,33 +103,35 @@
     }
   </style>
 </head>
+
 <body>
   <div class="portal-container">
     <div class="nav-steps">
       <a href="register.html" class="step-pill">1. Registrasi</a>
-      <a href="status-akun.html" class="step-pill">2. Status Aktivasi (Syarat Login)</a>
+      <a href="status-akun.html" class="step-pill">2. Status Aktivasi</a>
       <a href="login.html" class="step-pill">3. Login Pendaftar</a>
       <a href="formulir.html" class="step-pill">4. Formulir & Bukti</a>
       <a href="dashboard.html" class="step-pill">5. Dashboard Siswa</a>
+      <span class="step-pill active">6. Cek Kelulusan</span>
     </div>
 
     <div class="portal-card">
       <div class="brand-header">
         <div class="brand-logo">M3</div>
         <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a;">Pengumuman Kelulusan Seleksi SPMB</h2>
-        <p style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">SMA Muhammadiyah 3 Yogyakarta &bull; Alur 10: Akses Hasil Mandiri</p>
+        <p style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">SMA Muhammadiyah 3 Yogyakarta &bull; Alur 10:
+          Akses Hasil Mandiri</p>
       </div>
 
-      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 10px 14px; margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-        <span style="font-size: 0.82rem; color: #166534;">💡 Calon siswa terdaftar? Lihat langsung tiket wawancara & SKL di dasbor Anda:</span>
-        <a href="dashboard.html" class="btn btn-primary" style="font-size: 0.75rem; padding: 4px 12px; text-decoration: none;">Buka Dashboard Siswa &rarr;</a>
-      </div>
-
-      <div style="background: #f8fafc; padding: 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 1.5rem;">
-        <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px;">Masukkan Nomor Registrasi atau NISN Anda:</label>
+      <div
+        style="background: #f8fafc; padding: 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 1.5rem;">
+        <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px;">Masukkan Nomor
+          Registrasi atau NISN Anda:</label>
         <div style="display: flex; gap: 8px;">
-          <input type="text" id="input-query" class="form-control" placeholder="Contoh: REG-2026-001 atau 0051234567" style="padding: 10px 14px;">
-          <button id="btn-search" class="btn btn-primary" style="flex-shrink: 0; padding: 10px 20px;">Cek Status</button>
+          <input type="text" id="input-query" class="form-control" placeholder="Contoh: REG-2026-001 atau 0051234567"
+            style="padding: 10px 14px;">
+          <button id="btn-search" class="btn btn-primary" style="flex-shrink: 0; padding: 10px 20px;">Cek
+            Status</button>
         </div>
       </div>
 
@@ -127,7 +140,7 @@
   </div>
 
   <script type="module">
-    import { getPendaftarById, getPendaftarList, escapeHTML } from './utils.js?v=20261012_v5';
+    import { getPendaftarById, getPendaftarList, escapeHTML } from './utils.js';
 
     const inputQuery = document.getElementById('input-query');
     const btnSearch = document.getElementById('btn-search');
@@ -142,7 +155,7 @@
           inputQuery.value = u.id_pendaftar || u.id || u.nisn || '';
           displayResult(u);
         }
-      } catch (e) {}
+      } catch (e) { }
     }
 
     btnSearch.addEventListener('click', () => {
@@ -200,16 +213,8 @@
               <span>${escapeHTML(user.dataWawancara?.rekomendasi_beasiswa || user.wawancara?.beasiswa || 'Reguler')}</span>
             </div>
             <div class="kv-item">
-              <strong>Ruangan Wawancara</strong>
-              <span>${escapeHTML(user.jadwal_wawancara?.ruang || 'Ruang Wawancara 1 (Gedung Utama)')}</span>
-            </div>
-            <div class="kv-item">
-              <strong>Pewawancara Pengesah</strong>
-              <span>${(user.jadwal_wawancara?.pewawancara || user.dataWawancara?.pewawancara || '').includes('Veli') ? '👩‍🏫 Ustadzah Veli, M.Pd' : '👨‍🏫 Ustadz Yosa, S.Pd'}</span>
-            </div>
-            <div class="kv-item">
-              <strong>Metode Pelaksanaan</strong>
-              <span>${(user.jadwal_wawancara?.metode || '').toUpperCase() === 'DARING' ? '🌐 Daring (Virtual Meet)' : '🏢 Luring (Tatap Muka)'}</span>
+              <strong>Jalur Penerimaan</strong>
+              <span>Reguler Berkelanjutan</span>
             </div>
           </div>
 
@@ -223,15 +228,11 @@
                 <li>Menyelesaikan pembayaran Uang Pangkal di Kasir Sekolah</li>
               </ul>
             </div>
-            <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
-              <button onclick="window.print()" class="btn btn-primary" style="padding: 8px 18px; font-weight: 700; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">
-                📄 Cetak Surat Keterangan Lulus (SKL) Resmi
-              </button>
-            </div>
           ` : ''}
         </div>
       `;
     }
   </script>
 </body>
+
 </html>

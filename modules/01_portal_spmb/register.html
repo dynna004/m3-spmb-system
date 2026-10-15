@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
       margin: 2.5rem auto;
       padding: 0 1rem;
     }
+
     .portal-card {
       background: #ffffff;
       border-radius: 16px;
@@ -18,10 +20,12 @@
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
       border: 1px solid #e2e8f0;
     }
+
     .brand-header {
       text-align: center;
       margin-bottom: 1.75rem;
     }
+
     .brand-logo {
       display: inline-flex;
       align-items: center;
@@ -36,10 +40,12 @@
       margin-bottom: 0.75rem;
       box-shadow: 0 4px 12px rgba(0, 104, 55, 0.25);
     }
+
     .form-label-req::after {
       content: " *";
       color: #ef4444;
     }
+
     .input-hint {
       font-size: 0.75rem;
       color: #64748b;
@@ -47,9 +53,11 @@
       display: flex;
       justify-content: space-between;
     }
+
     .input-error {
       border-color: #ef4444 !important;
     }
+
     .alert-box {
       padding: 1rem;
       border-radius: 10px;
@@ -57,16 +65,19 @@
       margin-bottom: 1.25rem;
       display: none;
     }
+
     .alert-danger {
       background-color: #fef2f2;
       color: #991b1b;
       border: 1px solid #fecaca;
     }
+
     .alert-success {
       background-color: #f0fdf4;
       color: #166534;
       border: 1px solid #bbf7d0;
     }
+
     .nav-steps {
       display: flex;
       justify-content: center;
@@ -74,6 +85,7 @@
       margin-bottom: 1.5rem;
       flex-wrap: wrap;
     }
+
     .step-pill {
       font-size: 0.72rem;
       font-weight: 600;
@@ -82,27 +94,31 @@
       background: #e2e8f0;
       color: #64748b;
     }
+
     .step-pill.active {
       background: #006837;
       color: #ffffff;
     }
   </style>
 </head>
+
 <body>
   <div class="portal-container">
     <div class="nav-steps">
       <span class="step-pill active">1. Registrasi Akun</span>
-      <a href="status-akun.html" class="step-pill" style="text-decoration: none;">2. Status Aktivasi (Syarat Login)</a>
+      <a href="status-akun.html" class="step-pill" style="text-decoration: none;">2. Status Aktivasi</a>
       <a href="login.html" class="step-pill" style="text-decoration: none;">3. Login Pendaftar</a>
       <a href="formulir.html" class="step-pill" style="text-decoration: none;">4. Formulir & Bukti</a>
       <a href="dashboard.html" class="step-pill" style="text-decoration: none;">5. Dashboard Siswa</a>
+      <a href="pengumuman.html" class="step-pill" style="text-decoration: none;">6. Cek Kelulusan</a>
     </div>
 
     <div class="portal-card">
       <div class="brand-header">
         <div class="brand-logo">M3</div>
         <h2 style="font-size: 1.4rem; font-weight: 700; color: #0f172a;">Registrasi Akun Awal</h2>
-        <p style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">SMA Muhammadiyah 3 Yogyakarta (T.A. 2026/2027)</p>
+        <p style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">SMA Muhammadiyah 3 Yogyakarta (T.A. 2026/2027)
+        </p>
       </div>
 
       <div id="alert-msg" class="alert-box"></div>
@@ -127,7 +143,8 @@
 
         <div class="form-group">
           <label for="nisn" class="form-label-req">NISN (Nomor Induk Siswa Nasional)</label>
-          <input type="text" id="nisn" class="form-control" maxlength="10" placeholder="10 digit angka NISN" pattern="[0-9]{10}" required>
+          <input type="text" id="nisn" class="form-control" maxlength="10" placeholder="10 digit angka NISN"
+            pattern="[0-9]{10}" required>
           <div class="input-hint">
             <span>Wajib tepat 10 digit angka</span>
             <span id="nisn-counter">0 / 10</span>
@@ -136,25 +153,28 @@
 
         <div class="form-group">
           <label for="password" class="form-label-req">Password Akun</label>
-          <input type="password" id="password" class="form-control" placeholder="Min. 6 karakter (kombinasi huruf & angka)" required>
+          <input type="password" id="password" class="form-control"
+            placeholder="Min. 6 karakter (kombinasi huruf & angka)" required>
           <div style="font-size: 0.72rem; color: #64748b; margin-top: 4px;">
             Password diamankan dengan hashing SHA-256.
           </div>
         </div>
 
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 12px; font-size: 1rem;">
+        <button type="submit" class="btn btn-primary"
+          style="width: 100%; margin-top: 1rem; padding: 12px; font-size: 1rem;">
           Daftar Akun Baru
         </button>
 
         <p style="text-align: center; margin-top: 1.25rem; font-size: 0.85rem; color: #64748b;">
-          Sudah punya akun? <a href="login.html" style="color: #006837; font-weight: 600; text-decoration: none;">Login Pendaftar</a>
+          Sudah punya akun? <a href="login.html" style="color: #006837; font-weight: 600; text-decoration: none;">Login
+            Pendaftar</a>
         </p>
       </form>
     </div>
   </div>
 
   <script type="module">
-    import { getPendaftarList, savePendaftar, hashPassword, isValidEmail, isValidNoWA, isValidPassword } from './utils.js?v=20261012_v5';
+    import { getPendaftarList, savePendaftar, hashPassword, isValidEmail, isValidNoWA, isValidPassword } from './utils.js';
 
     const nisnInput = document.getElementById('nisn');
     const nisnCounter = document.getElementById('nisn-counter');
@@ -249,4 +269,5 @@
     });
   </script>
 </body>
+
 </html>

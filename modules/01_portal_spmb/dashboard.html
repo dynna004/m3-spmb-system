@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
       margin: 2rem auto;
       padding: 0 1rem;
     }
+
     .portal-card {
       background: #ffffff;
       border-radius: 16px;
@@ -19,6 +21,7 @@
       border: 1px solid #e2e8f0;
       margin-bottom: 1.5rem;
     }
+
     .nav-steps {
       display: flex;
       justify-content: center;
@@ -26,6 +29,7 @@
       margin-bottom: 1.5rem;
       flex-wrap: wrap;
     }
+
     .step-pill {
       font-size: 0.72rem;
       font-weight: 600;
@@ -36,14 +40,17 @@
       text-decoration: none;
       transition: all 0.2s ease;
     }
+
     .step-pill:hover {
       background: #cbd5e1;
       color: #1e293b;
     }
+
     .step-pill.active {
       background: #006837;
       color: #ffffff;
     }
+
     .badge-pill {
       display: inline-flex;
       align-items: center;
@@ -53,10 +60,30 @@
       padding: 4px 10px;
       border-radius: 20px;
     }
-    .badge-active { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-    .badge-pending { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
-    .badge-blue { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
-    .badge-purple { background: #f3e8ff; color: #7e22ce; border: 1px solid #e9d5ff; }
+
+    .badge-active {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+
+    .badge-pending {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    .badge-blue {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+
+    .badge-purple {
+      background: #f3e8ff;
+      color: #7e22ce;
+      border: 1px solid #e9d5ff;
+    }
 
     .kv-grid {
       display: grid;
@@ -67,6 +94,7 @@
       border-radius: 12px;
       border: 1px solid #e2e8f0;
     }
+
     .kv-item strong {
       display: block;
       font-size: 0.72rem;
@@ -75,6 +103,7 @@
       letter-spacing: 0.5px;
       margin-bottom: 2px;
     }
+
     .kv-item span {
       display: block;
       font-size: 0.92rem;
@@ -90,6 +119,7 @@
       position: relative;
       box-shadow: 0 4px 14px rgba(22, 101, 52, 0.06);
     }
+
     .ticket-card::before {
       content: '';
       position: absolute;
@@ -107,9 +137,24 @@
       font-size: 0.88rem;
       line-height: 1.6;
     }
-    .notice-success { background: #f0fdf4; border-left: 4px solid #22c55e; color: #14532d; }
-    .notice-warning { background: #fffbeb; border-left: 4px solid #f59e0b; color: #92400e; }
-    .notice-info { background: #f0f9ff; border-left: 4px solid #0284c7; color: #0c4a6e; }
+
+    .notice-success {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+      color: #14532d;
+    }
+
+    .notice-warning {
+      background: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      color: #92400e;
+    }
+
+    .notice-info {
+      background: #f0f9ff;
+      border-left: 4px solid #0284c7;
+      color: #0c4a6e;
+    }
 
     .progress-track {
       display: grid;
@@ -117,6 +162,7 @@
       gap: 8px;
       margin-bottom: 1.5rem;
     }
+
     .track-step {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
@@ -125,12 +171,14 @@
       text-align: center;
       font-size: 0.78rem;
     }
+
     .track-step.done {
       background: #ecfdf5;
       border-color: #a7f3d0;
       color: #065f46;
       font-weight: 700;
     }
+
     .track-step.current {
       background: #eff6ff;
       border-color: #bfdbfe;
@@ -151,23 +199,51 @@
       transition: all 0.2s ease;
       border: none;
     }
-    .btn-action-primary { background: #006837; color: white; }
-    .btn-action-primary:hover { background: #004d28; }
-    .btn-action-secondary { background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; }
-    .btn-action-secondary:hover { background: #e2e8f0; }
-    .btn-action-print { background: #0284c7; color: white; }
-    .btn-action-print:hover { background: #0369a1; }
+
+    .btn-action-primary {
+      background: #006837;
+      color: white;
+    }
+
+    .btn-action-primary:hover {
+      background: #004d28;
+    }
+
+    .btn-action-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+
+    .btn-action-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-action-print {
+      background: #0284c7;
+      color: white;
+    }
+
+    .btn-action-print:hover {
+      background: #0369a1;
+    }
 
     @media print {
       body * {
         visibility: hidden;
       }
-      .nav-steps, #btn-logout, .no-print {
+
+      .nav-steps,
+      #btn-logout,
+      .no-print {
         display: none !important;
       }
-      #printable-area, #printable-area * {
+
+      #printable-area,
+      #printable-area * {
         visibility: visible;
       }
+
       #printable-area {
         position: absolute;
         left: 0;
@@ -177,23 +253,27 @@
     }
   </style>
 </head>
+
 <body>
   <div class="portal-container">
     <!-- Top Navigation Steps -->
     <div class="nav-steps no-print">
       <a href="register.html" class="step-pill">1. Registrasi</a>
-      <a href="status-akun.html" class="step-pill">2. Status Aktivasi (Syarat Login)</a>
+      <a href="status-akun.html" class="step-pill">2. Status Aktivasi</a>
       <a href="login.html" class="step-pill">3. Login Pendaftar</a>
       <a href="formulir.html" class="step-pill">4. Formulir & Bukti</a>
       <span class="step-pill active">5. Dashboard Siswa</span>
+      <a href="pengumuman.html" class="step-pill">6. Cek Kelulusan</a>
     </div>
 
     <!-- State 1: View Locked (Jika belum login) -->
     <div id="view-not-logged" class="portal-card" style="display: none; text-align: center; padding: 3rem 1.5rem;">
       <div style="font-size: 3rem; margin-bottom: 1rem;">🔒</div>
-      <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Akses Khusus Calon Siswa Terdaftar</h3>
+      <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Akses Khusus Calon Siswa
+        Terdaftar</h3>
       <p style="color: #64748b; font-size: 0.9rem; max-width: 520px; margin: 0 auto 1.5rem auto; line-height: 1.6;">
-        Halaman Dashboard Siswa hanya dapat dibuka <strong>setelah Anda melakukan Login</strong> dengan akun yang telah diaktivasi oleh Admin SPMB.
+        Halaman Dashboard Siswa hanya dapat dibuka <strong>setelah Anda melakukan Login</strong> dengan akun yang telah
+        diaktivasi oleh Admin SPMB.
       </p>
       <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
         <a href="login.html" class="btn btn-primary" style="padding: 10px 24px;">🔑 Masuk / Login Pendaftar</a>
@@ -201,12 +281,17 @@
       </div>
 
       <!-- Quick Switch for Demo Evaluation -->
-      <div style="margin-top: 2rem; padding: 14px; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1; max-width: 480px; margin-left: auto; margin-right: auto; text-align: left;">
-        <strong style="display: block; font-size: 0.82rem; color: #334155; margin-bottom: 6px;">💡 Simulasi Pengujian Cepat (Handover):</strong>
-        <p style="font-size: 0.78rem; color: #64748b; margin-bottom: 8px;">Pilih akun pendaftar yang tersedia untuk langsung masuk ke dashboard:</p>
+      <div
+        style="margin-top: 2rem; padding: 14px; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1; max-width: 480px; margin-left: auto; margin-right: auto; text-align: left;">
+        <strong style="display: block; font-size: 0.82rem; color: #334155; margin-bottom: 6px;">💡 Simulasi Pengujian
+          Cepat (Handover):</strong>
+        <p style="font-size: 0.78rem; color: #64748b; margin-bottom: 8px;">Pilih akun pendaftar yang tersedia untuk
+          langsung masuk ke dashboard:</p>
         <div style="display: flex; gap: 6px;">
-          <input type="text" id="demo-query-id" class="form-control" placeholder="ID / NISN (Contoh: REG-2026-001)" style="font-size: 0.82rem; padding: 6px 10px;">
-          <button type="button" id="btn-demo-login" class="btn btn-primary" style="font-size: 0.82rem; padding: 6px 14px; flex-shrink: 0;">Buka Dashboard</button>
+          <input type="text" id="demo-query-id" class="form-control" placeholder="ID / NISN (Contoh: REG-2026-001)"
+            style="font-size: 0.82rem; padding: 6px 10px;">
+          <button type="button" id="btn-demo-login" class="btn btn-primary"
+            style="font-size: 0.82rem; padding: 6px 14px; flex-shrink: 0;">Buka Dashboard</button>
         </div>
       </div>
     </div>
@@ -217,22 +302,28 @@
       <div class="portal-card" style="padding: 1.5rem 2rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
           <div style="display: flex; align-items: center; gap: 14px;">
-            <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #006837 0%, #004d28 100%); color: white; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; box-shadow: 0 4px 12px rgba(0, 104, 55, 0.25);">
+            <div
+              style="width: 52px; height: 52px; background: linear-gradient(135deg, #006837 0%, #004d28 100%); color: white; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; box-shadow: 0 4px 12px rgba(0, 104, 55, 0.25);">
               M3
             </div>
             <div>
               <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <h2 id="header-user-nama" style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0;">Calon Siswa</h2>
+                <h2 id="header-user-nama" style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0;">Calon
+                  Siswa</h2>
                 <span id="badge-account-status" class="badge-pill badge-active">ACTIVE</span>
               </div>
               <p style="color: #64748b; font-size: 0.82rem; margin: 3px 0 0 0;">
-                No. Registrasi: <strong id="header-user-id" style="color: #006837;">-</strong> &bull; NISN: <span id="header-user-nisn">-</span> &bull; SMA Muhammadiyah 3 Yogyakarta
+                No. Registrasi: <strong id="header-user-id" style="color: #006837;">-</strong> &bull; NISN: <span
+                  id="header-user-nisn">-</span> &bull; SMA Muhammadiyah 3 Yogyakarta
               </p>
             </div>
           </div>
-          <div class="no-print" style="display: flex; gap: 8px;">
+          <div class="no-print" style="display: flex; gap: 8px; flex-wrap: wrap;">
             <a href="formulir.html" class="btn-action-card btn-action-primary">
               📝 Isi / Edit Formulir
+            </a>
+            <a href="pengumuman.html" class="btn-action-card btn-action-secondary" style="border: 1px solid #cbd5e1;">
+              📢 Cek Pengumuman
             </a>
             <button id="btn-logout" class="btn-action-card btn-action-secondary">
               🚪 Logout
@@ -245,20 +336,26 @@
       <div class="progress-track no-print">
         <div class="track-step done">1. Registrasi Akun<br>✅ Selesai</div>
         <div class="track-step done">2. Aktivasi Akun<br>✅ Aktif (Syarat Login)</div>
-        <div id="step-track-form" class="track-step done">3. Biodata & 4 Berkas<br><span id="step-track-form-lbl">✅ Lengkap</span></div>
-        <div id="step-track-wawancara" class="track-step done">4. Sesi Wawancara<br><span id="step-track-wawancara-lbl">✅ Terjadwal</span></div>
-        <div id="step-track-lulus" class="track-step current">5. Hasil Seleksi<br><span id="step-track-lulus-lbl">⏳ Proses SSoT</span></div>
+        <div id="step-track-form" class="track-step done">3. Biodata & 4 Berkas<br><span id="step-track-form-lbl">✅
+            Lengkap</span></div>
+        <div id="step-track-wawancara" class="track-step done">4. Sesi Wawancara<br><span
+            id="step-track-wawancara-lbl">✅ Terjadwal</span></div>
+        <div id="step-track-lulus" class="track-step current">5. Hasil Seleksi<br><span id="step-track-lulus-lbl">⏳
+            Proses SSoT</span></div>
       </div>
 
       <div id="printable-area">
         <!-- KARTU 1: TIKET SESI WAWANCARA RESMI -->
         <div class="portal-card ticket-card" style="margin-bottom: 1.5rem;">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; border-bottom: 1px dashed #cbd5e1; padding-bottom: 10px;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; border-bottom: 1px dashed #cbd5e1; padding-bottom: 10px;">
             <div style="display: flex; align-items: center; gap: 8px;">
               <span style="font-size: 1.5rem;">🎫</span>
               <div>
-                <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #166534;">Tiket Sesi Wawancara Calon Siswa</h3>
-                <span style="font-size: 0.78rem; color: #64748b;">SMA Muhammadiyah 3 Yogyakarta &bull; Tahun Ajaran 2026/2027</span>
+                <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #166534;">Tiket Sesi Wawancara Calon
+                  Siswa</h3>
+                <span style="font-size: 0.78rem; color: #64748b;">SMA Muhammadiyah 3 Yogyakarta &bull; Tahun Ajaran
+                  2026/2027</span>
               </div>
             </div>
             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
@@ -299,7 +396,8 @@
             <div id="ticket-notice" class="notice-box notice-info" style="margin-bottom: 1rem;">
               <strong>💡 Tata Tertib Wawancara:</strong>
               <div id="ticket-instruksi-text" style="font-size: 0.82rem; margin-top: 4px;">
-                Peserta wajib hadir 10 menit sebelum jam sesi dengan mengenakan seragam sekolah asal rapi dan membawa berkas pendukung fisik asli untuk ditunjukkan kepada pewawancara.
+                Peserta wajib hadir 10 menit sebelum jam sesi dengan mengenakan seragam sekolah asal rapi dan membawa
+                berkas pendukung fisik asli untuk ditunjukkan kepada pewawancara.
               </div>
             </div>
 
@@ -324,12 +422,15 @@
 
         <!-- KARTU 2: PENGUMUMAN KELULUSAN & PENETAPAN JURUSAN (SSoT MODUL 05) -->
         <div class="portal-card" style="margin-bottom: 1.5rem;">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
             <div style="display: flex; align-items: center; gap: 8px;">
               <span style="font-size: 1.5rem;">🎓</span>
               <div>
-                <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Pengumuman Kelulusan & Penetapan Jurusan</h3>
-                <span style="font-size: 0.78rem; color: #64748b;">Hasil Yudisium Resmi &bull; Alur 10 SSoT Terintegrasi</span>
+                <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Pengumuman Kelulusan &
+                  Penetapan Jurusan</h3>
+                <span style="font-size: 0.78rem; color: #64748b;">Hasil Yudisium Resmi &bull; Alur 10 SSoT
+                  Terintegrasi</span>
               </div>
             </div>
             <div>
@@ -344,11 +445,13 @@
 
         <!-- KARTU 3: KELENGKAPAN 4 BERKAS DOKUMEN DIGITAL -->
         <div class="portal-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
             <div style="display: flex; align-items: center; gap: 8px;">
               <span style="font-size: 1.5rem;">📁</span>
               <div>
-                <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Dokumen & Berkas Digital Pendaftaran</h3>
+                <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Dokumen & Berkas Digital
+                  Pendaftaran</h3>
                 <span style="font-size: 0.78rem; color: #64748b;">4 Dokumen Persyaratan Digital (Alur 5 SPMB)</span>
               </div>
             </div>
@@ -380,16 +483,20 @@
       <div class="portal-card no-print" style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 1.25rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
           <div>
-            <strong style="font-size: 0.85rem; color: #334155;">⚡ Simulasi Pengujian Modul 05 (Yudisium & Kelulusan):</strong>
+            <strong style="font-size: 0.85rem; color: #334155;">⚡ Simulasi Pengujian Modul 05 (Yudisium &
+              Kelulusan):</strong>
             <p style="font-size: 0.75rem; color: #64748b; margin: 2px 0 0 0;">
-              Klik tombol berikut untuk mensimulasikan hasil keputusan sidang pleno kelulusan pada akun ini secara instan:
+              Klik tombol berikut untuk mensimulasikan hasil keputusan sidang pleno kelulusan pada akun ini secara
+              instan:
             </p>
           </div>
           <div style="display: flex; gap: 6px;">
-            <button type="button" id="btn-sim-lulus" class="btn btn-secondary" style="font-size: 0.75rem; padding: 6px 12px;">
+            <button type="button" id="btn-sim-lulus" class="btn btn-secondary"
+              style="font-size: 0.75rem; padding: 6px 12px;">
               🎉 Toggle Status LULUS
             </button>
-            <button type="button" id="btn-sim-pewawancara" class="btn btn-secondary" style="font-size: 0.75rem; padding: 6px 12px;">
+            <button type="button" id="btn-sim-pewawancara" class="btn btn-secondary"
+              style="font-size: 0.75rem; padding: 6px 12px;">
               🔄 Ganti Pewawancara (Yosa / Veli)
             </button>
           </div>
@@ -401,8 +508,17 @@
   <script type="module">
     import { getPendaftarList, getPendaftarById, savePendaftar, logoutUser, escapeHTML } from './utils.js?v=20261012_v5';
 
-    // 1. Cek Sesi Login Pendaftar (Strict: Hanya tampil setelah login)
+    // 1. Cek Sesi Login Pendaftar
     let loggedInUser = JSON.parse(localStorage.getItem('m3_spmb_logged_in_user'));
+
+    if (!loggedInUser) {
+      // Periksa apakah ada akun aktif di sesi saat ini (misal setelah registrasi & aktivasi)
+      const cur = JSON.parse(localStorage.getItem('m3_spmb_current_user'));
+      if (cur && (cur.status_akun === 'active' || cur.status_akun === 'AKTIF')) {
+        loggedInUser = cur;
+        localStorage.setItem('m3_spmb_logged_in_user', JSON.stringify(cur));
+      }
+    }
 
     const viewNotLogged = document.getElementById('view-not-logged');
     const viewDashboard = document.getElementById('view-dashboard');
@@ -718,4 +834,5 @@
     });
   </script>
 </body>
+
 </html>

@@ -110,7 +110,7 @@ function syncToLegacyDB(list) {
     list.forEach(item => {
       // Cari data yang cocok di tuDb berdasarkan NISN atau ID
       const matchIdx = tuDb.pendaftar.findIndex(t => (
-        (item.nisn && t.nisn && t.nisn === item.nisn) ||
+        (item.nisn && t.nisn && String(t.nisn).trim() === String(item.nisn).trim()) ||
         (item.id_pendaftar && (t.id === item.id_pendaftar || t.id_pendaftar === item.id_pendaftar)) ||
         (item.id && (t.id === item.id || t.id_pendaftar === item.id))
       ));
@@ -194,20 +194,37 @@ export function getPendaftarList() {
     if (tuDbRaw) {
       const tuDb = JSON.parse(tuDbRaw);
       if (Array.isArray(tuDb.pendaftar)) {
+        // Bersihkan data ganda di SSoT terlebih dahulu agar tidak ada konflik status
+        const uniqueSSoT = [];
+        const seenSSoT = new Set();
+        // Beri prioritas entry yang status_akun nya sudah AKTIF / memiliki perubahan terbaru
+        tuDb.pendaftar.forEach(item => {
+          const key = item.nisn ? `nisn_${item.nisn}` : (item.id || item.id_pendaftar);
+          const existingIdx = uniqueSSoT.findIndex(u => (item.nisn && u.nisn === item.nisn) || ((item.id || item.id_pendaftar) && (u.id === item.id || u.id_pendaftar === item.id)));
+          if (existingIdx !== -1) {
+            // Merge entry jika ada duplikasi
+            uniqueSSoT[existingIdx] = { ...uniqueSSoT[existingIdx], ...item };
+          } else {
+            uniqueSSoT.push(item);
+          }
+        });
+        tuDb.pendaftar = uniqueSSoT;
+        localStorage.setItem(DB_TU_KEY, JSON.stringify(tuDb));
+
         let changed = false;
         tuDb.pendaftar.forEach(ssotItem => {
           const id = ssotItem.id || ssotItem.id_pendaftar;
           const matchIdx = list.findIndex(p => (
             (id && (p.id_pendaftar === id || p.id === id)) ||
-            (ssotItem.nisn && p.nisn && p.nisn === ssotItem.nisn)
+            (ssotItem.nisn && p.nisn && String(p.nisn).trim() === String(ssotItem.nisn).trim())
           ));
           if (matchIdx !== -1) {
             const p = list[matchIdx];
             // Sinkronkan status akun dua arah
-            if (ssotItem.status_akun === 'AKTIF' && p.status_akun !== 'active') {
+            if ((ssotItem.status_akun === 'AKTIF' || ssotItem.status_akun === 'active') && p.status_akun !== 'active') {
               p.status_akun = 'active';
               changed = true;
-            } else if (ssotItem.status_akun === 'MENUNGGU' && p.status_akun !== 'pending_activation') {
+            } else if ((ssotItem.status_akun === 'MENUNGGU' || ssotItem.status_akun === 'pending_activation') && (p.status_akun === 'active' || p.status_akun === 'AKTIF')) {
               p.status_akun = 'pending_activation';
               changed = true;
             }
@@ -297,6 +314,9 @@ export function savePendaftar(data) {
   return list;
 }
 
+/**
+ * Mengubah status_akun pendaftar
+ */
 export function updateStatusAkun(id, newStatus) {
   if (!id) return null;
   const list = getPendaftarList();
@@ -311,13 +331,29 @@ export function updateStatusAkun(id, newStatus) {
   if (idx === -1 && list.length > 0) {
     const byName = list.findIndex(item => item.nama_lengkap && String(item.nama_lengkap).toLowerCase().includes(targetStr));
     if (byName !== -1) idx = byName;
-    else idx = 0;
   }
 
   if (idx !== -1) {
     list[idx].status_akun = newStatus;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
     syncToLegacyDB(list);
+
+    // Sinkronkan session user di localStorage jika akun sedang aktif di session
+    try {
+      const cur = JSON.parse(localStorage.getItem('m3_spmb_current_user'));
+      if (cur && (cur.id_pendaftar === id || cur.id === id || cur.nisn === id || cur.nisn === list[idx].nisn)) {
+        cur.status_akun = newStatus;
+        localStorage.setItem('m3_spmb_current_user', JSON.stringify(cur));
+      }
+      const logged = JSON.parse(localStorage.getItem('m3_spmb_logged_in_user'));
+      if (logged && (logged.id_pendaftar === id || logged.id === id || logged.nisn === id || logged.nisn === list[idx].nisn)) {
+        logged.status_akun = newStatus;
+        localStorage.setItem('m3_spmb_logged_in_user', JSON.stringify(logged));
+      }
+    } catch (e) {
+      console.warn('Sync session user on status update failed:', e);
+    }
+
     dispatchSPMBEvent('spmb_db_updated', list[idx]);
     return list[idx];
   }
