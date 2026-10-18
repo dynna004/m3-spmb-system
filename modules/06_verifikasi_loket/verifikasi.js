@@ -10,8 +10,8 @@
  * 2. [SIMULASI INTEGRASI MODUL 05 - KELULUSAN]: Validasi status kelulusan seleksi ("LULUS")
  * 3. [SIMULASI INTEGRASI MODUL 03 - KEUANGAN]: Validasi status pembayaran uang pangkal ("LUNAS")
  * 4. Pengecekan Berkas Fisik (Checklist Dokumen Asli/Fotokopi yang diserahkan wali/siswa)
- * 5. [SIMULASI INTEGRASI MODUL 07 & 08 - PENGELOLAAN DATA & SSoT TU (LOCKING DATA)]:
- *    Penguncian data (is_locked = true, status_daftar_ulang = "TERVERIFIKASI") ke localStorage
+ * 5. [INTEGRASI DENGAN MODUL 07 - PENGELOLAAN & LOCK DATA]:
+ *    Pengesahan keabsahan dokumen fisik (status_daftar_ulang = "TERVERIFIKASI") sehingga siap dikunci di Modul 07
  * 6. Cetak Bukti Tanda Terima Fisik Berkas & Berita Acara Daftar Ulang
  * =========================================================================================
  */
@@ -305,8 +305,8 @@ export function completeVerification(studentId) {
     };
   }
 
-  // 4. [SIMULASI INTEGRASI MODUL 07 & 08 - LOCKING DATA]: Update status terkunci
-  student.is_locked = true;
+  // 4. [INTEGRASI DENGAN MODUL 07 - LOCK DATA]: Update status verifikasi berkas fisik
+  student.is_locked = false; // Belum dikunci permanen, menunggu otorisasi final di Modul 07
   student.status_daftar_ulang = 'TERVERIFIKASI';
   student.tgl_verifikasi = new Date().toISOString();
   student.petugas_verifikasi = 'Petugas Loket 1 - SMA Muhammadiyah 3';
@@ -318,7 +318,7 @@ export function completeVerification(studentId) {
 
   return { 
     success: true, 
-    message: `Data siswa ${student.nama_lengkap} (${student.id_pendaftar}) berhasil Terverifikasi dan Terkunci!`,
+    message: `Berkas fisik siswa ${student.nama_lengkap} (${student.id_pendaftar}) berhasil diverifikasi sah! Data kini Siap Dikunci di Modul 07 (Lock Data).`,
     student: student
   };
 }
@@ -514,7 +514,7 @@ export function renderVerifikasiLoket(containerId = 'module-viewport') {
             <button class="btn-filter ${loketState.activeFilter === 'all' ? 'active' : ''}" onclick="window.loketApp.setFilter('all')">Semua (${loketState.students.length})</button>
             <button class="btn-filter ${loketState.activeFilter === 'ready' ? 'active' : ''}" onclick="window.loketApp.setFilter('ready')">Siap Verifikasi</button>
             <button class="btn-filter ${loketState.activeFilter === 'unpaid' ? 'active' : ''}" onclick="window.loketApp.setFilter('unpaid')">Belum Lunas</button>
-            <button class="btn-filter ${loketState.activeFilter === 'locked' ? 'active' : ''}" onclick="window.loketApp.setFilter('locked')">Terkunci</button>
+            <button class="btn-filter ${loketState.activeFilter === 'locked' ? 'active' : ''}" onclick="window.loketApp.setFilter('locked')">Berkas Sah / Terkunci</button>
           </div>
 
           <!-- List Antrean Siswa -->
@@ -546,8 +546,8 @@ export function renderVerifikasiLoket(containerId = 'module-viewport') {
 function renderStatsHTML() {
   const total = loketState.students.length;
   const ready = loketState.students.filter(s => s.status_kelulusan === 'LULUS' && s.status_pembayaran === 'LUNAS' && !s.is_locked).length;
-  const verified = loketState.students.filter(s => s.is_locked).length;
-  const pending = loketState.students.filter(s => !s.is_locked && (s.status_pembayaran !== 'LUNAS' || s.status_kelulusan !== 'LULUS')).length;
+  const verified = loketState.students.filter(s => s.is_locked || s.status_daftar_ulang === 'TERVERIFIKASI').length;
+  const pending = loketState.students.filter(s => !s.is_locked && s.status_daftar_ulang !== 'TERVERIFIKASI' && (s.status_pembayaran !== 'LUNAS' || s.status_kelulusan !== 'LULUS')).length;
 
   return `
     <div class="loket-stat-card">
@@ -568,7 +568,7 @@ function renderStatsHTML() {
       <div class="loket-stat-icon verified">🔒</div>
       <div>
         <div class="loket-stat-val">${verified}</div>
-        <div class="loket-stat-label">Terverifikasi & Kunci</div>
+        <div class="loket-stat-label">Berkas Terverifikasi</div>
       </div>
     </div>
     <div class="loket-stat-card">
@@ -593,7 +593,7 @@ function renderQueueListHTML() {
   } else if (loketState.activeFilter === 'unpaid') {
     filtered = filtered.filter(s => s.status_pembayaran !== 'LUNAS');
   } else if (loketState.activeFilter === 'locked') {
-    filtered = filtered.filter(s => s.is_locked);
+    filtered = filtered.filter(s => s.is_locked || s.status_daftar_ulang === 'TERVERIFIKASI');
   }
 
   // Filter Search
@@ -629,11 +629,14 @@ function renderQueueListHTML() {
       ? `<span class="badge-tag lunas">Lunas</span>`
       : `<span class="badge-tag belum-lunas">Belum Bayar</span>`;
 
+    const isBerkasSah = student.status_daftar_ulang === 'TERVERIFIKASI' || student.status_daftar_ulang === 'VERIFIED_LOCKED';
     let badgeStatusLock = student.is_locked
-      ? `<span class="badge-tag verified">🔒 Terkunci</span>`
-      : (student.status_kelulusan === 'LULUS' && student.status_pembayaran === 'LUNAS')
-        ? `<span class="badge-tag ready">⭐ Siap Loket</span>`
-        : `<span class="badge-tag blocked">Pending</span>`;
+      ? `<span class="badge-tag verified">🔒 Terkunci TU</span>`
+      : isBerkasSah
+        ? `<span class="badge-tag ready">⭐ Berkas Sah</span>`
+        : (student.status_kelulusan === 'LULUS' && student.status_pembayaran === 'LUNAS')
+          ? `<span class="badge-tag ready">📋 Siap Loket</span>`
+          : `<span class="badge-tag blocked">Pending</span>`;
 
     return `
       <div 
@@ -708,7 +711,8 @@ function renderWorkbenchHTML() {
   const isLulus = student.status_kelulusan === 'LULUS';
   const isLunas = student.status_pembayaran === 'LUNAS';
   const isLocked = student.is_locked;
-  const canVerify = isLulus && isLunas && !isLocked;
+  const isBerkasVerified = student.status_daftar_ulang === 'TERVERIFIKASI' || student.status_daftar_ulang === 'VERIFIED_LOCKED' || isLocked;
+  const canVerify = isLulus && isLunas && !isBerkasVerified && !isLocked;
 
   // Hitung jumlah checklist dokumen
   const totalWajib = DAFTAR_DOKUMEN_FISIK.filter(d => d.wajib).length;
@@ -718,12 +722,12 @@ function renderWorkbenchHTML() {
   return `
     <div>
       
-      <!-- Banner Jika Data Sudah Terkunci -->
+      <!-- Banner Jika Data Sudah Terkunci ke TU -->
       ${isLocked ? `
         <div class="locked-banner">
           <div>
             <div class="locked-title">
-              <span>🔒</span> DATA SISWA TELAH TERVERIFIKASI & TERKUNCI (SINKRON DENGAN MODUL 07 & 08 TU)
+              <span>🔒</span> DATA SISWA TELAH TERVERIFIKASI & TERKUNCI RESMI (MODUL 07 & TU)
             </div>
             <div style="font-size: 0.8rem; color: #cbd5e1; margin-top: 4px;">
               Diverifikasi pada: <strong>${formatDate(student.tgl_verifikasi)}</strong> oleh <strong>${escapeHtml(student.petugas_verifikasi || 'Petugas Loket')}</strong>.
@@ -738,7 +742,26 @@ function renderWorkbenchHTML() {
             </button>
           </div>
         </div>
-      ` : ''}
+      ` : (isBerkasVerified ? `
+        <div class="locked-banner" style="background: linear-gradient(135deg, #065f46 0%, #047857 100%);">
+          <div>
+            <div class="locked-title">
+              <span>⭐</span> BERKAS FISIK TELAH DIVERIFIKASI SAH DI LOKET
+            </div>
+            <div style="font-size: 0.8rem; color: #d1fae5; margin-top: 4px;">
+              Dokumen fisik lengkap. Status kini <strong>Siap Dikunci</strong> oleh Koordinator SPMB di <strong>Modul 07 (Lock Data)</strong> sebelum dialirkan ke TU.
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary" onclick="window.loketApp.openReceiptModal('${student.id_pendaftar}')" style="padding: 8px 16px; font-size: 0.82rem; font-weight: 700;">
+              🖨️ Cetak Tanda Terima
+            </button>
+            <button class="btn btn-tester" onclick="window.switchModule('07')" style="background: rgba(255,255,255,0.15); color: #ffffff; border-color: rgba(255,255,255,0.3); font-size: 0.75rem; font-weight: 700;">
+              🔒 Buka Modul 07 →
+            </button>
+          </div>
+        </div>
+      ` : '')}
 
       <!-- Section 1: Profil & Identitas Siswa -->
       <div class="wb-section">
@@ -756,8 +779,10 @@ function renderWorkbenchHTML() {
             </div>
           </div>
           <div>
-            <span class="badge ${isLocked ? 'badge-success' : 'badge-warning'}" style="font-size: 0.82rem; padding: 6px 14px;">
-              ${isLocked ? 'STATUS: TERVERIFIKASI & TERKUNCI' : 'STATUS: MENUNGGU VERIFIKASI LOKET'}
+            <span class="badge ${isLocked ? 'badge-success' : (isBerkasVerified ? 'badge-info' : 'badge-warning')}" style="font-size: 0.82rem; padding: 6px 14px;">
+              ${isLocked 
+                ? 'STATUS: TERKUNCI KE TU 🔒' 
+                : (isBerkasVerified ? 'STATUS: BERKAS FISIK SAH (SIAP KUNCI M07) ⭐' : 'STATUS: MENUNGGU VERIFIKASI LOKET ⏳')}
             </span>
           </div>
         </div>
@@ -849,10 +874,10 @@ function renderWorkbenchHTML() {
           <!-- Checklist Rows -->
           <div class="doc-checklist-items">
             ${DAFTAR_DOKUMEN_FISIK.map(doc => {
-              const isChecked = isLocked 
+              const isChecked = (isLocked || isBerkasVerified) 
                 ? (student.dokumen_terverifikasi || []).includes(doc.id) 
                 : loketState.checkedDocs.has(doc.id);
-              const isDisabled = isLocked || !canVerify;
+              const isDisabled = isLocked || isBerkasVerified || !canVerify;
 
               return `
                 <div 
@@ -885,9 +910,9 @@ function renderWorkbenchHTML() {
               id="loket-notes-input" 
               rows="2" 
               placeholder="Contoh: Dokumen KK dan SKL asli telah dicocokkan, diserahkan langsung oleh wali murid..." 
-              ${isLocked ? 'readonly' : ''}
+              ${(isLocked || isBerkasVerified) ? 'readonly' : ''}
               onchange="window.loketApp.updateNotes(this.value)"
-            >${escapeHtml(isLocked ? (student.catatan_loket || '-') : loketState.officerNotes)}</textarea>
+            >${escapeHtml((isLocked || isBerkasVerified) ? (student.catatan_loket || '-') : loketState.officerNotes)}</textarea>
           </div>
 
         </div>
@@ -897,10 +922,14 @@ function renderWorkbenchHTML() {
       <div class="wb-action-bar">
         <div class="wb-action-status-info">
           ${isLocked ? `
-            <span>🔒 Data terkunci. Terintegrasi dengan Modul 07 Pengelolaan Data & Modul 08 Basis Data TU.</span>
+            <span>🔒 Data terkunci resmi ke TU. Berkas fisik lengkap & sah.</span>
+          ` : isBerkasVerified ? `
+            <span style="color: #15803d; font-weight: 700;">
+              ⭐ Berkas fisik telah diverifikasi sah! Silakan cetak tanda terima fisik untuk pendaftar.
+            </span>
           ` : (canVerify && isAllDocsComplete) ? `
             <span style="color: #15803d; font-weight: 700;">
-              ✨ Seluruh dokumen fisik lengkap! Siap untuk pengesahan daftar ulang.
+              ✨ Seluruh dokumen fisik lengkap! Siap untuk pengesahan berkas di loket.
             </span>
           ` : `
             <span style="color: #b45309;">
@@ -910,7 +939,7 @@ function renderWorkbenchHTML() {
         </div>
 
         <div>
-          ${isLocked ? `
+          ${(isLocked || isBerkasVerified) ? `
             <button 
               type="button" 
               class="btn btn-primary" 
@@ -927,7 +956,7 @@ function renderWorkbenchHTML() {
               ${(!canVerify || !isAllDocsComplete) ? 'disabled' : ''}
               onclick="window.loketApp.handleSubmitVerification('${student.id_pendaftar}')"
             >
-              <span>✅</span> Selesaikan Verifikasi & Kunci Data
+              <span>✅</span> Sahkan Verifikasi Berkas Fisik
             </button>
           `}
         </div>
@@ -947,7 +976,7 @@ function syncCheckedDocsFromSelectedStudent() {
   const student = loketState.students.find(s => s.id_pendaftar === loketState.selectedStudentId);
   if (!student) return;
 
-  if (student.is_locked && Array.isArray(student.dokumen_terverifikasi)) {
+  if ((student.is_locked || student.status_daftar_ulang === 'TERVERIFIKASI') && Array.isArray(student.dokumen_terverifikasi)) {
     student.dokumen_terverifikasi.forEach(id => loketState.checkedDocs.add(id));
     loketState.officerNotes = student.catatan_loket || '';
   } else if (student.status_kelulusan === 'LULUS' && student.status_pembayaran === 'LUNAS') {

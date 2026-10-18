@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengelolaan & Lock Data Final SPMB - SMA Muhammadiyah 3 Yogyakarta</title>
+
+  <!-- Shared Style System & Modul 07 Style -->
+  <link rel="stylesheet" href="../../shared/styles.css">
+  <link rel="stylesheet" href="./lock.css">
+
+  <style>
+    body {
+      background-color: #f8fafc;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* Standalone Navigation Bar */
+    .lock-standalone-topbar {
+      background: #004d28;
+      color: #ffffff;
+      padding: 10px 2rem;
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .lock-standalone-topbar a {
+      color: #f5a623;
+      text-decoration: none;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s ease;
+    }
+
+    .lock-standalone-topbar a:hover {
+      color: #ffd166;
+    }
+
+    .lock-page-wrapper {
+      max-width: 1320px;
+      margin: 2rem auto;
+      padding: 0 1.5rem 3rem 1.5rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Standalone Top Bar Link -->
+  <div class="lock-standalone-topbar">
+    <div>
+      <strong>SMA Muhammadiyah 3 Yogyakarta</strong> — Modul 07: Data Locking Engine
+    </div>
+    <div>
+      <a href="../../index.html#07">
+        <span>←</span> Kembali ke Integrasi Utama (Main Router)
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Viewport Container -->
+  <main class="lock-page-wrapper">
+    <div id="lock-app-viewport"></div>
+  </main>
+
+  <!-- Module Initializer -->
+  <script type="module">
+    import { renderLockValidasi } from './lock.js?v=20261018_v1';
+    renderLockValidasi('lock-app-viewport');
+  </script>
+</body>
+
+</html>

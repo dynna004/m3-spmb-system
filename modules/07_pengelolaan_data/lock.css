@@ -1,0 +1,734 @@
+/* ==========================================================================
+   MODUL 07: PENGELOLAAN & PENGUNCIAN DATA FINAL SPMB (DATA LOCKING ENGINE)
+   SMA Muhammadiyah 3 Yogyakarta - Single Source of Truth Adapter
+   ========================================================================== */
+
+.lock-module-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #0f172a;
+}
+
+/* 1. Header Banner & Context */
+.lock-header-card {
+  background: linear-gradient(135deg, #064e3b 0%, #006837 55%, #047857 100%);
+  color: #ffffff;
+  border-radius: 14px;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 104, 55, 0.25), 0 8px 10px -6px rgba(0, 104, 55, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.lock-header-card::after {
+  content: "🔒";
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 6rem;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.lock-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.lock-header-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lock-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.lock-header-desc {
+  font-size: 0.925rem;
+  color: #d1fae5;
+  max-width: 780px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Security Notice Callout */
+.lock-notice-box {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-left: 4px solid #16a34a;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.lock-notice-icon {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.lock-notice-text {
+  font-size: 0.85rem;
+  color: #166534;
+  line-height: 1.5;
+}
+
+.lock-notice-text strong {
+  font-weight: 700;
+  color: #14532d;
+}
+
+/* 2. Stat Cards Grid */
+.lock-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.lock-stat-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lock-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.lock-stat-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.lock-stat-icon-wrapper.total { background: #eff6ff; color: #2563eb; }
+.lock-stat-icon-wrapper.ready { background: #ecfdf5; color: #059669; }
+.lock-stat-icon-wrapper.locked { background: #fef3c7; color: #d97706; }
+.lock-stat-icon-wrapper.incomplete { background: #f1f5f9; color: #64748b; }
+
+.lock-stat-number {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #0f172a;
+}
+
+.lock-stat-label {
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* 3. Filter & Controls Bar */
+.lock-controls-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.lock-tabs {
+  display: flex;
+  gap: 6px;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 10px;
+  overflow-x: auto;
+}
+
+.lock-tab-btn {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lock-tab-btn.active {
+  background: #ffffff;
+  color: #006837;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.lock-tab-count {
+  background: rgba(100, 116, 139, 0.15);
+  color: inherit;
+  font-size: 0.7rem;
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+
+.lock-tab-btn.active .lock-tab-count {
+  background: #e6f4ea;
+  color: #006837;
+}
+
+.lock-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.lock-search-input {
+  padding: 7px 12px 7px 32px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E") no-repeat 10px center;
+  min-width: 200px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.lock-search-input:focus {
+  outline: none;
+  border-color: #006837;
+  box-shadow: 0 0 0 3px rgba(0, 104, 55, 0.15);
+}
+
+.lock-btn-batch {
+  background: #006837;
+  color: #ffffff;
+  border: none;
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.lock-btn-batch:hover:not(:disabled) {
+  background: #004d28;
+  transform: translateY(-1px);
+}
+
+.lock-btn-batch:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.lock-btn-demo-preset {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.lock-btn-demo-preset:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+/* 4. Table Area */
+.lock-table-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  overflow: hidden;
+}
+
+.lock-table-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lock-table-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lock-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.lock-table th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.lock-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.85rem;
+  color: #1e293b;
+  vertical-align: middle;
+}
+
+.lock-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.lock-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.lock-student-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lock-student-name {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.lock-student-sub {
+  font-size: 0.75rem;
+  color: #64748b;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.lock-student-nisn {
+  font-family: monospace;
+  background: #f1f5f9;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* Criteria Audit Badges */
+.lock-criteria-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.725rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.lock-criteria-badge.pass {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.lock-criteria-badge.fail {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.lock-criteria-badge.pending {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+/* Lock Status Badge */
+.lock-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.lock-status-pill.locked {
+  background: #15803d;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(21, 128, 61, 0.3);
+}
+
+.lock-status-pill.ready {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  animation: lockPulse 2s infinite ease-in-out;
+}
+
+.lock-status-pill.incomplete {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+@keyframes lockPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+/* Action Buttons */
+.lock-btn-action {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.lock-btn-action.lock-now {
+  background: #006837;
+  color: #ffffff;
+}
+
+.lock-btn-action.lock-now:hover {
+  background: #004d28;
+  transform: translateY(-1px);
+}
+
+.lock-btn-action.locked-done {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  cursor: default;
+}
+
+.lock-btn-action.btn-detail {
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.lock-btn-action.btn-detail:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.lock-btn-action.btn-unlock {
+  background: transparent;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  font-size: 0.7rem;
+  padding: 3px 8px;
+}
+
+.lock-btn-action.btn-unlock:hover {
+  background: #fef2f2;
+}
+
+/* 5. 5 UI States: Empty, Loading, Success, Error, Incomplete */
+.lock-state-box {
+  padding: 3.5rem 1.5rem;
+  text-align: center;
+  color: #64748b;
+}
+
+.lock-state-icon {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+  line-height: 1;
+}
+
+.lock-state-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.25rem 0;
+}
+
+.lock-state-text {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Toast Notification (Success / Info / Error) */
+.lock-toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: #1e293b;
+  color: #ffffff;
+  padding: 12px 18px;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 9999;
+  animation: lockToastSlide 0.25s ease-out;
+}
+
+.lock-toast.success { background: #064e3b; border-left: 4px solid #34d399; }
+.lock-toast.error { background: #7f1d1d; border-left: 4px solid #f87171; }
+.lock-toast.info { background: #0c4a6e; border-left: 4px solid #38bdf8; }
+
+@keyframes lockToastSlide {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 6. Modal Dialogs */
+.lock-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1000;
+  animation: lockFadeIn 0.2s ease;
+}
+
+.lock-modal-card {
+  background: #ffffff;
+  border-radius: 14px;
+  max-width: 580px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  animation: lockModalSlide 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes lockFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes lockModalSlide { from { transform: scale(0.96) translateY(10px); } to { transform: scale(1) translateY(0); } }
+
+.lock-modal-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lock-modal-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lock-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: #94a3b8;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+.lock-modal-close:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.lock-modal-body {
+  padding: 1.5rem;
+}
+
+.lock-modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  background: #f8fafc;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+}
+
+/* Audit Checklist within Modal */
+.lock-audit-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 1.25rem 0;
+}
+
+.lock-audit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.lock-audit-check-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.lock-audit-item-content {
+  flex: 1;
+}
+
+.lock-audit-item-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+.lock-audit-item-desc {
+  font-size: 0.775rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+/* 7. Audit Trail / Activity Log Section */
+.lock-log-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.lock-log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.lock-log-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lock-log-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.lock-log-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.8rem;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border-left: 3px solid #006837;
+}
+
+.lock-log-time {
+  font-family: monospace;
+  color: #64748b;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.lock-log-desc {
+  color: #334155;
+  font-weight: 500;
+  flex: 1;
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+  .lock-header-card {
+    padding: 1.25rem 1rem;
+  }
+  .lock-controls-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .lock-actions-group {
+    justify-content: space-between;
+  }
+  .lock-search-input {
+    width: 100%;
+  }
+}
