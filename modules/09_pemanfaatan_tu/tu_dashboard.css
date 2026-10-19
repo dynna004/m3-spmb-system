@@ -1,0 +1,880 @@
+/* =========================================================================================
+ * MODUL 09: PEMANFAATAN DATA TATA USAHA (TU DASHBOARD) - STYLESHEET
+ * SMA Muhammadiyah 3 Yogyakarta - Sistem Integrasi SPMB & TU
+ * Developer: Raudhatul Audyna | Strategi: Agile | Layer: Presentation & Application
+ * ========================================================================================= */
+
+:root {
+  --tu-primary: #006837;
+  --tu-primary-dark: #004d28;
+  --tu-primary-light: #e6f4ea;
+  --tu-accent: #f5a623;
+  --tu-accent-light: #fff8eb;
+  --tu-info: #0284c7;
+  --tu-info-light: #e0f2fe;
+  --tu-success: #16a34a;
+  --tu-success-light: #dcfce7;
+  --tu-warning: #d97706;
+  --tu-warning-light: #fef3c7;
+  --tu-danger: #dc2626;
+  --tu-danger-light: #fee2e2;
+  --tu-slate-50: #f8fafc;
+  --tu-slate-100: #f1f5f9;
+  --tu-slate-200: #e2e8f0;
+  --tu-slate-300: #cbd5e1;
+  --tu-slate-600: #475569;
+  --tu-slate-800: #1e293b;
+  --tu-slate-900: #0f172a;
+  --tu-card-radius: 14px;
+  --tu-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.06);
+  --tu-shadow-hover: 0 8px 24px -4px rgba(0, 104, 55, 0.12);
+}
+
+.tu-module-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  animation: tuFadeIn 0.25s ease-out;
+}
+
+@keyframes tuFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 1. Header Banner */
+.tu-header-card {
+  background: linear-gradient(135deg, #005a30 0%, #007941 100%);
+  color: #ffffff;
+  border-radius: var(--tu-card-radius);
+  padding: 1.75rem 2rem;
+  box-shadow: 0 8px 24px rgba(0, 80, 40, 0.18);
+  position: relative;
+  overflow: hidden;
+  border-left: 6px solid var(--tu-accent);
+}
+
+.tu-header-card::after {
+  content: 'TU';
+  position: absolute;
+  right: -20px;
+  bottom: -35px;
+  font-size: 10rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.tu-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.tu-header-title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: -0.02em;
+}
+
+.tu-header-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tu-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tu-badge-pill.gold {
+  background: var(--tu-accent);
+  color: #0f172a;
+  border-color: #f7b731;
+}
+
+.tu-badge-pill.zero-reentry {
+  background: #10b981;
+  color: #ffffff;
+  border-color: #34d399;
+}
+
+.tu-header-desc {
+  font-size: 0.925rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 960px;
+}
+
+/* SSoT Notice Callout */
+.tu-callout-ssot {
+  background: #ffffff;
+  border: 1px solid var(--tu-slate-200);
+  border-left: 4px solid #059669;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.tu-callout-icon {
+  font-size: 1.75rem;
+  background: #ecfdf5;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.tu-callout-text {
+  font-size: 0.85rem;
+  color: var(--tu-slate-600);
+  line-height: 1.45;
+}
+
+.tu-callout-text strong {
+  color: var(--tu-slate-900);
+}
+
+.tu-callout-badge {
+  background: #dcfce7;
+  color: #15803d;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+/* 2. Bento Stats Grid */
+.tu-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.tu-stat-card {
+  background: #ffffff;
+  border-radius: var(--tu-card-radius);
+  border: 1px solid var(--tu-slate-200);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: var(--tu-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tu-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--tu-shadow-hover);
+}
+
+.tu-stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.tu-stat-icon.fetch { background: var(--tu-primary-light); color: var(--tu-primary); }
+.tu-stat-icon.rombel { background: var(--tu-info-light); color: var(--tu-info); }
+.tu-stat-icon.buku { background: var(--tu-accent-light); color: var(--tu-accent); }
+.tu-stat-icon.dapodik { background: var(--tu-success-light); color: var(--tu-success); }
+
+.tu-stat-number {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--tu-slate-900);
+  line-height: 1.2;
+}
+
+.tu-stat-label {
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--tu-slate-600);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-top: 3px;
+}
+
+/* 3. Sub-Navigation Tabs */
+.tu-nav-tabs {
+  display: flex;
+  gap: 8px;
+  background: #ffffff;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--tu-slate-200);
+  box-shadow: var(--tu-shadow);
+  overflow-x: auto;
+}
+
+.tu-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--tu-slate-600);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.tu-tab-btn:hover {
+  background: var(--tu-slate-100);
+  color: var(--tu-slate-900);
+}
+
+.tu-tab-btn.active {
+  background: var(--tu-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 104, 55, 0.25);
+}
+
+.tu-tab-badge {
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.08);
+  color: inherit;
+  font-weight: 700;
+}
+
+.tu-tab-btn.active .tu-tab-badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+/* 4. Controls & Filter Bar */
+.tu-filter-card {
+  background: #ffffff;
+  border-radius: var(--tu-card-radius);
+  border: 1px solid var(--tu-slate-200);
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  box-shadow: var(--tu-shadow);
+}
+
+.tu-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tu-search-input {
+  padding: 8px 14px;
+  border: 1px solid var(--tu-slate-300);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  min-width: 250px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tu-search-input:focus {
+  border-color: var(--tu-primary);
+  box-shadow: 0 0 0 3px rgba(0, 104, 55, 0.12);
+}
+
+.tu-select-filter {
+  padding: 8px 12px;
+  border: 1px solid var(--tu-slate-300);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  background: #ffffff;
+  outline: none;
+  cursor: pointer;
+}
+
+.tu-select-filter:focus {
+  border-color: var(--tu-primary);
+}
+
+.tu-btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+}
+
+.tu-btn-action:hover {
+  transform: translateY(-1px);
+}
+
+.tu-btn-action:active {
+  transform: translateY(0);
+}
+
+.tu-btn-action.primary {
+  background: var(--tu-primary);
+  color: #ffffff;
+}
+
+.tu-btn-action.primary:hover {
+  background: var(--tu-primary-dark);
+}
+
+.tu-btn-action.secondary {
+  background: #ffffff;
+  border: 1px solid var(--tu-slate-300);
+  color: var(--tu-slate-800);
+}
+
+.tu-btn-action.secondary:hover {
+  background: var(--tu-slate-50);
+}
+
+.tu-btn-action.gold {
+  background: var(--tu-accent);
+  color: #0f172a;
+}
+
+.tu-btn-action.gold:hover {
+  background: #e59817;
+}
+
+/* 5. Main Card & Tables */
+.tu-card-panel {
+  background: #ffffff;
+  border-radius: var(--tu-card-radius);
+  border: 1px solid var(--tu-slate-200);
+  box-shadow: var(--tu-shadow);
+  overflow: hidden;
+}
+
+.tu-card-panel-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--tu-slate-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tu-panel-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--tu-slate-900);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tu-panel-subtitle {
+  font-size: 0.825rem;
+  color: var(--tu-slate-600);
+  margin-top: 2px;
+}
+
+/* Responsive Table */
+.tu-table-container {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.tu-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+.tu-data-table th {
+  background: var(--tu-slate-50);
+  color: var(--tu-slate-800);
+  font-weight: 700;
+  font-size: 0.775rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--tu-slate-200);
+  white-space: nowrap;
+}
+
+.tu-data-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--tu-slate-200);
+  vertical-align: middle;
+}
+
+.tu-data-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.tu-data-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+/* Student Info Row Cell */
+.tu-student-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.tu-student-name {
+  font-weight: 700;
+  color: var(--tu-slate-900);
+  font-size: 0.925rem;
+}
+
+.tu-student-sub {
+  font-size: 0.775rem;
+  color: var(--tu-slate-600);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.tu-reg-badge {
+  font-family: monospace;
+  font-weight: 700;
+  color: var(--tu-primary);
+  background: var(--tu-primary-light);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.tu-buku-induk-code {
+  font-family: monospace;
+  font-weight: 700;
+  color: #0f766e;
+  background: #ccfbf1;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  border: 1px solid #99f6e4;
+}
+
+.tu-buku-induk-empty {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* Status Badges */
+.tu-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.tu-badge.mipa { background: #e0f2fe; color: #0369a1; }
+.tu-badge.ips { background: #fef3c7; color: #92400e; }
+.tu-badge.locked { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+.tu-badge.assigned { background: #e0e7ff; color: #4338ca; }
+.tu-badge.unassigned { background: #f1f5f9; color: #64748b; border: 1px dashed #cbd5e1; }
+.tu-badge.dapodik-ready { background: #dcfce7; color: #166534; }
+.tu-badge.dapodik-pending { background: #fee2e2; color: #991b1b; }
+
+/* Contact Darurat Cell */
+.tu-emergency-cell {
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.tu-emergency-name {
+  font-weight: 600;
+  color: var(--tu-slate-800);
+}
+
+.tu-emergency-phone {
+  font-family: monospace;
+  color: var(--tu-slate-600);
+  font-size: 0.775rem;
+}
+
+/* Action Button Inside Table */
+.tu-btn-table {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.775rem;
+  font-weight: 600;
+  border: 1px solid var(--tu-slate-300);
+  background: #ffffff;
+  color: var(--tu-slate-800);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.tu-btn-table:hover {
+  background: var(--tu-slate-100);
+  border-color: var(--tu-slate-400);
+}
+
+.tu-btn-table.primary {
+  background: var(--tu-primary);
+  color: #ffffff;
+  border-color: var(--tu-primary);
+}
+
+.tu-btn-table.primary:hover {
+  background: var(--tu-primary-dark);
+}
+
+/* 6. Rombel Visualizer (Tab 2) */
+.tu-rombel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+.tu-rombel-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid var(--tu-slate-200);
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.tu-rombel-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--tu-primary);
+}
+
+.tu-rombel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tu-rombel-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--tu-slate-900);
+}
+
+.tu-rombel-jurusan-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.tu-rombel-jurusan-tag.mipa { background: #e0f2fe; color: #0284c7; }
+.tu-rombel-jurusan-tag.ips { background: #fef3c7; color: #d97706; }
+
+.tu-progress-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tu-progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: var(--tu-slate-100);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.tu-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #059669);
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+.tu-progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--tu-slate-600);
+  font-weight: 600;
+}
+
+.tu-rombel-students-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid var(--tu-slate-100);
+  border-radius: 8px;
+  padding: 8px;
+  background: var(--tu-slate-50);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tu-rombel-student-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.775rem;
+  padding: 4px 8px;
+  background: #ffffff;
+  border-radius: 6px;
+  border: 1px solid var(--tu-slate-200);
+}
+
+/* 7. Modal Styles */
+.tu-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1.5rem;
+  animation: tuFadeIn 0.2s ease;
+}
+
+.tu-modal-dialog {
+  background: #ffffff;
+  border-radius: 16px;
+  max-width: 650px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+}
+
+.tu-modal-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--tu-slate-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--tu-slate-50);
+  border-radius: 16px 16px 0 0;
+}
+
+.tu-modal-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--tu-slate-900);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tu-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--tu-slate-600);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+}
+
+.tu-modal-close:hover {
+  background: var(--tu-slate-200);
+  color: var(--tu-slate-900);
+}
+
+.tu-modal-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.tu-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tu-form-label {
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: var(--tu-slate-800);
+}
+
+.tu-form-input, .tu-form-select, .tu-form-textarea {
+  padding: 9px 12px;
+  border: 1px solid var(--tu-slate-300);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.tu-form-input:focus, .tu-form-select:focus, .tu-form-textarea:focus {
+  border-color: var(--tu-primary);
+  box-shadow: 0 0 0 3px rgba(0, 104, 55, 0.1);
+}
+
+.tu-modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--tu-slate-200);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  background: var(--tu-slate-50);
+  border-radius: 0 0 16px 16px;
+}
+
+/* 8. Print Template (Buku Induk Resmi) */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .tu-printable-area, .tu-printable-area * {
+    visibility: visible;
+  }
+  .tu-printable-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 20mm;
+    background: #ffffff;
+  }
+  .tu-modal-footer, .tu-modal-close, .nav-tabs, .app-header {
+    display: none !important;
+  }
+}
+
+.tu-print-kop {
+  border-bottom: 3px double #000000;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.tu-print-kop-title {
+  text-align: center;
+  flex: 1;
+}
+
+.tu-print-kop-title h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #000000;
+  margin-bottom: 2px;
+}
+
+.tu-print-kop-title p {
+  font-size: 0.8rem;
+  color: #333333;
+  margin: 0;
+}
+
+/* 9. Toast Notification */
+.tu-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--tu-slate-900);
+  color: #ffffff;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  z-index: 2000;
+  animation: tuSlideIn 0.25s ease-out;
+  border-left: 4px solid var(--tu-accent);
+}
+
+@keyframes tuSlideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* 10. Empty & Incomplete States */
+.tu-empty-state {
+  text-align: center;
+  padding: 3.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.tu-empty-icon {
+  font-size: 3rem;
+  background: var(--tu-slate-100);
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-bottom: 6px;
+}
+
+.tu-empty-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--tu-slate-900);
+}
+
+.tu-empty-desc {
+  font-size: 0.875rem;
+  color: var(--tu-slate-600);
+  max-width: 480px;
+  line-height: 1.5;
+}
