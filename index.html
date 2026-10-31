@@ -23,7 +23,8 @@
     <button class="tab-btn" onclick="switchModule('06')">06. Verifikasi Loket</button>
     <button class="tab-btn" onclick="switchModule('07')">07. Lock Data</button>
     <button class="tab-btn" onclick="switchModule('08')">08. Schema TU</button>
-    <button class="tab-btn" onclick="switchModule('09')">09. Dashboard TU</button>
+    <button class="tab-btn" onclick="switchModule('09')">09. Dashboard TU (V1)</button>
+    <button class="tab-btn" onclick="switchModule('09_v2')">09. Dashboard TU (V2)</button>
     <button class="tab-btn" onclick="switchModule('10')">10. Executive Report</button>
   </nav>
 
@@ -43,6 +44,7 @@
     import { renderLockValidasi } from './modules/07_pengelolaan_data/lock.js?v=20261018_v1';
     import { renderSchemaTU } from './modules/08_basis_data_tu/schema.js?v=20261018_v1';
     import { renderTUDashboard } from './modules/09_pemanfaatan_tu/tu_dashboard.js?v=20261019_v2';
+    import { renderTUDashboardV2 } from './modules/09_pemanfaatan_tu/tu_dashboard_v2.js?v=20261030_v2';
     import { renderExecutiveReport } from './modules/10_executive_report/report.js?v=20261019_v1';
 
     // Render Shared Header
@@ -54,7 +56,10 @@
       const mainTabs = document.querySelectorAll('nav.nav-tabs .tab-btn');
       mainTabs.forEach(tab => tab.classList.remove('active'));
 
-      const activeTab = Array.from(mainTabs).find(tab => tab.textContent.trim().startsWith(moduleId));
+      const activeTab = Array.from(mainTabs).find(tab => {
+        const onclickAttr = tab.getAttribute('onclick') || '';
+        return onclickAttr.includes(`'${moduleId}'`);
+      });
       if (activeTab) activeTab.classList.add('active');
 
       const viewport = 'module-viewport';
@@ -70,6 +75,7 @@
         case '07': renderLockValidasi(viewport); break;
         case '08': renderSchemaTU(viewport); break;
         case '09': renderTUDashboard(viewport); break;
+        case '09_v2': renderTUDashboardV2(viewport); break;
         case '10': renderExecutiveReport(viewport); break;
         default: renderPortalSPMB(viewport);
       }
@@ -77,7 +83,7 @@
 
     // Auto-detect modul dari URL hash (misal #05 untuk langsung buka Modul Kelulusan)
     const initialHash = window.location.hash.replace('#', '').trim();
-    if (initialHash && ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'].includes(initialHash)) {
+    if (initialHash && ['01', '02', '03', '04', '05', '06', '07', '08', '09', '09_v2', '10'].includes(initialHash)) {
       switchModule(initialHash);
     } else {
       switchModule('01');

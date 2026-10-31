@@ -1,0 +1,214 @@
+/* =========================================================================================
+ * MODUL 09 (VERSI 2 - REVISI TESTING OPSI 1): PEMANFAATAN DATA TATA USAHA
+ * Penyesuaian Tata Kelola Alur Kurikulum & Standardisasi Ekspor XLSX
+ * SMA Muhammadiyah 3 Yogyakarta - Sistem Integrasi SPMB & TU
+ * Developer: Raudhatul Audyna | Strategi: Agile | Layer: Presentation & Application
+ * ========================================================================================= */
+
+@import url("./tu_dashboard.css");
+
+/* 1. Kurikulum Governance Action Bar in Rombel Tab (M3 Green/Gold Theme) */
+.tu-kurikulum-box {
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+  border-radius: var(--tu-card-radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  box-shadow: var(--tu-shadow);
+}
+
+.tu-kurikulum-box-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.tu-kurikulum-box-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--tu-primary-light);
+  color: var(--tu-primary);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.tu-kurikulum-box-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--tu-primary-dark);
+}
+
+.tu-kurikulum-box-desc {
+  font-size: 0.8rem;
+  color: #166534;
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.tu-kurikulum-box-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* 2. Drag-and-Drop / Upload Zone for Kurikulum Data */
+.tu-upload-dropzone {
+  border: 2px dashed #94a3b8;
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.tu-upload-dropzone:hover,
+.tu-upload-dropzone.dragover {
+  border-color: var(--tu-primary);
+  background: #f0fdf4;
+}
+
+.tu-upload-dropzone-icon {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+  color: var(--tu-primary);
+}
+
+.tu-upload-dropzone-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--tu-slate-900);
+}
+
+.tu-upload-dropzone-desc {
+  font-size: 0.8rem;
+  color: var(--tu-slate-600);
+  margin-top: 4px;
+}
+
+/* 3. Locked / Read-Only Field Indicator */
+.tu-field-locked-wrapper {
+  position: relative;
+}
+
+.tu-field-locked-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #92400e;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-left: 6px;
+}
+
+.tu-input-readonly {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+  cursor: not-allowed !important;
+  border-color: #cbd5e1 !important;
+  font-weight: 600;
+}
+
+.tu-field-locked-note {
+  font-size: 0.725rem;
+  color: #64748b;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 4. Kurikulum Status Badges */
+.tu-badge-kurikulum {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.tu-badge-kurikulum.verified {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.tu-badge-kurikulum.pending {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+/* 5. Modal Comparison Table */
+.tu-preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  margin-top: 1rem;
+}
+
+.tu-preview-table th {
+  background: #f8fafc;
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 2px solid #e2e8f0;
+  font-weight: 700;
+  color: #334155;
+}
+
+.tu-preview-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #1e293b;
+}
+
+.tu-preview-table tr:hover {
+  background: #f8fafc;
+}
+
+/* 6. Robust Class Fallbacks / Aliases for Full Compatibility */
+.tu-modal-card {
+  background: #ffffff;
+  border-radius: 16px;
+  max-width: 650px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: tuModalIn 0.2s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.tu-metrics-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.tu-stat-icon.students {
+  background: var(--tu-primary-light);
+  color: var(--tu-primary);
+}
+
+.tu-stat-icon.buku-induk {
+  background: var(--tu-accent-light);
+  color: var(--tu-accent);
+}
