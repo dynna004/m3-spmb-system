@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../../shared/styles.css">
   <style>
     .portal-container {
-      max-width: 500px;
+      max-width: 520px;
       margin: 2.5rem auto;
       padding: 0 1rem;
     }
@@ -23,7 +23,7 @@
 
     .brand-header {
       text-align: center;
-      margin-bottom: 1.75rem;
+      margin-bottom: 1.5rem;
     }
 
     .brand-logo {
@@ -118,10 +118,10 @@
 <body>
   <div class="portal-container">
     <div class="nav-steps">
-      <a href="register.html" class="step-pill" style="text-decoration: none;">1. Registrasi</a>
-      <a href="status-akun.html" class="step-pill" style="text-decoration: none;">2. Status Aktivasi</a>
+      <a href="register.html" class="step-pill" style="text-decoration: none;">1. Registrasi Akun</a>
+      <a href="status-akun.html" class="step-pill" style="text-decoration: none;">2. Status &amp; Email Aktivasi</a>
       <span class="step-pill active">3. Login Pendaftar</span>
-      <a href="formulir.html" class="step-pill" style="text-decoration: none;">4. Formulir & Bukti</a>
+      <a href="formulir.html" class="step-pill" style="text-decoration: none;">4. Formulir &amp; Bukti</a>
       <a href="dashboard.html" class="step-pill" style="text-decoration: none;">5. Dashboard Siswa</a>
       <a href="pengumuman.html" class="step-pill" style="text-decoration: none;">6. Cek Kelulusan</a>
     </div>
@@ -130,14 +130,20 @@
       <div class="brand-header">
         <div class="brand-logo">M3</div>
         <h2 style="font-size: 1.4rem; font-weight: 700; color: #0f172a;">Login Pendaftar SPMB</h2>
-        <p style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">Masuk dengan NISN / Email & Password Anda</p>
+        <p style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">Masuk menggunakan NISN / Email yang telah diaktivasi otomatis</p>
+      </div>
+
+      <!-- Banner Info Akun Baru Didaftarkan -->
+      <div id="recent-account-banner" style="display: none; background: #f0fdf4; border: 1px solid #86efac; border-left: 4px solid #006837; border-radius: 10px; padding: 10px 14px; margin-bottom: 1.15rem; font-size: 0.8rem; color: #14532d;">
+        <div style="font-weight: 800; margin-bottom: 2px;">📩 Melanjutkan dari Notifikasi Email Aktivasi:</div>
+        <div id="recent-account-text"></div>
       </div>
 
       <div id="alert-msg" class="alert-box"></div>
 
       <form id="form-login">
         <div class="form-group">
-          <label for="identity">NISN atau Email</label>
+          <label for="identity">NISN atau Email Terdaftar</label>
           <input type="text" id="identity" class="form-control" placeholder="10 digit NISN atau Email" required>
         </div>
 
@@ -151,8 +157,8 @@
         </div>
 
         <button type="submit" class="btn btn-primary"
-          style="width: 100%; margin-top: 1rem; padding: 12px; font-size: 1rem;">
-          Masuk / Login
+          style="width: 100%; margin-top: 1rem; padding: 12px; font-size: 1rem; font-weight: 700;">
+          🔑 Masuk / Login ke Portal
         </button>
 
         <p style="text-align: center; margin-top: 1.25rem; font-size: 0.85rem; color: #64748b;">
@@ -167,7 +173,7 @@
   <div id="modal-reset" class="modal-overlay">
     <div class="modal-card">
       <h3 style="font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">Reset Password Akun</h3>
-      <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">Verifikasi NISN & Email terdaftar untuk
+      <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">Verifikasi NISN &amp; Email terdaftar untuk
         menyetel password baru.</p>
 
       <div id="reset-alert" class="alert-box"></div>
@@ -198,15 +204,30 @@
   </div>
 
   <script type="module">
-    import { getPendaftarList, savePendaftar, hashPassword, isValidPassword } from './utils.js';
+    import { getPendaftarList, savePendaftar, hashPassword, isValidPassword, escapeHTML } from './utils.js';
 
     const formLogin = document.getElementById('form-login');
+    const identityInput = document.getElementById('identity');
     const alertMsg = document.getElementById('alert-msg');
     const modalReset = document.getElementById('modal-reset');
     const btnForgotPass = document.getElementById('btn-forgot-pass');
     const btnCancelReset = document.getElementById('btn-cancel-reset');
     const formReset = document.getElementById('form-reset');
     const resetAlert = document.getElementById('reset-alert');
+
+    // Auto-prefill jika baru selesai registrasi dan menerima notifikasi email
+    try {
+      const recent = JSON.parse(localStorage.getItem('m3_spmb_current_user'));
+      if (recent && (recent.nisn || recent.email)) {
+        identityInput.value = recent.nisn || recent.email;
+        const banner = document.getElementById('recent-account-banner');
+        const bannerText = document.getElementById('recent-account-text');
+        if (banner && bannerText) {
+          banner.style.display = 'block';
+          bannerText.innerHTML = `Akun <strong>${escapeHTML(recent.nama_lengkap || recent.nama)}</strong> (NISN: <code>${escapeHTML(recent.nisn)}</code> / Email: <code>${escapeHTML(recent.email)}</code>) telah aktif otomatis. Silakan masukkan password yang Anda buat saat registrasi.`;
+        }
+      }
+    } catch (e) {}
 
     function showAlert(msg, type = 'danger') {
       alertMsg.className = `alert-box alert-${type}`;
@@ -216,42 +237,44 @@
 
     formLogin.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const identity = document.getElementById('identity').value.trim();
+      const identity = identityInput.value.trim();
+      const lowerIdentity = identity.toLowerCase();
       const password = document.getElementById('password').value;
 
       const pendaftarList = getPendaftarList();
-      const user = pendaftarList.find(p => p.nisn === identity || p.email === identity || p.no_wa === identity);
+      const user = pendaftarList.find(p => (
+        p.nisn === identity ||
+        (p.email && p.email.toLowerCase() === lowerIdentity) ||
+        p.no_wa === identity
+      ));
 
       if (!user) {
         showAlert('<strong>Login Gagal:</strong> Akun dengan NISN/Email tersebut tidak ditemukan.');
         return;
       }
 
-      // Verifikasi Hashed Password
+      if (user.is_bot_suspect || user.security_flag === 'BOT_SUSPECT') {
+        showAlert('<strong>Akses Ditolak:</strong> Akun ini ditangguhkan karena teridentifikasi aktivitas bot/spam oleh sistem keamanan.', 'danger');
+        return;
+      }
+
       const inputHash = await hashPassword(password);
       if (user.password_hash && user.password_hash !== inputHash && user.password !== password) {
         showAlert('<strong>Login Gagal:</strong> Password yang Anda masukkan salah!');
         return;
       }
 
-      // Check status activation
-      const isActive = (user.status_akun === 'active' || user.status_akun === 'AKTIF');
-      if (!isActive) {
-        localStorage.setItem('m3_spmb_current_user', JSON.stringify(user));
-        showAlert(`<strong>Akun Belum Aktif!</strong><br>Akun Anda (${user.nama_lengkap || user.nama}) masih berstatus <code>pending_activation</code>.<br><br><a href="status-akun.html" style="color: #b45309; font-weight: 700;">Cek Status Aktivasi &rarr;</a>`, 'warning');
-        return;
-      }
-
-      // Store authenticated session
+      // Pastikan akun non-bot berstatus aktif otomatis
+      user.status_akun = 'active';
       localStorage.setItem('m3_spmb_logged_in_user', JSON.stringify(user));
+      localStorage.setItem('m3_spmb_current_user', JSON.stringify(user));
       showAlert('<strong>Login Berhasil!</strong> Mengalihkan ke Dashboard Calon Siswa...', 'success');
 
       setTimeout(() => {
         window.location.href = 'dashboard.html';
-      }, 1000);
+      }, 900);
     });
 
-    // Reset Password Modal Trigger
     btnForgotPass.addEventListener('click', (e) => {
       e.preventDefault();
       modalReset.style.display = 'flex';
@@ -265,7 +288,7 @@
     formReset.addEventListener('submit', async (e) => {
       e.preventDefault();
       const nisn = document.getElementById('reset-nisn').value.trim();
-      const email = document.getElementById('reset-email').value.trim();
+      const email = document.getElementById('reset-email').value.trim().toLowerCase();
       const newPass = document.getElementById('reset-new-pass').value;
 
       if (!isValidPassword(newPass)) {
@@ -276,7 +299,7 @@
       }
 
       const pendaftarList = getPendaftarList();
-      const user = pendaftarList.find(p => p.nisn === nisn && p.email === email);
+      const user = pendaftarList.find(p => p.nisn === nisn && p.email && p.email.toLowerCase() === email);
 
       if (!user) {
         resetAlert.className = 'alert-box alert-danger';
@@ -285,11 +308,9 @@
         return;
       }
 
-      // Update Hashed Password
       const newHash = await hashPassword(newPass);
       user.password_hash = newHash;
-      delete user.password; // Remove plaintext password if present
-
+      delete user.password;
       savePendaftar(user);
 
       resetAlert.className = 'alert-box alert-success';
@@ -298,8 +319,8 @@
 
       setTimeout(() => {
         modalReset.style.display = 'none';
-        document.getElementById('identity').value = nisn;
-      }, 1500);
+        identityInput.value = nisn;
+      }, 1200);
     });
   </script>
 </body>

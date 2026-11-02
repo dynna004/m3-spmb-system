@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Status Akun - Portal SPMB SMA Muhammadiyah 3 Yogyakarta</title>
+  <title>Status & Notifikasi Email Aktivasi - Portal SPMB SMA Muhammadiyah 3 Yogyakarta</title>
   <link rel="stylesheet" href="../../shared/styles.css">
   <style>
     .portal-container {
-      max-width: 560px;
-      margin: 2.5rem auto;
+      max-width: 640px;
+      margin: 2rem auto;
       padding: 0 1rem;
     }
 
@@ -23,7 +23,7 @@
 
     .brand-header {
       text-align: center;
-      margin-bottom: 1.75rem;
+      margin-bottom: 1.5rem;
     }
 
     .brand-logo {
@@ -67,11 +67,17 @@
       display: inline-block;
       padding: 6px 16px;
       border-radius: 30px;
-      font-weight: 700;
-      font-size: 0.85rem;
+      font-weight: 800;
+      font-size: 0.82rem;
       letter-spacing: 0.5px;
       text-transform: uppercase;
       margin-bottom: 1rem;
+    }
+
+    .status-active {
+      background-color: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
     }
 
     .status-pending {
@@ -80,30 +86,24 @@
       border: 1px solid #fde68a;
     }
 
-    .status-active {
-      background-color: #dcfce7;
-      color: #15803d;
-      border: 1px solid #bbf7d0;
-    }
-
     .notice-card {
       border-radius: 12px;
-      padding: 1.25rem;
-      margin-top: 1rem;
-      font-size: 0.92rem;
+      padding: 1.15rem 1.25rem;
+      margin-top: 0.5rem;
+      font-size: 0.88rem;
       line-height: 1.6;
+    }
+
+    .notice-active {
+      background-color: #f0fdf4;
+      border-left: 4px solid #006837;
+      color: #14532d;
     }
 
     .notice-pending {
       background-color: #fffbeb;
       border-left: 4px solid #f59e0b;
       color: #92400e;
-    }
-
-    .notice-active {
-      background-color: #f0fdf4;
-      border-left: 4px solid #22c55e;
-      color: #14532d;
     }
 
     .detail-grid {
@@ -114,13 +114,81 @@
       padding: 1rem;
       border-radius: 10px;
       margin: 1.25rem 0;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
+      border: 1px solid #e2e8f0;
     }
 
     .detail-item strong {
       display: block;
       color: #64748b;
       font-size: 0.72rem;
+      margin-bottom: 2px;
+    }
+
+    /* Kotak Masuk Notifikasi Email Aktivasi (Gaya Modul Wawancara) */
+    .email-inbox-card {
+      border: 1.5px solid #86efac;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #ffffff;
+      margin: 1.25rem 0;
+      box-shadow: 0 4px 14px rgba(0, 104, 55, 0.06);
+    }
+
+    .email-inbox-header {
+      background: linear-gradient(135deg, #064e3b 0%, #006837 100%);
+      color: #ffffff;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .email-inbox-meta {
+      background: #f8fafc;
+      padding: 12px 16px;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 0.8rem;
+      color: #334155;
+      line-height: 1.5;
+    }
+
+    .email-inbox-body {
+      padding: 14px 16px;
+      font-size: 0.84rem;
+      color: #1e293b;
+      line-height: 1.55;
+    }
+
+    /* Modal Pratinjau Email Lengkap */
+    .preview-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .preview-modal-backdrop.open {
+      display: flex;
+    }
+
+    .preview-modal-dialog {
+      background: #ffffff;
+      border-radius: 16px;
+      max-width: 680px;
+      width: 100%;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
     }
   </style>
 </head>
@@ -128,99 +196,114 @@
 <body>
   <div class="portal-container">
     <div class="nav-steps">
-      <a href="register.html" class="step-pill" style="text-decoration: none;">1. Registrasi</a>
-      <span class="step-pill active">2. Status Aktivasi</span>
+      <a href="register.html" class="step-pill" style="text-decoration: none;">1. Registrasi Akun</a>
+      <span class="step-pill active">2. Status &amp; Email Aktivasi</span>
       <a href="login.html" class="step-pill" style="text-decoration: none;">3. Login Pendaftar</a>
-      <a href="formulir.html" class="step-pill" style="text-decoration: none;">4. Formulir & Bukti</a>
+      <a href="formulir.html" class="step-pill" style="text-decoration: none;">4. Formulir &amp; Bukti</a>
       <a href="dashboard.html" class="step-pill" style="text-decoration: none;">5. Dashboard Siswa</a>
       <a href="pengumuman.html" class="step-pill" style="text-decoration: none;">6. Cek Kelulusan</a>
     </div>
 
     <div class="portal-card">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-        <span style="font-size: 0.8rem; color: #64748b;">SMA Muhammadiyah 3 Yogyakarta</span>
-        <button id="btn-logout" class="btn btn-secondary" style="font-size: 0.75rem; padding: 4px 12px;">Logout
-          Session</button>
+        <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;">SMA Muhammadiyah 3 Yogyakarta</span>
+        <button id="btn-logout" class="btn btn-secondary" style="font-size: 0.75rem; padding: 4px 12px;">Logout Session</button>
       </div>
 
       <div class="brand-header">
         <div class="brand-logo">M3</div>
-        <h2 style="font-size: 1.4rem; font-weight: 700; color: #0f172a;">Status & Notifikasi Akun</h2>
+        <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a;">Status Aktivasi Otomatis &amp; Email Login</h2>
+        <p style="font-size: 0.82rem; color: #64748b; margin-top: 4px;">
+          Akun dengan NISN &amp; Email unik langsung aktif otomatis tanpa menunggu verifikasi manual Admin
+        </p>
       </div>
 
       <div style="text-align: center;">
-        <span id="badge-status" class="status-badge status-pending">pending_activation</span>
+        <span id="badge-status" class="status-badge status-active">✓ OTOMATIS AKTIF (NISN &amp; EMAIL UNIK)</span>
       </div>
 
-      <div id="notice-container" class="notice-card notice-pending">
-        <strong>Pemberitahuan Aktivasi:</strong><br>
-        Akun Anda berhasil dibuat dan sedang menunggu aktivasi dari Admin SPMB.
+      <div id="notice-container" class="notice-card notice-active">
+        <strong>Akun Terverifikasi &amp; Otomatis Aktif!</strong><br>
+        NISN dan Email Anda tervalidasi unik. Sistem telah mengirimkan <strong>Email Notifikasi Aktivasi &amp; Kredensial Login</strong> ke alamat email Anda.
       </div>
 
+      <!-- Ringkasan Data Registrasi Pendaftar -->
       <div class="detail-grid">
         <div class="detail-item">
-          <strong>ID Pendaftar</strong>
-          <span id="display-reg-id">-</span>
+          <strong>Nomor Pendaftaran</strong>
+          <span id="display-reg-id" style="font-family: monospace; font-weight: 800; color: #006837;">-</span>
         </div>
         <div class="detail-item">
-          <strong>Nama Pendaftar</strong>
-          <span id="display-nama">-</span>
+          <strong>Nama Lengkap</strong>
+          <span id="display-nama" style="font-weight: 700; color: #0f172a;">-</span>
         </div>
         <div class="detail-item">
-          <strong>NISN</strong>
-          <span id="display-nisn">-</span>
+          <strong>NISN (Username Login 1)</strong>
+          <span id="display-nisn" style="font-family: monospace; font-weight: 700; color: #0369a1;">-</span>
         </div>
         <div class="detail-item">
-          <strong>Waktu Pendaftaran</strong>
+          <strong>Email (Username Login 2)</strong>
+          <span id="display-email" style="font-weight: 600; color: #0f172a;">-</span>
+        </div>
+        <div class="detail-item">
+          <strong>No. WhatsApp</strong>
+          <span id="display-wa">-</span>
+        </div>
+        <div class="detail-item">
+          <strong>Waktu Aktivasi Otomatis</strong>
           <span id="display-created-at">-</span>
         </div>
       </div>
 
-      <!-- Tiket Jadwal Wawancara (Jika sudah memilih jadwal di Formulir) -->
-      <div id="jadwal-ticket-container"
-        style="display: none; margin-top: 1.25rem; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 14px; text-align: left;">
-        <div
-          style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
-          <strong style="color: #166534; font-size: 0.92rem; display: flex; align-items: center; gap: 6px;">
-            <span>🗓️</span> Tiket Sesi Wawancara Pendaftar
-          </strong>
-          <div style="display: flex; gap: 6px;">
-            <span id="badge-jadwal-metode"
-              style="font-size: 0.72rem; padding: 3px 10px; border-radius: 20px; font-weight: 700; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0;">🏢
-              Luring</span>
-            <span id="badge-jadwal-tipe"
-              style="font-size: 0.72rem; padding: 3px 10px; border-radius: 20px; font-weight: 700; background: #bbf7d0; color: #166534;">Weekday</span>
+      <!-- CONTOH TAMPILAN NOTIFIKASI EMAIL AKTIVASI UNTUK LOGIN -->
+      <div class="email-inbox-card" id="email-notification-card">
+        <div class="email-inbox-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.2rem;">📩</span>
+            <div>
+              <div style="font-size: 0.88rem; font-weight: 800;">Contoh Tampilan Notifikasi Email Aktivasi Akun</div>
+              <div style="font-size: 0.72rem; opacity: 0.9;">Dikirim otomatis setelah validasi NISN &amp; Email tidak duplikat</div>
+            </div>
           </div>
+          <span id="email-sent-badge" style="background: #dcfce7; color: #166534; font-size: 0.7rem; font-weight: 800; padding: 3px 10px; border-radius: 999px;">
+            ✓ Email Terkirim
+          </span>
         </div>
-        <div style="font-size: 0.84rem; color: #1e293b; line-height: 1.6;">
-          <div><strong>Metode Pelaksanaan:</strong> <span id="display-jadwal-metode"
-              style="font-weight: 700; color: #006837;">Luring (Tatap Muka)</span></div>
-          <div><strong>Hari & Tanggal:</strong> <span id="display-jadwal-hari-tgl">-</span></div>
-          <div><strong>Jam Sesi:</strong> <span id="display-jadwal-jam"
-              style="font-weight: 700; color: #006837;">-</span></div>
-          <div><strong id="label-jadwal-ruang">Ruangan:</strong> <span id="display-jadwal-ruang">Ruang Wawancara 1
-              (Gedung Utama M3)</span></div>
-          <div id="display-jadwal-instruksi" style="margin-top: 6px; font-size: 0.78rem; color: #64748b;">
-            💡 Harap hadir 10 menit sebelum jam sesi wawancara dimulai dengan membawa berkas pendukung.
+
+        <div class="email-inbox-meta">
+          <div><strong>Dari:</strong> Panitia SPMB Muhi &lt;no-reply@spmb.muhi.sch.id&gt;</div>
+          <div><strong>Kepada:</strong> <span id="email-meta-recipient">-</span></div>
+          <div><strong>Subjek:</strong> <span id="email-meta-subject" style="font-weight: 700; color: #0f172a;">-</span></div>
+        </div>
+
+        <div class="email-inbox-body">
+          <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; font-size: 0.81rem;">
+            Halo <strong id="email-body-name">-</strong>, akun pendaftaran Anda telah <strong>teraktivasi otomatis</strong>. Silakan gunakan <strong>NISN (<code id="email-body-nisn">-</code>)</strong> atau <strong>Email (<code id="email-body-email">-</code>)</strong> beserta password yang Anda daftarkan untuk <strong>Login</strong> dan mengisi Formulir Biodata.
+          </div>
+
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" id="btn-open-full-email" class="btn btn-secondary" style="flex: 1; font-size: 0.8rem; font-weight: 700; padding: 9px 12px; background: #f8fafc; border: 1px solid #cbd5e1; color: #0f172a; cursor: pointer;">
+              👁️ Lihat Tampilan Email Resmi &amp; WA Lengkap
+            </button>
+            <button type="button" id="btn-login-page" class="btn btn-primary" style="flex: 1; font-size: 0.84rem; font-weight: 800; padding: 9px 14px; background: #006837; cursor: pointer;">
+              🔑 Lanjut ke Halaman Login &rarr;
+            </button>
           </div>
         </div>
       </div>
 
-      <div id="action-area" style="margin-top: 1.5rem;">
-        <button id="btn-login-page" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 1rem;"
-          disabled>
-          🔑 Ke Halaman Login Pendaftar &rarr;
-        </button>
-      </div>
-
-      <!-- Quick Demo Simulation Toggle -->
-      <div
-        style="margin-top: 1.75rem; padding: 14px; background: #f8fafc; border-radius: 12px; border: 1.5px dashed #cbd5e1; text-align: center; font-size: 0.8rem; color: #475569;">
-        <strong style="color: #0f172a; font-size: 0.85rem;">💡 Testing Handover Admin SPMB:</strong><br>
-        <span style="display: block; margin: 4px 0 8px 0; color: #64748b;">Simulasi perubahan status_akun oleh Modul 02:</span>
-        <button id="btn-toggle-status" type="button" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s;">
-          ⚡ Toggle status_akun (pending_activation / active)
-        </button>
+      <!-- Kotak Lapor Kesalahan Ketik (Typo) ke Admin -->
+      <div style="margin-top: 1.25rem; padding: 12px 14px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; font-size: 0.8rem; color: #92400e;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <strong>📝 Ada Kesalahan Ketik (Typo) pada Nama, Email, NISN, atau No. WA?</strong><br>
+            <span style="color: #78350f;">Laporkan ke Admin SPMB agar data akun Anda dapat diedit/diperbaiki di halaman Admin.</span>
+          </div>
+          <button type="button" id="btn-report-typo" style="background: #d97706; color: #ffffff; border: none; border-radius: 6px; padding: 6px 12px; font-size: 0.76rem; font-weight: 700; cursor: pointer;">
+            🚩 Laporkan Typo ke Admin
+          </button>
+        </div>
+        <div id="typo-report-feedback" style="display: none; margin-top: 8px; padding: 8px 10px; background: #ffffff; border: 1px solid #fcd34d; border-radius: 6px; color: #166534; font-weight: 600;"></div>
       </div>
 
       <p style="text-align: center; margin-top: 1.25rem; font-size: 0.85rem;">
@@ -229,46 +312,63 @@
     </div>
   </div>
 
-  <script>
-    // Storage Helper: get pendaftar list
-    function getPendaftarList() {
-      try {
-        const raw = localStorage.getItem('spmb_pendaftar_db');
-        if (raw) return JSON.parse(raw);
-      } catch (e) {}
-      return [
-        {
-          id_pendaftar: "REG-2026-001",
-          nama_lengkap: "Ahmad Dahlan",
-          email: "ahmad@email.com",
-          no_wa: "081234567891",
-          nisn: "0051234567",
-          status_akun: "pending_activation",
-          created_at: "2026-10-05T08:00:00Z"
-        }
-      ];
-    }
+  <!-- MODAL PRATINJAU SURAT EMAIL RESMI & WHATSAPP -->
+  <div class="preview-modal-backdrop" id="modal-full-email">
+    <div class="preview-modal-dialog">
+      <div style="background: linear-gradient(135deg, #064e3b 0%, #006837 100%); color: #ffffff; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <div style="font-size: 0.98rem; font-weight: 800;">📩 Pratinjau Notifikasi Email Aktivasi &amp; Login</div>
+          <div style="font-size: 0.75rem; opacity: 0.9;">Format Email HTML Resmi &amp; Pesan WhatsApp Otomatis</div>
+        </div>
+        <button type="button" id="btn-close-full-email" style="background: rgba(255,255,255,0.2); border: none; color: #ffffff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: 800;">✕</button>
+      </div>
 
-    // Storage Helper: dispatch event
-    function dispatchSPMBEvent(eventName, detailData) {
-      try {
-        const event = new CustomEvent(eventName || 'spmb_db_updated', { detail: detailData });
-        window.dispatchEvent(event);
-        document.dispatchEvent(event);
-        window.dispatchEvent(new Event('db_updated'));
-      } catch (e) {}
-    }
+      <!-- Tab Switcher Email / WA -->
+      <div style="display: flex; gap: 6px; background: #e2e8f0; padding: 6px 16px;">
+        <button type="button" id="tab-btn-email" style="flex: 1; padding: 7px; border-radius: 6px; border: none; background: #ffffff; color: #006837; font-weight: 800; font-size: 0.8rem; cursor: pointer;">
+          ✉️ Email Resmi Aktivasi (HTML)
+        </button>
+        <button type="button" id="tab-btn-wa" style="flex: 1; padding: 7px; border-radius: 6px; border: none; background: transparent; color: #475569; font-weight: 700; font-size: 0.8rem; cursor: pointer;">
+          💬 Pesan WhatsApp Pendamping
+        </button>
+      </div>
 
-    // Storage Helper: logout
-    function logoutUser() {
-      localStorage.removeItem('m3_spmb_logged_in_user');
-      localStorage.removeItem('m3_spmb_current_user');
-    }
+      <div style="padding: 16px; overflow-y: auto; background: #f1f5f9; flex: 1;">
+        <div id="pane-email-html"></div>
+        <div id="pane-wa-text" style="display: none; background: #dcf8c6; padding: 16px; border-radius: 12px; font-family: sans-serif; font-size: 0.85rem; line-height: 1.55; white-space: pre-wrap; color: #111827; border: 1px solid #86efac;"></div>
+      </div>
 
-    // Render Status Akun
+      <div style="padding: 12px 20px; background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+        <button type="button" id="btn-close-full-email-foot" class="btn btn-secondary" style="font-size: 0.82rem; padding: 8px 14px;">Tutup</button>
+        <a href="login.html" class="btn btn-primary" style="text-decoration: none; font-size: 0.85rem; padding: 9px 18px; background: #006837; font-weight: 800;">
+          🔑 Login dengan Akun Ini Sekarang &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import {
+      getPendaftarList,
+      savePendaftar,
+      logoutUser,
+      recordRegistrationAnomaly
+    } from './utils.js';
+    import {
+      formatRegNumber,
+      formatWaktuIndonesia,
+      generateActivationEmailMessage,
+      generateActivationWhatsAppMessage
+    } from '../02_admin_spmb/activationEmailService.js';
+
+    let activeStudentRecord = null;
+
     function renderStatus() {
-      let user = JSON.parse(localStorage.getItem('m3_spmb_logged_in_user')) || 
-                 JSON.parse(localStorage.getItem('m3_spmb_current_user'));
+      let user = null;
+      try {
+        user = JSON.parse(localStorage.getItem('m3_spmb_logged_in_user')) ||
+               JSON.parse(localStorage.getItem('m3_spmb_current_user'));
+      } catch (e) {}
 
       const list = getPendaftarList();
       let currentInDb = null;
@@ -283,258 +383,130 @@
         currentInDb = user || (list.length > 0 ? list[0] : {
           id_pendaftar: 'REG-2026-001',
           nama_lengkap: 'Ahmad Dahlan',
+          email: 'ahmad.dahlan@gmail.com',
+          no_wa: '081234567891',
           nisn: '0051234567',
-          status_akun: 'pending_activation',
+          status_akun: 'active',
           created_at: new Date().toISOString()
         });
         localStorage.setItem('m3_spmb_current_user', JSON.stringify(currentInDb));
       }
 
-      const badge = document.getElementById('badge-status');
-      const notice = document.getElementById('notice-container');
-      const btnLoginPage = document.getElementById('btn-login-page');
+      activeStudentRecord = currentInDb;
 
-      document.getElementById('display-reg-id').textContent = currentInDb.id_pendaftar || currentInDb.id || 'REG-2026-001';
-      document.getElementById('display-nama').textContent = currentInDb.nama_lengkap || currentInDb.nama || '-';
-      document.getElementById('display-nisn').textContent = currentInDb.nisn || '-';
+      const regNo = formatRegNumber(currentInDb.id_pendaftar || currentInDb.id || 'REG-2026-001');
+      const nama = currentInDb.nama_lengkap || currentInDb.nama || '-';
+      const nisn = currentInDb.nisn || '-';
+      const email = currentInDb.email || '-';
+      const noWa = currentInDb.no_wa || '-';
 
-      const createdDate = currentInDb.created_at ? new Date(currentInDb.created_at).toLocaleString('id-ID') : '-';
-      document.getElementById('display-created-at').textContent = createdDate;
-
-      // Ambil status mutakhir
-      const isAccountActive = (
-        currentInDb.status_akun === 'active' || 
-        currentInDb.status_akun === 'AKTIF' ||
-        (user && (user.status_akun === 'active' || user.status_akun === 'AKTIF'))
+      document.getElementById('display-reg-id').textContent = regNo;
+      document.getElementById('display-nama').textContent = nama;
+      document.getElementById('display-nisn').textContent = nisn;
+      document.getElementById('display-email').textContent = email;
+      document.getElementById('display-wa').textContent = noWa;
+      document.getElementById('display-created-at').textContent = formatWaktuIndonesia(
+        currentInDb.activated_at || currentInDb.created_at
       );
-      const isLoggedIn = !!localStorage.getItem('m3_spmb_logged_in_user');
-      const hasFilledForm = !!(currentInDb.jadwal_wawancara && currentInDb.jadwal_wawancara.tanggal);
 
-      if (isAccountActive) {
-        badge.className = 'status-badge status-active';
-        badge.textContent = 'ACTIVE';
+      // Populate Email Preview Card
+      const emailMsg = generateActivationEmailMessage(currentInDb, 'login.html');
+      const waMsg = generateActivationWhatsAppMessage(currentInDb);
 
-        notice.className = 'notice-card notice-active';
-        if (hasFilledForm) {
-          notice.innerHTML = '<strong>Akun Terverifikasi & Jadwal Terbit!</strong><br>Data pendaftaran dan jadwal sesi wawancara Anda telah tersimpan di sistem. Silakan simpan detail tiket wawancara Anda di bawah atau cek pengumuman kelulusan.';
-        } else if (isLoggedIn) {
-          notice.innerHTML = '<strong>Akun Terverifikasi & Aktif!</strong><br>Status Anda saat ini sedang <strong>Login</strong>. Silakan lanjutkan pengisian Formulir Pendaftaran & unggah berkas digital.';
-        } else {
-          notice.innerHTML = '<strong>Akun Terverifikasi & Aktif!</strong><br>Selamat! Akun Anda telah diaktivasi oleh Admin SPMB. Silakan <strong>Login</strong> terlebih dahulu untuk mengisi Formulir Pendaftaran lengkap.';
-        }
+      document.getElementById('email-meta-recipient').textContent = `${nama} <${email}>`;
+      document.getElementById('email-meta-subject').textContent = emailMsg.subject;
+      document.getElementById('email-body-name').textContent = nama;
+      document.getElementById('email-body-nisn').textContent = nisn;
+      document.getElementById('email-body-email').textContent = email;
 
-        btnLoginPage.disabled = false;
-        if (hasFilledForm) {
-          btnLoginPage.innerHTML = '📊 Buka Dashboard Calon Siswa &rarr;';
-          btnLoginPage.onclick = () => { window.location.href = 'dashboard.html'; };
-        } else if (isLoggedIn) {
-          btnLoginPage.innerHTML = '📊 Buka Dashboard Calon Siswa &rarr;';
-          btnLoginPage.onclick = () => { window.location.href = 'dashboard.html'; };
-        } else {
-          btnLoginPage.innerHTML = '🔑 Ke Halaman Login Pendaftar &rarr;';
-          btnLoginPage.onclick = () => { window.location.href = 'login.html'; };
-        }
-      } else {
-        badge.className = 'status-badge status-pending';
-        badge.textContent = 'PENDING ACTIVATION';
+      document.getElementById('pane-email-html').innerHTML = emailMsg.html;
+      document.getElementById('pane-wa-text').textContent = waMsg;
 
-        notice.className = 'notice-card notice-pending';
-        notice.innerHTML = '<strong>Akun Anda berhasil dibuat dan sedang menunggu aktivasi dari Admin SPMB.</strong><br>Silakan secara berkala memeriksa halaman ini atau menghubungi Panitia SPMB SMA Muhammadiyah 3 Yogyakarta.';
-
-        btnLoginPage.disabled = true;
-        btnLoginPage.innerHTML = '🔑 Ke Halaman Login Pendaftar &rarr;';
-        btnLoginPage.onclick = null;
-      }
-
-      // Update teks & warna tombol toggle simulasi
-      const toggleBtn = document.getElementById('btn-toggle-status');
-      if (toggleBtn) {
-        toggleBtn.innerHTML = isAccountActive 
-          ? '⚡ Nonaktifkan Akun (Jadikan PENDING)' 
-          : '⚡ Aktifkan Akun (Jadikan ACTIVE)';
-        toggleBtn.style.background = isAccountActive ? '#fef3c7' : '#dcfce7';
-        toggleBtn.style.color = isAccountActive ? '#92400e' : '#15803d';
-        toggleBtn.style.border = isAccountActive ? '1.5px solid #fde68a' : '1.5px solid #86efac';
-      }
-
-      // Render Tiket Jadwal Wawancara jika sudah ada
-      const ticketBox = document.getElementById('jadwal-ticket-container');
-      if (currentInDb.jadwal_wawancara && currentInDb.jadwal_wawancara.tanggal) {
-        const jw = currentInDb.jadwal_wawancara;
-        if (ticketBox) ticketBox.style.display = 'block';
-        document.getElementById('display-jadwal-hari-tgl').textContent = `${jw.hari || ''}, ${jw.tanggal}`;
-        document.getElementById('display-jadwal-jam').textContent = jw.sesi || `${jw.jam || ''} WIB`;
-
-        const isDaring = (jw.metode || '').toUpperCase() === 'DARING';
-        const badgeMetode = document.getElementById('badge-jadwal-metode');
-        const displayMetode = document.getElementById('display-jadwal-metode');
-        const displayRuang = document.getElementById('display-jadwal-ruang');
-        const labelRuang = document.getElementById('label-jadwal-ruang');
-        const instruksi = document.getElementById('display-jadwal-instruksi');
-
-        if (badgeMetode) {
-          badgeMetode.textContent = isDaring ? '🌐 Daring' : '🏢 Luring';
-          badgeMetode.style.background = isDaring ? '#e0f2fe' : '#ecfdf5';
-          badgeMetode.style.color = isDaring ? '#0369a1' : '#065f46';
-          badgeMetode.style.borderColor = isDaring ? '#7dd3fc' : '#a7f3d0';
-        }
-
-        if (displayMetode) {
-          displayMetode.textContent = isDaring ? '🌐 Daring (Virtual Meet / Online)' : '🏢 Luring (Tatap Muka di Sekolah)';
-          displayMetode.style.color = isDaring ? '#0284c7' : '#006837';
-        }
-
-        if (displayRuang) {
-          displayRuang.textContent = jw.ruang || (isDaring ? 'Google Meet / Zoom (Daring Online)' : 'Ruang Wawancara 1 (Gedung Utama M3)');
-        }
-        if (labelRuang) {
-          labelRuang.textContent = isDaring ? 'Platform / Link:' : 'Ruangan:';
-        }
-
-        if (instruksi) {
-          if (isDaring) {
-            instruksi.innerHTML = '💡 <strong>Sesi Virtual:</strong> Tautan video conference akan dibuka 15 menit sebelum wawancara. Pastikan mikrofon dan kamera berfungsi dengan baik.';
-            instruksi.style.color = '#0369a1';
-          } else {
-            instruksi.innerHTML = '💡 <strong>Sesi Tatap Muka:</strong> Harap hadir di kampus 10 menit sebelum jam sesi dengan membawa berkas pendukung asli.';
-            instruksi.style.color = '#475569';
-          }
-        }
-
-        const badgeTipe = document.getElementById('badge-jadwal-tipe');
-        if (badgeTipe) {
-          const isWeekend = (jw.tipe_hari === 'Weekend' || jw.hari === 'Sabtu' || jw.hari === 'Minggu');
-          badgeTipe.textContent = isWeekend ? 'Weekend (09.00-15.00)' : 'Weekday (08.00-15.00)';
-          badgeTipe.style.background = isWeekend ? '#fef3c7' : '#bbf7d0';
-          badgeTipe.style.color = isWeekend ? '#92400e' : '#166534';
-        }
-      } else {
-        if (ticketBox) ticketBox.style.display = 'none';
+      const btnLoginPage = document.getElementById('btn-login-page');
+      if (btnLoginPage) {
+        btnLoginPage.innerHTML = '🔑 Lanjut ke Halaman Login &rarr;';
+        btnLoginPage.onclick = () => { window.location.href = 'login.html'; };
       }
     }
 
-    // Global Toggle Handler
-    let isToggling = false;
-    window.toggleStatusAkun = function() {
-      if (isToggling) return;
-      isToggling = true;
-      setTimeout(() => { isToggling = false; }, 250);
+    // Modal Full Email Handlers
+    const modalFullEmail = document.getElementById('modal-full-email');
+    document.getElementById('btn-open-full-email')?.addEventListener('click', () => {
+      modalFullEmail.classList.add('open');
+    });
+    document.getElementById('btn-close-full-email')?.addEventListener('click', () => {
+      modalFullEmail.classList.remove('open');
+    });
+    document.getElementById('btn-close-full-email-foot')?.addEventListener('click', () => {
+      modalFullEmail.classList.remove('open');
+    });
+    modalFullEmail?.addEventListener('click', (e) => {
+      if (e.target === modalFullEmail) modalFullEmail.classList.remove('open');
+    });
 
-      let user = JSON.parse(localStorage.getItem('m3_spmb_logged_in_user')) || 
-                 JSON.parse(localStorage.getItem('m3_spmb_current_user'));
+    // Tab Switcher inside Modal
+    const tabEmailBtn = document.getElementById('tab-btn-email');
+    const tabWaBtn = document.getElementById('tab-btn-wa');
+    const paneEmail = document.getElementById('pane-email-html');
+    const paneWa = document.getElementById('pane-wa-text');
 
-      const list = getPendaftarList();
-      let currentInDb = null;
-      if (user) {
-        currentInDb = list.find(p => (
-          (user.id_pendaftar && (p.id_pendaftar === user.id_pendaftar || p.id === user.id_pendaftar)) ||
-          (user.id && (p.id === user.id || p.id_pendaftar === user.id)) ||
-          (user.nisn && p.nisn === user.nisn)
-        ));
-      }
-      if (!currentInDb) {
-        currentInDb = list.length > 0 ? list[0] : (user || {
-          id_pendaftar: "REG-2026-001",
-          nama_lengkap: "Ahmad Dahlan",
-          nisn: "0051234567",
-          status_akun: "pending_activation"
-        });
-      }
+    tabEmailBtn?.addEventListener('click', () => {
+      tabEmailBtn.style.background = '#ffffff';
+      tabEmailBtn.style.color = '#006837';
+      tabWaBtn.style.background = 'transparent';
+      tabWaBtn.style.color = '#475569';
+      paneEmail.style.display = 'block';
+      paneWa.style.display = 'none';
+    });
 
-      const isCurrentlyActive = (currentInDb.status_akun === 'active' || currentInDb.status_akun === 'AKTIF');
-      const nextStatus = isCurrentlyActive ? 'pending_activation' : 'active';
-      const ssotStatus = (nextStatus === 'active') ? 'AKTIF' : 'MENUNGGU';
+    tabWaBtn?.addEventListener('click', () => {
+      tabWaBtn.style.background = '#ffffff';
+      tabWaBtn.style.color = '#006837';
+      tabEmailBtn.style.background = 'transparent';
+      tabEmailBtn.style.color = '#475569';
+      paneWa.style.display = 'block';
+      paneEmail.style.display = 'none';
+    });
 
-      const targetId = currentInDb.id_pendaftar || currentInDb.id || 'REG-2026-001';
-      const targetNisn = currentInDb.nisn || '';
+    // Lapor Typo ke Admin Handler
+    document.getElementById('btn-report-typo')?.addEventListener('click', () => {
+      if (!activeStudentRecord) return;
+      const reason = prompt(
+        `Masukkan bagian data yang salah ketik (typo) untuk dilaporkan ke Admin SPMB\n(Contoh: "Nama kurang huruf / Email salah ketik / No WA salah"):`,
+        `Mohon koreksi penulisan data akun saya (Nama/Email/NISN/No. WA)`
+      );
+      if (!reason) return;
 
-      // 1. Update spmb_pendaftar_db
-      let foundInList = false;
-      list.forEach(p => {
-        if ((targetId && (p.id_pendaftar === targetId || p.id === targetId)) ||
-            (targetNisn && p.nisn === targetNisn)) {
-          p.status_akun = nextStatus;
-          foundInList = true;
-        }
+      activeStudentRecord.is_typo_reported = true;
+      activeStudentRecord.is_duplicate_flag = true;
+      activeStudentRecord.security_flag = 'DUPLICATE_CONFLICT';
+      activeStudentRecord.security_note = `Laporan Typo dari Pendaftar: "${reason}"`;
+      savePendaftar(activeStudentRecord);
+
+      recordRegistrationAnomaly({
+        tipe: 'LAPORAN_TYPO_PENDAFTAR',
+        nama_pelapor: activeStudentRecord.nama_lengkap || activeStudentRecord.nama,
+        nisn_input: activeStudentRecord.nisn,
+        email_input: activeStudentRecord.email,
+        no_wa_input: activeStudentRecord.no_wa,
+        keterangan: reason
       });
-      if (!foundInList) {
-        currentInDb.status_akun = nextStatus;
-        list.push(currentInDb);
+
+      const fb = document.getElementById('typo-report-feedback');
+      if (fb) {
+        fb.style.display = 'block';
+        fb.textContent = '✅ Laporan perbaikan typo telah dikirim ke Dashboard Admin SPMB (Modul 02). Admin akan segera memperbarui Nama, Email, NISN, atau No. WhatsApp Anda.';
       }
-      localStorage.setItem('spmb_pendaftar_db', JSON.stringify(list));
-
-      // 2. Update SSoT m3_spmb_tu_db
-      try {
-        const tuDbRaw = localStorage.getItem('m3_spmb_tu_db');
-        const tuDb = tuDbRaw ? JSON.parse(tuDbRaw) : { pendaftar: [] };
-        if (!Array.isArray(tuDb.pendaftar)) tuDb.pendaftar = [];
-
-        let foundInTu = false;
-        tuDb.pendaftar.forEach(t => {
-          if ((targetId && (t.id === targetId || t.id_pendaftar === targetId)) ||
-              (targetNisn && t.nisn === targetNisn)) {
-            t.status_akun = ssotStatus;
-            foundInTu = true;
-          }
-        });
-        if (!foundInTu) {
-          tuDb.pendaftar.push({
-            id: targetId,
-            id_pendaftar: targetId,
-            nama: currentInDb.nama_lengkap || currentInDb.nama || 'Ahmad Dahlan',
-            nisn: targetNisn,
-            status_akun: ssotStatus
-          });
-        }
-        localStorage.setItem('m3_spmb_tu_db', JSON.stringify(tuDb));
-      } catch (e) {
-        console.warn('SSoT sync error in toggle:', e);
-      }
-
-      // 3. Update active session user
-      currentInDb.status_akun = nextStatus;
-      localStorage.setItem('m3_spmb_current_user', JSON.stringify(currentInDb));
-
-      const loggedIn = JSON.parse(localStorage.getItem('m3_spmb_logged_in_user'));
-      if (loggedIn) {
-        if ((targetId && (loggedIn.id_pendaftar === targetId || loggedIn.id === targetId)) ||
-            (targetNisn && loggedIn.nisn === targetNisn)) {
-          loggedIn.status_akun = nextStatus;
-          localStorage.setItem('m3_spmb_logged_in_user', JSON.stringify(loggedIn));
-        }
-      }
-
-      // 4. Dispatch event agar modul lain bereaksi
-      dispatchSPMBEvent('spmb_db_updated', currentInDb);
-
-      // 5. Render status tampilan seketika
-      renderStatus();
-    };
+    });
 
     // Logout Handler
-    const btnLogoutEl = document.getElementById('btn-logout');
-    if (btnLogoutEl) {
-      btnLogoutEl.addEventListener('click', () => {
-        logoutUser();
-        alert('Sesi Anda telah di-logout.');
-        window.location.href = 'login.html';
-      });
-    }
+    document.getElementById('btn-logout')?.addEventListener('click', () => {
+      logoutUser();
+      window.location.href = 'login.html';
+    });
 
-    // Event listener tombol toggle
-    const toggleBtnEl = document.getElementById('btn-toggle-status');
-    if (toggleBtnEl) {
-      toggleBtnEl.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.toggleStatusAkun();
-      });
-    }
-
-    // Sinkronisasi otomatis saat status diubah oleh Admin (Modul 02) di tab/window lain
     window.addEventListener('storage', () => renderStatus());
     window.addEventListener('spmb_db_updated', () => renderStatus());
-
-    // Jalankan render awal saat halaman dimuat
     document.addEventListener('DOMContentLoaded', () => renderStatus());
     renderStatus();
   </script>

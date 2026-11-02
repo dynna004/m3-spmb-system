@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registrasi Akun - Portal SPMB SMA Muhammadiyah 3 Yogyakarta</title>
+  <title>Registrasi Akun Otomatis - Portal SPMB SMA Muhammadiyah 3 Yogyakarta</title>
   <link rel="stylesheet" href="../../shared/styles.css">
   <style>
     .portal-container {
-      max-width: 560px;
-      margin: 2.5rem auto;
+      max-width: 620px;
+      margin: 2rem auto;
       padding: 0 1rem;
     }
 
@@ -23,7 +23,7 @@
 
     .brand-header {
       text-align: center;
-      margin-bottom: 1.75rem;
+      margin-bottom: 1.25rem;
     }
 
     .brand-logo {
@@ -41,6 +41,21 @@
       box-shadow: 0 4px 12px rgba(0, 104, 55, 0.25);
     }
 
+    .auto-verify-banner {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #006837;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 1.25rem;
+      font-size: 0.82rem;
+      color: #14532d;
+      line-height: 1.5;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
     .form-label-req::after {
       content: " *";
       color: #ef4444;
@@ -56,26 +71,28 @@
 
     .input-error {
       border-color: #ef4444 !important;
+      background-color: #fef2f2 !important;
     }
 
     .alert-box {
-      padding: 1rem;
-      border-radius: 10px;
+      padding: 1.15rem;
+      border-radius: 12px;
       font-size: 0.875rem;
       margin-bottom: 1.25rem;
       display: none;
+      line-height: 1.55;
     }
 
     .alert-danger {
       background-color: #fef2f2;
       color: #991b1b;
-      border: 1px solid #fecaca;
+      border: 1.5px solid #fca5a5;
     }
 
     .alert-success {
       background-color: #f0fdf4;
       color: #166534;
-      border: 1px solid #bbf7d0;
+      border: 1.5px solid #86efac;
     }
 
     .nav-steps {
@@ -99,6 +116,86 @@
       background: #006837;
       color: #ffffff;
     }
+
+    /* Modal Contoh Tampilan Email Aktivasi */
+    .email-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .email-modal-backdrop.open {
+      display: flex;
+    }
+
+    .email-modal-dialog {
+      background: #ffffff;
+      border-radius: 16px;
+      max-width: 660px;
+      width: 100%;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+      border: 1px solid #cbd5e1;
+    }
+
+    .email-modal-header {
+      background: linear-gradient(135deg, #064e3b 0%, #006837 100%);
+      color: #ffffff;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .email-modal-body {
+      padding: 18px;
+      overflow-y: auto;
+      background: #f1f5f9;
+      flex: 1;
+    }
+
+    .email-modal-footer {
+      padding: 14px 20px;
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .sim-toolbar {
+      margin-top: 1.5rem;
+      padding: 14px;
+      background: #f8fafc;
+      border-radius: 12px;
+      border: 1.5px dashed #cbd5e1;
+      font-size: 0.78rem;
+      color: #475569;
+    }
+
+    .sim-btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 520px) {
+      .sim-btn-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 
@@ -106,9 +203,9 @@
   <div class="portal-container">
     <div class="nav-steps">
       <span class="step-pill active">1. Registrasi Akun</span>
-      <a href="status-akun.html" class="step-pill" style="text-decoration: none;">2. Status Aktivasi</a>
+      <a href="status-akun.html" class="step-pill" style="text-decoration: none;">2. Status &amp; Email Aktivasi</a>
       <a href="login.html" class="step-pill" style="text-decoration: none;">3. Login Pendaftar</a>
-      <a href="formulir.html" class="step-pill" style="text-decoration: none;">4. Formulir & Bukti</a>
+      <a href="formulir.html" class="step-pill" style="text-decoration: none;">4. Formulir &amp; Bukti</a>
       <a href="dashboard.html" class="step-pill" style="text-decoration: none;">5. Dashboard Siswa</a>
       <a href="pengumuman.html" class="step-pill" style="text-decoration: none;">6. Cek Kelulusan</a>
     </div>
@@ -116,28 +213,45 @@
     <div class="portal-card">
       <div class="brand-header">
         <div class="brand-logo">M3</div>
-        <h2 style="font-size: 1.4rem; font-weight: 700; color: #0f172a;">Registrasi Akun Awal</h2>
-        <p style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">SMA Muhammadiyah 3 Yogyakarta (T.A. 2026/2027)
-        </p>
+        <h2 style="font-size: 1.4rem; font-weight: 700; color: #0f172a;">Registrasi Akun Calon Siswa</h2>
+        <p style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">SMA Muhammadiyah 3 Yogyakarta (T.A. 2026/2027)</p>
       </div>
 
-      <div id="alert-msg" class="alert-box"></div>
+      <!-- Info Aktivasi Otomatis -->
+      <div class="auto-verify-banner">
+        <span style="font-size: 1.2rem; line-height: 1;">⚡</span>
+        <div>
+          <strong>Sistem Aktivasi Otomatis (Real-Time):</strong><br>
+          Akun Anda akan <strong>otomatis aktif</strong> dan langsung menerima <strong>Notifikasi Email Login</strong> apabila <strong>NISN &amp; Email belum pernah terdaftar (tidak duplikat)</strong>.
+        </div>
+      </div>
 
-      <form id="form-register">
+      <!-- Kotak Peringatan Duplikat / Sukses -->
+      <div id="alert-msg" class="alert-box" role="alert"></div>
+
+      <form id="form-register" novalidate>
+        <!-- Honeypot Anti-Bot tersembunyi -->
+        <div style="display: none;" aria-hidden="true">
+          <label for="website_hp">Jangan diisi jika Anda manusia</label>
+          <input type="text" id="website_hp" name="website_hp" tabindex="-1" autocomplete="off">
+        </div>
+
         <div class="form-group">
-          <label for="nama" class="form-label-req">Nama Lengkap</label>
-          <input type="text" id="nama" class="form-control" placeholder="Nama lengkap sesuai ijazah/KK" required>
+          <label for="nama" class="form-label-req">Nama Lengkap Siswa</label>
+          <input type="text" id="nama" class="form-control" placeholder="Nama lengkap sesuai Ijazah SMP / KK" required>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
           <div class="form-group">
-            <label for="email" class="form-label-req">Email</label>
+            <label for="email" class="form-label-req">Email Aktif</label>
             <input type="email" id="email" class="form-control" placeholder="nama@domain.com" required>
+            <div class="input-hint"><span>Untuk pengiriman notifikasi login</span></div>
           </div>
 
           <div class="form-group">
             <label for="no_wa" class="form-label-req">No. WhatsApp</label>
             <input type="text" id="no_wa" class="form-control" placeholder="081234567890" required>
+            <div class="input-hint"><span>Nomor aktif siswa / orang tua</span></div>
           </div>
         </div>
 
@@ -146,7 +260,7 @@
           <input type="text" id="nisn" class="form-control" maxlength="10" placeholder="10 digit angka NISN"
             pattern="[0-9]{10}" required>
           <div class="input-hint">
-            <span>Wajib tepat 10 digit angka</span>
+            <span>Wajib tepat 10 digit angka unik</span>
             <span id="nisn-counter">0 / 10</span>
           </div>
         </div>
@@ -156,94 +270,276 @@
           <input type="password" id="password" class="form-control"
             placeholder="Min. 6 karakter (kombinasi huruf & angka)" required>
           <div style="font-size: 0.72rem; color: #64748b; margin-top: 4px;">
-            Password diamankan dengan hashing SHA-256.
+            Gunakan password ini bersama NISN atau Email untuk login setelah akun teraktivasi otomatis.
           </div>
         </div>
 
         <button type="submit" class="btn btn-primary"
-          style="width: 100%; margin-top: 1rem; padding: 12px; font-size: 1rem;">
-          Daftar Akun Baru
+          style="width: 100%; margin-top: 0.75rem; padding: 12px; font-size: 1rem; font-weight: 700;">
+          🚀 Daftar &amp; Aktivasi Akun Otomatis
         </button>
 
-        <p style="text-align: center; margin-top: 1.25rem; font-size: 0.85rem; color: #64748b;">
-          Sudah punya akun? <a href="login.html" style="color: #006837; font-weight: 600; text-decoration: none;">Login
-            Pendaftar</a>
+        <p style="text-align: center; margin-top: 1.15rem; font-size: 0.85rem; color: #64748b;">
+          Sudah punya akun yang aktif? <a href="login.html" style="color: #006837; font-weight: 700; text-decoration: none;">Login Pendaftar &rarr;</a>
         </p>
       </form>
+
+      <!-- Panel Simulasi Cepat untuk Pengujian -->
+      <div class="sim-toolbar">
+        <strong style="color: #0f172a; font-size: 0.82rem;">🧪 Panel Uji Coba Cepat (Simulasi Validasi Registrasi):</strong>
+        <div style="margin-top: 3px; color: #64748b;">Klik tombol di bawah untuk menguji skenario NISN &amp; Email Unik vs Duplikat:</div>
+        <div class="sim-btn-grid">
+          <button type="button" id="btn-sim-unique" class="btn btn-secondary" style="font-size: 0.76rem; padding: 7px 10px; background: #f0fdf4; color: #166534; border: 1px solid #86efac; font-weight: 700;">
+            ✨ Isi Data Unik (Otomatis Aktif + Email)
+          </button>
+          <button type="button" id="btn-sim-duplicate" class="btn btn-secondary" style="font-size: 0.76rem; padding: 7px 10px; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; font-weight: 700;">
+            ⚠️ Isi NISN &amp; Email Duplikat (Terdaftar)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CONTOH TAMPILAN NOTIFIKASI EMAIL AKTIVASI UNTUK LOGIN -->
+  <div class="email-modal-backdrop" id="modal-email-activation">
+    <div class="email-modal-dialog">
+      <div class="email-modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.35rem;">📩</span>
+          <div>
+            <div style="font-size: 0.98rem; font-weight: 800;">Notifikasi Email Aktivasi Akun Diterima!</div>
+            <div style="font-size: 0.74rem; opacity: 0.9;">Contoh tampilan email resmi yang dikirim otomatis ke kotak masuk pendaftar</div>
+          </div>
+        </div>
+        <button type="button" id="btn-close-email-modal" style="background: rgba(255,255,255,0.18); border: none; color: #ffffff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: 800;">✕</button>
+      </div>
+
+      <div class="email-modal-body" id="modal-email-body-container">
+        <!-- Diisi dari generateActivationEmailMessage -->
+      </div>
+
+      <div class="email-modal-footer">
+        <a href="status-akun.html" class="btn btn-secondary" style="text-decoration: none; font-size: 0.84rem; padding: 9px 14px; font-weight: 600;">
+          📄 Lihat Halaman Status Akun
+        </a>
+        <a href="login.html" id="btn-modal-go-login" class="btn btn-primary" style="text-decoration: none; font-size: 0.9rem; padding: 10px 20px; font-weight: 800; background: #006837;">
+          🔑 Lanjut Login dengan Akun Tadi &rarr;
+        </a>
+      </div>
     </div>
   </div>
 
   <script type="module">
-    import { getPendaftarList, savePendaftar, hashPassword, isValidEmail, isValidNoWA, isValidPassword } from './utils.js';
+    import {
+      getPendaftarList,
+      savePendaftar,
+      hashPassword,
+      isValidEmail,
+      isValidNoWA,
+      isValidPassword,
+      escapeHTML,
+      checkDuplicateRegistration,
+      detectBotRegistration,
+      recordRegistrationAnomaly
+    } from './utils.js';
+    import {
+      generateActivationEmailMessage,
+      dispatchActivationNotification
+    } from '../02_admin_spmb/activationEmailService.js';
 
+    const formLoadTimestamp = Date.now();
+    const namaInput = document.getElementById('nama');
+    const emailInput = document.getElementById('email');
+    const waInput = document.getElementById('no_wa');
     const nisnInput = document.getElementById('nisn');
+    const passwordInput = document.getElementById('password');
     const nisnCounter = document.getElementById('nisn-counter');
     const formRegister = document.getElementById('form-register');
     const alertMsg = document.getElementById('alert-msg');
+    const modalEmail = document.getElementById('modal-email-activation');
+    const modalEmailBody = document.getElementById('modal-email-body-container');
+    const btnCloseEmailModal = document.getElementById('btn-close-email-modal');
 
     // Filter & live counter NISN
     nisnInput.addEventListener('input', (e) => {
       e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
       nisnCounter.textContent = `${e.target.value.length} / 10`;
-      if (e.target.value.length === 10) {
-        nisnInput.classList.remove('input-error');
-      }
+      nisnInput.classList.remove('input-error');
     });
 
-    function showAlert(msg, isError = true) {
+    emailInput.addEventListener('input', () => emailInput.classList.remove('input-error'));
+    namaInput.addEventListener('input', () => namaInput.classList.remove('input-error'));
+    waInput.addEventListener('input', () => waInput.classList.remove('input-error'));
+
+    function showAlert(htmlContent, isError = true) {
       alertMsg.className = `alert-box ${isError ? 'alert-danger' : 'alert-success'}`;
-      alertMsg.innerHTML = msg;
+      alertMsg.innerHTML = htmlContent;
       alertMsg.style.display = 'block';
+      alertMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
+
+    // Handler Tombol Lapor Kendala Typo / Duplikat ke Admin dari Peringatan Duplikat
+    window.laporKendalaDuplikatKeAdmin = function (nisnVal, emailVal, namaVal, waVal) {
+      recordRegistrationAnomaly({
+        tipe: 'LAPORAN_TYPO_DUPLIKAT',
+        nama_pelapor: namaVal || 'Calon Pendaftar',
+        nisn_input: nisnVal,
+        email_input: emailVal,
+        no_wa_input: waVal,
+        keterangan: `Calon pendaftar (${namaVal}) melaporkan kendala NISN/Email terdeteksi duplikat atau salah ketik (typo) saat registrasi. Mohon Admin memeriksa dan mengedit data jika terjadi kesalahan input.`
+      });
+
+      // Tandai juga pada akun terkait di spmb_pendaftar_db agar muncul badge Laporan Typo/Duplikat di tabel Admin
+      const list = getPendaftarList();
+      const target = list.find(p => p.nisn === nisnVal || (p.email && p.email.toLowerCase() === String(emailVal).toLowerCase()));
+      if (target) {
+        target.is_duplicate_flag = true;
+        target.is_typo_reported = true;
+        target.security_flag = 'DUPLICATE_CONFLICT';
+        target.security_note = `Laporan Duplikat/Typo dari ${namaVal} (WA: ${waVal || '-'}) - Mohon cek & perbaiki via menu Edit Data.`;
+        savePendaftar(target);
+      }
+
+      const reportBanner = document.getElementById('dup-report-feedback');
+      if (reportBanner) {
+        reportBanner.style.display = 'block';
+        reportBanner.innerHTML = `✅ <strong>Laporan terkirim ke Dashboard Admin SPMB (Modul 02)!</strong> Admin dapat melihat laporan duplikat/typo ini dan mengedit Nama, Email, NISN, atau No. WhatsApp Anda.`;
+      }
+    };
 
     formRegister.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const nama = document.getElementById('nama').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const noWa = document.getElementById('no_wa').value.trim();
+      const nama = namaInput.value.trim();
+      const email = emailInput.value.trim();
+      const noWa = waInput.value.trim();
       const nisn = nisnInput.value.trim();
-      const password = document.getElementById('password').value;
+      const password = passwordInput.value;
+      const honeypot = document.getElementById('website_hp')?.value || '';
+      const fillDurationMs = Date.now() - formLoadTimestamp;
 
-      // 1. Validasi NISN (Tepat 10 digit)
+      // 1. Validasi Nama Lengkap
+      if (!nama || nama.length < 3) {
+        namaInput.classList.add('input-error');
+        showAlert('⚠️ <strong>Nama Lengkap wajib diisi</strong> minimal 3 karakter sesuai Ijazah/KK.');
+        return;
+      }
+
+      // 2. Validasi NISN (Tepat 10 digit angka)
       if (!/^[0-9]{10}$/.test(nisn)) {
         nisnInput.classList.add('input-error');
-        showAlert('NISN wajib diisi dengan tepat 10 digit angka!');
+        showAlert('⚠️ <strong>NISN tidak valid!</strong> NISN wajib diisi dengan tepat 10 digit angka.');
         return;
       }
 
-      // 2. Validasi Format Email
+      // 3. Validasi Format Email
       if (!isValidEmail(email)) {
-        showAlert('Format email tidak valid! Gunakan format contoh: nama@domain.com');
+        emailInput.classList.add('input-error');
+        showAlert('⚠️ <strong>Format Email tidak valid!</strong> Gunakan format email aktif seperti <code>nama@gmail.com</code>.');
         return;
       }
 
-      // 3. Validasi Format No. WhatsApp
+      // 4. Validasi Format No. WhatsApp
       if (!isValidNoWA(noWa)) {
-        showAlert('Format No. WhatsApp tidak valid! Gunakan format Indonesia (contoh: 081234567890).');
+        waInput.classList.add('input-error');
+        showAlert('⚠️ <strong>Format No. WhatsApp tidak valid!</strong> Gunakan nomor aktif diawali <code>08...</code> atau <code>+628...</code>.');
         return;
       }
 
-      // 4. Validasi Kriteria Password (Min 6 Karakter, Huruf + Angka)
+      // 5. Validasi Kriteria Password
       if (!isValidPassword(password)) {
-        showAlert('Password tidak memenuhi syarat! Minimal 6 karakter dan wajib mengombinasikan huruf dan angka.');
+        showAlert('⚠️ <strong>Password belum memenuhi syarat!</strong> Minimal 6 karakter dengan kombinasi huruf dan angka.');
         return;
       }
 
-      // Check Duplikasi NISN / Email
-      const pendaftarList = getPendaftarList();
-      if (pendaftarList.some(p => p.nisn === nisn)) {
-        showAlert('NISN ini sudah terdaftar! Silakan menuju halaman Login.');
-        return;
-      }
-      if (pendaftarList.some(p => p.email === email)) {
-        showAlert('Email ini sudah terdaftar! Gunakan email lain.');
+      // 6. Cek Duplikasi NISN DAN Email pada Database
+      const dupResult = checkDuplicateRegistration(nisn, email);
+      if (dupResult.isDuplicate) {
+        if (dupResult.duplicateNisn) nisnInput.classList.add('input-error');
+        if (dupResult.duplicateEmail) emailInput.classList.add('input-error');
+
+        let dupFieldsText = '';
+        if (dupResult.duplicateNisn && dupResult.duplicateEmail) {
+          dupFieldsText = `<strong>NISN (<code>${escapeHTML(nisn)}</code>)</strong> dan <strong>Email (<code>${escapeHTML(email)}</code>)</strong>`;
+        } else if (dupResult.duplicateNisn) {
+          dupFieldsText = `<strong>NISN (<code>${escapeHTML(nisn)}</code>)</strong>`;
+        } else {
+          dupFieldsText = `<strong>Email (<code>${escapeHTML(email)}</code>)</strong>`;
+        }
+
+        showAlert(`
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 800; color: #991b1b;">
+              <span>🚫 Registrasi Ditolak: Email atau NISN Sudah Terdaftar (Duplikat)!</span>
+            </div>
+            <div>
+              Sistem mendeteksi bahwa ${dupFieldsText} <strong>sudah terdaftar</strong> pada database SPMB SMA Muhammadiyah 3 Yogyakarta.
+            </div>
+            <div style="background: #ffffff; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 12px; font-size: 0.82rem; color: #7f1d1d;">
+              <strong>📞 Silakan Hubungi Admin SPMB:</strong><br>
+              Apabila Anda merasa belum pernah mendaftar atau terjadi <strong>kesalahan ketik (typo) pada Nama, NISN, Email, atau No. WhatsApp</strong> pada pengisian sebelumnya, silakan segera menghubungi <strong>Admin SPMB</strong> untuk dibantu pemeriksaan atau pengeditan data:
+              <ul style="margin: 6px 0 8px 18px; padding: 0;">
+                <li><strong>WhatsApp Helpdesk Admin:</strong> 0812-2700-333 (Panitia SPMB Muhi)</li>
+                <li><strong>Email Admin:</strong> admin.spmb@muhi-yogya.sch.id</li>
+                <li><strong>Loket Fisik:</strong> Kampus SMA Muhammadiyah 3 Yogyakarta (Jl. Kapten Piere Tendean No. 56)</li>
+              </ul>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;">
+                <a href="login.html" style="background: #006837; color: #ffffff; border-radius: 6px; padding: 7px 12px; font-size: 0.78rem; font-weight: 700; text-decoration: none;">
+                  🔑 Ke Halaman Login (Jika Ini Akun Anda)
+                </a>
+              </div>
+            </div>
+          </div>
+        `, true);
         return;
       }
 
-      // Hash Password sebelum disimpan
+      // 7. Deteksi Indikasi Bot
+      const botCheck = detectBotRegistration({
+        nama,
+        email,
+        no_wa: noWa,
+        nisn,
+        honeypot,
+        fillDurationMs
+      });
+
       const hashedPassword = await hashPassword(password);
+      const pendaftarList = getPendaftarList();
+      const nextNum = pendaftarList.length + 1;
+      const regId = `REG-2026-${String(nextNum).padStart(3, '0')}`;
+      const nowIso = new Date().toISOString();
 
-      const regId = `REG-2026-${String(pendaftarList.length + 1).padStart(3, '0')}`;
+      if (botCheck.isBot) {
+        const botAccount = {
+          id_pendaftar: regId,
+          nama_lengkap: nama,
+          email: email,
+          no_wa: noWa,
+          nisn: nisn,
+          password_hash: hashedPassword,
+          status_akun: 'pending_activation',
+          metode_aktivasi: 'HOLD_BOT_DETECTION',
+          is_bot_suspect: true,
+          security_flag: 'BOT_SUSPECT',
+          security_note: `Indikasi Bot: ${botCheck.reasons.join(', ')}`,
+          created_at: nowIso,
+          biodata: null,
+          pembayaran: null
+        };
+        savePendaftar(botAccount);
+        recordRegistrationAnomaly({
+          tipe: 'TERDETEKSI_BOT',
+          nama_pelapor: nama,
+          nisn_input: nisn,
+          email_input: email,
+          no_wa_input: noWa,
+          keterangan: `Akun ditahan oleh filter anti-bot: ${botCheck.reasons.join('; ')}`
+        });
+        showAlert(`⚠️ <strong>Sistem Keamanan Mendeteksi Aktivitas Tidak Wajar (Indikasi Bot/Spam):</strong><br>${escapeHTML(botCheck.reasons.join(', '))}. Data Anda ditandai untuk peninjauan Admin SPMB.`, true);
+        return;
+      }
+
+      // 8. NISN & EMAIL UNIK -> AKTIVASI AKUN OTOMATIS + KIRIM NOTIFIKASI EMAIL LOGIN
       const newAccount = {
         id_pendaftar: regId,
         nama_lengkap: nama,
@@ -251,21 +547,96 @@
         no_wa: noWa,
         nisn: nisn,
         password_hash: hashedPassword,
-        status_akun: 'pending_activation',
-        created_at: new Date().toISOString(),
+        status_akun: 'active',
+        metode_aktivasi: 'OTOMATIS_REGISTRASI',
+        security_flag: 'VERIFIED_UNIQUE',
+        security_note: 'Teraktivasi otomatis saat registrasi (NISN & Email tervalidasi unik)',
+        activated_at: nowIso,
+        created_at: nowIso,
         biodata: null,
         pembayaran: null
       };
 
-      // Simpan ke central storage spmb_pendaftar_db
+      // Catat pengiriman email aktivasi otomatis
+      dispatchActivationNotification(newAccount, 'Otomatis Saat Registrasi (NISN & Email Unik)');
+
+      // Simpan ke database terpusat & set current user
       savePendaftar(newAccount);
       localStorage.setItem('m3_spmb_current_user', JSON.stringify(newAccount));
 
-      showAlert('<strong>Registrasi Berhasil!</strong> Akun berstatus <code>pending_activation</code>. Mengalihkan ke Halaman Status...', false);
+      // Render Contoh Tampilan Notifikasi Email di Modal & Alert Sukses
+      const emailObj = generateActivationEmailMessage(newAccount, 'login.html');
+      modalEmailBody.innerHTML = emailObj.html;
+      modalEmail.classList.add('open');
 
-      setTimeout(() => {
-        window.location.href = 'status-akun.html';
-      }, 1200);
+      showAlert(`
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="font-size: 0.96rem; font-weight: 800; color: #166534;">
+            ✅ Registrasi Berhasil &amp; Akun Otomatis Aktif!
+          </div>
+          <div>
+            Karena <strong>NISN (${escapeHTML(nisn)})</strong> dan <strong>Email (${escapeHTML(email)})</strong> belum pernah terdaftar (tidak duplikat), akun Anda <strong>langsung teraktivasi otomatis</strong> tanpa menunggu verifikasi manual Admin.
+          </div>
+          <div style="background: #ffffff; border: 1px solid #86efac; border-radius: 8px; padding: 10px 12px; font-size: 0.82rem; color: #14532d;">
+            📩 <strong>Notifikasi Email Aktivasi Telah Dikirim ke <code>${escapeHTML(email)}</code></strong><br>
+            Silakan lihat contoh tampilan email aktivasi atau langsung menuju halaman Login menggunakan akun yang baru saja didaftarkan.
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px;">
+            <button type="button" id="btn-reopen-email-preview" style="background: #006837; color: #ffffff; border: none; border-radius: 6px; padding: 8px 14px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
+              ✉️ Lihat Contoh Notifikasi Email Aktivasi
+            </button>
+            <a href="login.html" style="background: #15803d; color: #ffffff; border-radius: 6px; padding: 8px 14px; font-size: 0.8rem; font-weight: 700; text-decoration: none;">
+              🔑 Lanjut Login Sekarang &rarr;
+            </a>
+            <a href="status-akun.html" style="background: #f0fdf4; color: #006837; border: 1px solid #86efac; border-radius: 6px; padding: 8px 14px; font-size: 0.8rem; font-weight: 700; text-decoration: none;">
+              📄 Halaman Status Akun
+            </a>
+          </div>
+        </div>
+      `, false);
+
+      const btnReopen = document.getElementById('btn-reopen-email-preview');
+      if (btnReopen) {
+        btnReopen.onclick = () => modalEmail.classList.add('open');
+      }
+    });
+
+    // Tutup Modal Email
+    if (btnCloseEmailModal) {
+      btnCloseEmailModal.onclick = () => modalEmail.classList.remove('open');
+    }
+    modalEmail.addEventListener('click', (e) => {
+      if (e.target === modalEmail) modalEmail.classList.remove('open');
+    });
+
+    // Tombol Simulasi 1: Isi Data Unik (Otomatis Aktif)
+    document.getElementById('btn-sim-unique')?.addEventListener('click', () => {
+      const rand4 = Math.floor(1000 + Math.random() * 8999);
+      namaInput.value = `Nabila Putri Azzahra`;
+      emailInput.value = `nabila.azzahra.${rand4}@gmail.com`;
+      waInput.value = `08123456${rand4}`;
+      nisnInput.value = `006891${rand4}`;
+      passwordInput.value = `SpmbMuhi2026`;
+      nisnCounter.textContent = `10 / 10`;
+      [namaInput, emailInput, waInput, nisnInput].forEach(el => el.classList.remove('input-error'));
+      alertMsg.style.display = 'none';
+    });
+
+    // Tombol Simulasi 2: Isi Data Duplikat (Menggunakan NISN & Email yang sudah terdaftar)
+    document.getElementById('btn-sim-duplicate')?.addEventListener('click', () => {
+      const list = getPendaftarList();
+      const existing = list[0] || {
+        nama_lengkap: 'Ahmad Dahlan',
+        email: 'ahmad.dahlan@gmail.com',
+        nisn: '0051234567'
+      };
+      namaInput.value = `${existing.nama_lengkap || 'Ahmad Dahlan'} (Input Ulang)`;
+      emailInput.value = existing.email || 'ahmad.dahlan@gmail.com';
+      waInput.value = '081299887766';
+      nisnInput.value = existing.nisn || '0051234567';
+      passwordInput.value = 'SpmbMuhi2026';
+      nisnCounter.textContent = `${nisnInput.value.length} / 10`;
+      alertMsg.style.display = 'none';
     });
   </script>
 </body>

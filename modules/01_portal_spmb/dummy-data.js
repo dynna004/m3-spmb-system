@@ -1,7 +1,7 @@
 /**
  * Inisialisasi Data Dummy & Storage SPMB (Module 01)
  * Key LocalStorage Utama: spmb_pendaftar_db
- * Skema JSON Standardized Contract
+ * Skema JSON Standardized Contract (Aktivasi Otomatis jika NISN & Email Tidak Duplikat)
  */
 
 const STORAGE_KEY = 'spmb_pendaftar_db';
@@ -13,12 +13,24 @@ export const initialDummyPendaftar = [
   {
     id_pendaftar: "REG-2026-001",
     nama_lengkap: "Ahmad Dahlan",
-    email: "ahmad@email.com",
+    email: "ahmad.dahlan@gmail.com",
     no_wa: "081234567891",
     nisn: "0051234567",
     password_hash: DEMO_PASSWORD_HASH,
-    status_akun: "pending_activation",
+    status_akun: "active",
+    metode_aktivasi: "OTOMATIS_REGISTRASI",
+    activated_at: "2026-10-05T08:00:05Z",
     created_at: "2026-10-05T08:00:00Z",
+    notifikasi_aktivasi: {
+      status: "Berhasil Dikirim (Otomatis)",
+      kode_status: "SENT",
+      waktu_aktual_kirim: "2026-10-05T08:00:05+07:00",
+      metode_kirim: "Otomatis Saat Registrasi (NISN & Email Unik)",
+      media: "Email Resmi & WhatsApp",
+      email_tujuan: "ahmad.dahlan@gmail.com",
+      wa_tujuan: "081234567891",
+      jumlah_kirim: 1
+    },
     biodata: null,
     pembayaran: null,
     jadwal_wawancara: {
@@ -36,12 +48,24 @@ export const initialDummyPendaftar = [
   {
     id_pendaftar: "REG-2026-002",
     nama_lengkap: "Budi Santoso",
-    email: "budi@email.com",
+    email: "budi.santoso@gmail.com",
     no_wa: "081234567890",
     nisn: "1234567890",
     password_hash: DEMO_PASSWORD_HASH,
     status_akun: "active",
+    metode_aktivasi: "OTOMATIS_REGISTRASI",
+    activated_at: "2026-10-05T09:15:04Z",
     created_at: "2026-10-05T09:15:00Z",
+    notifikasi_aktivasi: {
+      status: "Berhasil Dikirim (Otomatis)",
+      kode_status: "SENT",
+      waktu_aktual_kirim: "2026-10-05T09:15:04+07:00",
+      metode_kirim: "Otomatis Saat Registrasi (NISN & Email Unik)",
+      media: "Email Resmi & WhatsApp",
+      email_tujuan: "budi.santoso@gmail.com",
+      wa_tujuan: "081234567890",
+      jumlah_kirim: 1
+    },
     jadwal_wawancara: {
       tanggal: "2026-10-24",
       hari: "Sabtu",
@@ -57,7 +81,7 @@ export const initialDummyPendaftar = [
     biodata: {
       nik: "3171012345678901",
       alamat: "Jl. Merdeka No. 10",
-      asal_sekolah: "SMPN 1 Jakarta",
+      asal_sekolah: "SMPN 1 Yogyakarta",
       nama_orang_tua: "Siti Aminah",
       pilihan_jurusan: "MIPA"
     },
