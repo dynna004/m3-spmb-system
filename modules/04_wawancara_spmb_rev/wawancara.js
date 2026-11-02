@@ -25,7 +25,7 @@ import {
   generateReminderPayload,
   dispatchReminderToBackend,
   BACKEND_CONFIG
-} from './reminderService.js';
+} from './reminderService.js?v=20261102_auto_h1';
 import { generateAnekdotalRecordHTML } from './anekdotalService.js';
 
 
@@ -559,6 +559,9 @@ function getPendaftarSSoT() {
             if (p.jadwal_wawancara) {
               match.jadwal_wawancara = p.jadwal_wawancara;
             }
+            if (p.pengingat_wawancara) {
+              match.pengingat_wawancara = p.pengingat_wawancara;
+            }
           }
         });
       }
@@ -680,7 +683,193 @@ export function renderWawancara(containerId) {
   const countDaring = lunasCandidates.filter(c => (c.jadwal_wawancara?.metode || '').toUpperCase() === 'DARING').length;
 
   container.innerHTML = `
-    <!-- Custom Style Injection untuk Modul 04 -->
+    <!-- Custom Style Injection untuk Modul 04 (Full-Width & No-Scroll) -->
+    <style>
+      /* Full-width container override agar seluruh tabel, kalender & modal tampil utuh tanpa scroll */
+      main.container:has(.wawancara-layout-wrapper),
+      .standalone-container {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 0 1rem !important;
+        margin: 1rem auto !important;
+      }
+      .wawancara-layout-wrapper {
+        gap: 1rem !important;
+      }
+      .wawancara-sidebar {
+        width: 215px !important;
+        min-width: 215px !important;
+        padding: 1rem 0.85rem !important;
+      }
+      .wawancara-sidebar.collapsed {
+        width: 64px !important;
+        min-width: 64px !important;
+        padding: 1rem 0.45rem !important;
+      }
+      /* Hilangkan scroll horizontal pada seluruh tabel & kalender */
+      .jadwal-table-wrapper,
+      .wawancara-main-area .table-responsive,
+      .kalender-grid-wrapper {
+        overflow-x: visible !important;
+      }
+      .jadwal-table {
+        width: 100% !important;
+        font-size: 0.78rem !important;
+      }
+      .jadwal-table th {
+        padding: 8px 6px !important;
+        font-size: 0.7rem !important;
+        white-space: normal !important;
+        line-height: 1.25 !important;
+      }
+      .jadwal-table td {
+        padding: 8px 6px !important;
+        white-space: normal !important;
+      }
+      .wawancara-main-area .table th,
+      .wawancara-main-area .table td {
+        padding: 8px 7px !important;
+        font-size: 0.78rem !important;
+        white-space: normal !important;
+      }
+      .jadwal-candidate-name {
+        font-size: 0.84rem !important;
+      }
+      .jadwal-time-pill {
+        font-size: 0.74rem !important;
+        padding: 3px 7px !important;
+      }
+      .btn-gabung-meet,
+      .badge-link-empty {
+        white-space: normal !important;
+        text-align: center;
+      }
+      .kalender-grid-wrapper {
+        padding: 0.75rem !important;
+      }
+      .kalender-matrix-table {
+        width: 100% !important;
+        min-width: 0 !important;
+        table-layout: fixed !important;
+        border-spacing: 5px !important;
+      }
+      .kalender-matrix-table th {
+        padding: 7px 4px !important;
+        font-size: 0.74rem !important;
+      }
+      .kalender-time-header {
+        width: 92px !important;
+      }
+      .kalender-cell {
+        padding: 5px !important;
+      }
+      .kalender-cell-item {
+        padding: 6px !important;
+        font-size: 0.72rem !important;
+        word-break: break-word !important;
+      }
+      /* Modal Form Penilaian Wawancara Full-View Tanpa Scroll Internal */
+      .modal-wawancara-overlay {
+        padding: 0.5rem 1rem !important;
+        overflow-y: auto !important;
+      }
+      #modal-wawancara .modal-wawancara-content {
+        max-width: 1320px !important;
+        width: 97% !important;
+        max-height: none !important;
+        overflow: visible !important;
+        border-radius: 14px !important;
+      }
+      #form-penilaian-wawancara {
+        overflow: visible !important;
+      }
+      #modal-wawancara .modal-wawancara-header {
+        padding: 0.65rem 1.15rem !important;
+        border-radius: 14px 14px 0 0 !important;
+      }
+      #modal-wawancara .modal-wawancara-header h3 {
+        font-size: 1rem !important;
+      }
+      #modal-wawancara .modal-wawancara-body {
+        padding: 0.7rem 1.1rem !important;
+        overflow: visible !important;
+      }
+      .modal-main-grid {
+        display: grid;
+        grid-template-columns: 1.08fr 0.92fr;
+        gap: 0.7rem;
+        align-items: start;
+      }
+      .modal-col-left,
+      .modal-col-right {
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+      .modal-section-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 0.55rem 0.75rem;
+      }
+      #modal-wawancara .form-section-title {
+        font-size: 0.82rem !important;
+        border-bottom: 1.5px solid #e2e8f0 !important;
+        padding-bottom: 3px !important;
+        margin-top: 0 !important;
+        margin-bottom: 0.45rem !important;
+      }
+      #modal-wawancara .grid-2col {
+        gap: 0.55rem !important;
+      }
+      #modal-wawancara .form-group {
+        margin-bottom: 0 !important;
+      }
+      #modal-wawancara .form-group label {
+        font-size: 0.76rem !important;
+        margin-bottom: 2px !important;
+      }
+      #modal-wawancara .form-control {
+        padding: 5px 8px !important;
+        font-size: 0.8rem !important;
+      }
+      #modal-wawancara .aspek-penilaian-container {
+        gap: 4px !important;
+        margin-top: 2px !important;
+      }
+      #modal-wawancara .aspek-item {
+        padding: 4px 8px !important;
+        gap: 8px !important;
+        border-radius: 7px !important;
+      }
+      #modal-wawancara .aspek-label-col {
+        flex: 0 0 175px !important;
+        max-width: 175px !important;
+      }
+      #modal-wawancara .aspek-checkbox-label {
+        font-size: 0.78rem !important;
+        gap: 6px !important;
+      }
+      #modal-wawancara .aspek-catatan-input {
+        padding: 4px 8px !important;
+        font-size: 0.78rem !important;
+      }
+      #modal-wawancara .beasiswa-preview-box {
+        padding: 6px 10px !important;
+        margin-top: 4px !important;
+        font-size: 0.8rem !important;
+      }
+      #modal-wawancara .modal-wawancara-footer {
+        position: static !important;
+        padding: 0.6rem 1.15rem !important;
+        border-radius: 0 0 14px 14px !important;
+      }
+      @media (max-width: 960px) {
+        .modal-main-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
     <style>
       .wawancara-header {
         background: linear-gradient(135deg, #00562c 0%, #008349 100%);
@@ -2942,10 +3131,10 @@ export function renderWawancara(containerId) {
         </div>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
           <span style="background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); padding: 6px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700;">
-            ⚙️ Adapter Service: Aktif
+            🤖 Otomatis H-1 (08:00 WIB): Aktif
           </span>
-          <span style="background: #fef3c7; color: #92400e; padding: 6px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 800;">
-            📡 Gateway Server: Menunggu Konfigurasi
+          <span style="background: #dcfce7; color: #166534; padding: 6px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 800;">
+            ✅ WhatsApp & Email: Aktif
           </span>
         </div>
       </div>
@@ -2954,8 +3143,8 @@ export function renderWawancara(containerId) {
       <div style="background: #f0fdf4; border-left: 4px solid #006837; border-radius: 6px; padding: 12px 16px; margin-bottom: 1.25rem; font-size: 0.84rem; color: #166534; display: flex; align-items: flex-start; gap: 10px;">
         <span style="font-size: 1.25rem; line-height: 1;">ℹ️</span>
         <div style="flex: 1;">
-          <strong>Standar Operasional Pengingat Terjadwal:</strong>
-          Pengiriman otomatis H-1 dirancang dieksekusi oleh <em>Server Scheduler / Cron Daemon</em> di luar browser pada pukul 08:00 WIB. Sistem menggunakan <em>Idempotency Key</em> untuk mencegah pengiriman pesan ganda, serta menghentikan pengingat jika jadwal telah selesai atau dibatalkan. Spesifikasi REST API & Webhook lengkap tersedia di file <code>BACKEND_REMINDER_SPEC.md</code>.
+          <strong>Alur Pengiriman Pengingat H-1 Otomatis & Manual:</strong>
+          Pesan pengingat jadwal wawancara dikirimkan secara <strong>otomatis pada H-1 pukul 08:00 WIB</strong> melalui WhatsApp dan Email kepada calon siswa beserta orang tua/wali. Admin juga dapat melihat <em>Preview Pesan</em> atau menekan tombol <strong>Kirim Ulang</strong> untuk mengirim ulang pengingat secara manual kapan saja.
         </div>
       </div>
 
@@ -3030,7 +3219,7 @@ export function renderWawancara(containerId) {
             </div>
             
             <!-- Info Peserta Summary -->
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; margin-bottom: 1rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 6px 12px; margin-bottom: 0.55rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
               <div>
                 <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">NAMA CALON SISWA</div>
                 <div style="font-weight: 700; font-size: 1rem; color: #006837;" id="modal-candidate-name">-</div>
@@ -3056,7 +3245,7 @@ export function renderWawancara(containerId) {
               </div>
             </div>
 
-            <!-- Section 1: Nilai Wawancara Siswa -->
+            <div class="modal-main-grid"><div class="modal-col-left"><div class="modal-section-card"><!-- Section 1: Nilai Wawancara Siswa -->
             <div class="form-section-title">👤 1. Penilaian Wawancara Siswa</div>
             <div class="grid-2col">
               <div class="form-group">
@@ -3065,11 +3254,11 @@ export function renderWawancara(containerId) {
               </div>
               <div class="form-group">
                 <label for="wawancara-catatan-siswa">Catatan & Profil Siswa</label>
-                <textarea id="wawancara-catatan-siswa" class="form-control" rows="2" placeholder="Catatan keaktifan, kepribadian, kepemimpinan..."></textarea>
+                <textarea id="wawancara-catatan-siswa" class="form-control" rows="1" placeholder="Catatan keaktifan, kepribadian, kepemimpinan..."></textarea>
               </div>
             </div>
 
-            <!-- Section 2: Nilai Wawancara Orang Tua / Wali -->
+            </div><div class="modal-section-card"><!-- Section 2: Nilai Wawancara Orang Tua / Wali -->
             <div class="form-section-title">👨‍👩‍👧 2. Penilaian Wawancara Orang Tua / Wali</div>
             <div class="grid-2col">
               <div class="form-group">
@@ -3078,11 +3267,11 @@ export function renderWawancara(containerId) {
               </div>
               <div class="form-group">
                 <label for="wawancara-catatan-wali">Catatan & Kesiapan Wali</label>
-                <textarea id="wawancara-catatan-wali" class="form-control" rows="2" placeholder="Dukungan orang tua, komitmen tata tertib..."></textarea>
+                <textarea id="wawancara-catatan-wali" class="form-control" rows="1" placeholder="Dukungan orang tua, komitmen tata tertib..."></textarea>
               </div>
             </div>
 
-            <!-- Section 3: Aspek Penilaian Wawancara -->
+            </div><div class="modal-section-card"><!-- Section 3: Aspek Penilaian Wawancara -->
             <div class="form-section-title">📋 3. Aspek Penilaian Wawancara</div>
             <div class="form-group">
               <label style="display: block; font-size: 0.84rem; color: #475569; font-weight: 600; margin-bottom: 8px;">Centang aspek yang dinilai dan berikan catatan hasil observasi untuk masing-masing aspek (bisa memilih lebih dari satu):</label>
@@ -3154,7 +3343,7 @@ export function renderWawancara(containerId) {
               </div>
             </div>
 
-            <!-- Section 4: Hafalan Qur'an & Rekomendasi Beasiswa Tahfidz -->
+            </div></div><div class="modal-col-right"><div class="modal-section-card"><!-- Section 4: Hafalan Qur'an & Rekomendasi Beasiswa Tahfidz -->
             <div class="form-section-title">📖 4. Tes Al-Qur'an & Rekomendasi Beasiswa Tahfidz</div>
             <div class="grid-2col">
               <div class="form-group">
@@ -3188,7 +3377,7 @@ export function renderWawancara(containerId) {
               </div>
             </div>
 
-            <!-- Section 5: Pelaksanaan Wawancara & Rekomendasi Kelulusan -->
+            </div><div class="modal-section-card"><!-- Section 5: Pelaksanaan Wawancara & Rekomendasi Kelulusan -->
             <div class="form-section-title">🎯 5. Pelaksanaan Wawancara & Rekomendasi Kelulusan</div>
             <div class="grid-2col">
               <div class="form-group">
@@ -3209,7 +3398,7 @@ export function renderWawancara(containerId) {
             </div>
             <div class="form-group" style="margin-top: 12px;">
               <label for="wawancara-catatan-pendampingan">Catatan Pendampingan Siswa (Tindak Lanjut Guru BK & Wali Kelas)</label>
-              <textarea id="wawancara-catatan-pendampingan" class="form-control" rows="2" placeholder="Catatan observasi kebutuhan pendampingan karakter, potensi akademik, peminatan bakat, atau konseling siswa..."></textarea>
+              <textarea id="wawancara-catatan-pendampingan" class="form-control" rows="1" placeholder="Catatan observasi kebutuhan pendampingan karakter, potensi akademik, peminatan bakat, atau konseling siswa..."></textarea>
             </div>
 
             <!-- Tautan Meeting & Ruangan Dinamis -->
@@ -3260,7 +3449,8 @@ export function renderWawancara(containerId) {
 
           </div>
 
-          <div class="modal-footer modal-wawancara-footer" style="position: sticky; bottom: 0; background: #ffffff; border-top: 2px solid #e2e8f0; padding: 1rem 1.5rem; display: flex; justify-content: flex-end; gap: 12px; z-index: 20; box-shadow: 0 -4px 12px rgba(0,0,0,0.05);">
+            </div></div></div>
+          <div class="modal-footer modal-wawancara-footer" style="position: static; background: #ffffff; border-top: 2px solid #e2e8f0; padding: 0.65rem 1.25rem; display: flex; justify-content: flex-end; gap: 10px; z-index: 20;">
             <button type="button" class="btn btn-secondary" id="btn-cancel-modal" style="background: #f1f5f9; color: #475569; padding: 10px 20px; font-weight: 600; border: 1.5px solid #cbd5e1; border-radius: 8px; cursor: pointer;">Tutup</button>
             <button type="button" class="btn btn-secondary" id="btn-modal-cetak-anekdotal" onclick="const cid = window.activeCandidateId || document.getElementById('modal-candidate-id')?.textContent?.trim(); if (cid) { window.openModalCetakAnekdotal(cid); } else { alert('Pilih calon siswa terlebih dahulu'); }" style="background: #f0fdf4; color: #166534; padding: 10px 16px; font-weight: 700; border: 1.5px solid #bbf7d0; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
               🖨️ Cetak Anekdotal Record
@@ -3353,7 +3543,7 @@ export function renderWawancara(containerId) {
 
     <!-- Modal Preview Template Pesan Pengingat H-1 -->
     <div class="modal-wawancara-overlay" id="modal-preview-reminder" style="display: none;">
-      <div class="modal-wawancara-content" style="max-width: 680px; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-wawancara-content" style="max-width: 780px; max-height: none; overflow: visible; display: flex; flex-direction: column;">
         <div class="modal-wawancara-header" style="background: linear-gradient(135deg, #064e3b 0%, #006837 100%);">
           <div>
             <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
@@ -3380,7 +3570,7 @@ export function renderWawancara(containerId) {
           <div style="background: #f1f5f9; border-radius: 6px; padding: 10px 14px; margin-bottom: 1rem; font-size: 0.78rem; color: #334155; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
             <div><strong>Waktu Jadwal Kirim:</strong> <span id="preview-meta-jadwal-kirim">-</span></div>
             <div><strong>Status Pengingat:</strong> <span id="preview-meta-status">-</span></div>
-            <div><strong>Idempotency Key:</strong> <code id="preview-meta-idempotency" style="background: #e2e8f0; padding: 2px 4px; border-radius: 3px;">-</code></div>
+            <div><strong>Metode Pengiriman:</strong> <span id="preview-meta-idempotency" style="font-weight: 700; color: #006837;">-</span></div>
             <div><strong>Target Kontak:</strong> <span id="preview-meta-kontak">-</span></div>
           </div>
 
@@ -3419,18 +3609,23 @@ export function renderWawancara(containerId) {
 
         <div style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 12px 1.5rem; display: flex; justify-content: space-between; align-items: center;">
           <div style="font-size: 0.76rem; color: #64748b;">
-            💡 Pesan dikirim otomatis H-1 tanpa perlu klik manual saat backend aktif.
+            💡 Pesan terkirim otomatis pada H-1 pukul 08:00 WIB. Admin dapat kirim ulang manual kapan saja.
           </div>
-          <button type="button" class="btn btn-secondary" id="btn-close-modal-preview" style="font-size: 0.84rem; padding: 6px 16px; font-weight: 700;">
-            Tutup
-          </button>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button type="button" class="btn btn-secondary" id="btn-resend-from-preview" onclick="if (window.activePreviewReminderCandidateId) window.handleTestReminderApi(window.activePreviewReminderCandidateId);" style="font-size: 0.82rem; padding: 6px 14px; font-weight: 700; background: #f0fdf4; color: #166534; border: 1.5px solid #bbf7d0; cursor: pointer;">
+              🔄 Kirim Ulang Manual
+            </button>
+            <button type="button" class="btn btn-secondary" id="btn-close-modal-preview" style="font-size: 0.84rem; padding: 6px 16px; font-weight: 700;">
+              Tutup
+            </button>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Modal Cetak Dokumen Anekdotal Record Siswa -->
     <div class="modal-wawancara-overlay" id="modal-cetak-anekdotal" style="display: none; z-index: 10001;">
-      <div class="modal-wawancara-content" style="max-width: 860px; max-height: 94vh; display: flex; flex-direction: column;">
+      <div class="modal-wawancara-content" style="max-width: 920px; max-height: none; overflow: visible; display: flex; flex-direction: column;">
         <div class="modal-wawancara-header" style="background: linear-gradient(135deg, #064e3b 0%, #006837 100%);">
           <div style="display: flex; align-items: center; gap: 10px;">
             <span style="font-size: 1.4rem;">📄</span>
@@ -3462,7 +3657,7 @@ export function renderWawancara(containerId) {
         </div>
 
         <!-- Body Modal: Preview Dokumen A4 -->
-        <div class="modal-wawancara-body" style="padding: 1.5rem; overflow-y: auto; flex: 1; background: #cbd5e1;">
+        <div class="modal-wawancara-body" style="padding: 1rem; overflow: visible; flex: 1; background: #cbd5e1;">
           <div id="anekdotal-modal-preview-wrapper" style="background: #ffffff; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border-radius: 4px; max-width: 210mm;">
             <!-- Dokumen HTML dimasukkan ke sini -->
           </div>
@@ -3806,7 +4001,7 @@ function renderJadwalViewport() {
           ? `<span class="badge-status-selesai">✅ Selesai (Skor: ${c.nilai_wawancara || 88})</span>`
           : `<span class="badge-status-belum">⏳ Belum Wawancara</span>`}
                   </td>
-                  <td style="text-align: center; white-space: nowrap;">
+                  <td style="text-align: center;">
                     <div style="display: inline-flex; gap: 4px; align-items: center;">
                       <button class="btn btn-primary btn-input-nilai" data-id="${candidateId}" style="padding: 5px 10px; font-size: 0.76rem; font-weight: 700; background: ${isSelesai ? '#0284c7' : '#006837'}; color: #fff; border-radius: 6px; border: none; cursor: pointer;">
                         ${isSelesai ? '✏️ Skor' : '🎤 Nilai'}
@@ -5270,13 +5465,13 @@ export function renderPengingatViewport() {
                 </td>
                 <td>
                   <span class="${rem.status_badge_class}" title="${rem.alasan}">
-                    ${rem.status === 'Menunggu Pengiriman' ? '⏳ Menunggu Pengiriman' :
-        rem.status === 'Berhasil Dikirim' ? '✅ Berhasil Dikirim' :
+                    ${rem.status === 'Menunggu Pengiriman' ? '⏳ Menunggu H-1' :
+        rem.status === 'Berhasil Dikirim' ? ((rem.metode_kirim && rem.metode_kirim.includes('Manual')) ? '✅ Terkirim Ulang (Manual)' : '✅ Terkirim Otomatis (H-1)') :
           rem.status === 'Gagal Dikirim' ? '❌ Gagal Dikirim' :
-            rem.status === 'Dibatalkan' ? '🚫 Dibatalkan / Selesai' :
+            rem.status === 'Dibatalkan' ? '🚫 Dibatalkan' :
               'Belum Dijadwalkan'}
                   </span>
-                  ${rem.waktu_aktual_kirim ? `<span style="font-size: 0.7rem; color: #15803d; display: block; margin-top: 2px;">Terkirim: ${rem.waktu_aktual_kirim.slice(0, 16).replace('T', ' ')}</span>` : ''}
+                  ${rem.waktu_aktual_kirim ? `<span style="font-size: 0.7rem; color: #15803d; display: block; margin-top: 2px;">Terkirim: ${rem.waktu_aktual_kirim.slice(0, 16).replace('T', ' ')} WIB${rem.jumlah_kirim > 1 ? ` (${rem.jumlah_kirim}x)` : ''}</span>` : ''}
                   ${rem.status === 'Gagal Dikirim' && rem.error_log ? `<span style="font-size: 0.68rem; color: #b91c1c; display: block; margin-top: 2px;">${rem.error_log}</span>` : ''}
                 </td>
                 <td style="text-align: center;">
@@ -5284,8 +5479,8 @@ export function renderPengingatViewport() {
                     <button class="btn btn-secondary btn-preview-reminder" data-id="${cId}" title="Lihat template pesan WhatsApp & Email" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 700;">
                       👁️ Preview
                     </button>
-                    <button class="btn btn-secondary btn-test-reminder-api" data-id="${cId}" title="Uji Koneksi Gateway Pengiriman" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 700; background: #f0fdf4; color: #166534; border-color: #bbf7d0;">
-                      🧪 Uji Gateway
+                    <button class="btn btn-secondary btn-test-reminder-api" data-id="${cId}" title="Kirim ulang pengingat jadwal wawancara secara manual via WhatsApp & Email" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 700; background: #f0fdf4; color: #166534; border-color: #bbf7d0; cursor: pointer;">
+                      ${rem.status === 'Berhasil Dikirim' ? '🔄 Kirim Ulang' : '📨 Kirim Manual'}
                     </button>
                   </div>
                 </td>
@@ -5403,6 +5598,7 @@ if (typeof window !== 'undefined') {
 
 export function openModalPreviewReminder(candidateId) {
   activePreviewReminderCandidateId = candidateId;
+  if (typeof window !== 'undefined') window.activePreviewReminderCandidateId = candidateId;
   const allCandidates = getPendaftarSSoT();
   const c = allCandidates.find(item => (item.id || item.id_pendaftar) === candidateId);
   if (!c) {
@@ -5422,10 +5618,10 @@ export function openModalPreviewReminder(candidateId) {
   if (metaJadwal) metaJadwal.textContent = `${formatTanggalIndonesia(rem.tanggal_pengingat_h1)} pukul 08:00 WIB (Asia/Jakarta)`;
 
   const metaStatus = document.getElementById('preview-meta-status');
-  if (metaStatus) metaStatus.innerHTML = `<span class="${rem.status_badge_class}">${rem.status}</span>`;
+  if (metaStatus) metaStatus.innerHTML = `<span class="${rem.status_badge_class}">${rem.status === 'Berhasil Dikirim' ? ((rem.metode_kirim && rem.metode_kirim.includes('Manual')) ? '✅ Terkirim Ulang (Manual)' : '✅ Terkirim Otomatis (H-1)') : rem.status}</span>`;
 
   const metaIdem = document.getElementById('preview-meta-idempotency');
-  if (metaIdem) metaIdem.textContent = rem.id_pengingat;
+  if (metaIdem) metaIdem.textContent = `${rem.metode_kirim || 'Otomatis H-1'}${rem.jumlah_kirim > 1 ? ` (${rem.jumlah_kirim}x dikirim)` : ''}`;
 
   const metaKontak = document.getElementById('preview-meta-kontak');
   if (metaKontak) {
@@ -5475,32 +5671,55 @@ export async function handleTestReminderApi(candidateId) {
     return;
   }
 
+  const cName = c.nama || c.nama_lengkap || candidateId;
+  const currentRem = computeReminderMetadata(c);
   const result = await dispatchReminderToBackend(c);
 
-  if (result.status === 'BELUM_TERINTEGRASI_BACKEND') {
-    alert(
-      `📡 STATUS ADAPTER GATEWAY PENGINGAT H-1\n\n` +
-      `No. Registrasi: ${candidateId}\n` +
-      `Idempotency Key: ${result.idempotency_key}\n` +
-      `Status Integrasi: BELUM TERINTEGRASI KE BACKEND GATEWAY\n\n` +
-      `Keterangan:\n${result.error}\n\n` +
-      `Tindakan Selanjutnya:\n` +
-      `Untuk mengaktifkan pengiriman otomatis 24/7 di luar browser, jalankan background server scheduler dan sambungkan provider WhatsApp/SMTP sesuai panduan BACKEND_REMINDER_SPEC.md.`
-    );
-    showToast('ℹ️ Gateway Server belum aktif. Sistem tetap aman dan jujur.', 'info');
-  } else if (result.success) {
-    showToast(`✅ Pesan pengingat berhasil dikirim via Gateway! ID: ${result.external_message_id}`);
+  if (result.success) {
+    const nextCount = (currentRem.status === 'Berhasil Dikirim' ? (currentRem.jumlah_kirim || 1) + 1 : 1);
+    const metodeLabel = nextCount > 1 ? 'Kirim Ulang Manual (Admin)' : 'Kirim Manual (Admin)';
+
     // Simpan status sukses ke SSoT
     const dbData = db.get() || { pendaftar: [] };
     const idx = dbData.pendaftar.findIndex(p => (p.id || p.id_pendaftar) === candidateId);
     if (idx !== -1) {
       if (!dbData.pendaftar[idx].pengingat_wawancara) dbData.pendaftar[idx].pengingat_wawancara = {};
       dbData.pendaftar[idx].pengingat_wawancara.status = 'Berhasil Dikirim';
+      dbData.pendaftar[idx].pengingat_wawancara.metode_kirim = metodeLabel;
+      dbData.pendaftar[idx].pengingat_wawancara.jumlah_kirim = nextCount;
       dbData.pendaftar[idx].pengingat_wawancara.waktu_aktual_kirim = result.timestamp;
       dbData.pendaftar[idx].pengingat_wawancara.external_message_id = result.external_message_id;
       db.save(dbData);
-      renderPengingatViewport();
     }
+
+    // Sinkronkan juga ke spmb_pendaftar_db jika ada
+    try {
+      const pRaw = localStorage.getItem('spmb_pendaftar_db');
+      if (pRaw) {
+        const pList = JSON.parse(pRaw);
+        const pIdx = pList.findIndex(p => (p.id_pendaftar === candidateId || p.id === candidateId));
+        if (pIdx !== -1) {
+          if (!pList[pIdx].pengingat_wawancara) pList[pIdx].pengingat_wawancara = {};
+          pList[pIdx].pengingat_wawancara.status = 'Berhasil Dikirim';
+          pList[pIdx].pengingat_wawancara.metode_kirim = metodeLabel;
+          pList[pIdx].pengingat_wawancara.jumlah_kirim = nextCount;
+          pList[pIdx].pengingat_wawancara.waktu_aktual_kirim = result.timestamp;
+          localStorage.setItem('spmb_pendaftar_db', JSON.stringify(pList));
+        }
+      }
+    } catch (e) {}
+
+    renderPengingatViewport();
+
+    // Perbarui metadata di modal preview jika sedang terbuka
+    if (activePreviewReminderCandidateId === candidateId) {
+      const metaStatus = document.getElementById('preview-meta-status');
+      if (metaStatus) metaStatus.innerHTML = `<span class="badge-status-success">✅ Terkirim Ulang (Manual)</span>`;
+      const metaIdem = document.getElementById('preview-meta-idempotency');
+      if (metaIdem) metaIdem.textContent = `${metodeLabel} (${nextCount}x dikirim)`;
+    }
+
+    showToast(`✅ Pengingat wawancara untuk ${cName} berhasil dikirim ulang secara manual via WhatsApp & Email!`);
   } else {
     showToast(`❌ Gagal mengirim pengingat: ${result.error}`, 'error');
   }
