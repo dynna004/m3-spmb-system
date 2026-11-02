@@ -38,7 +38,7 @@ function ensureAdminStyles() {
     link.id = cssId;
     link.rel = 'stylesheet';
     const isStandalone = window.location.pathname.includes('/02_admin_spmb/');
-    link.href = isStandalone ? './admin.css' : './modules/02_admin_spmb/admin.css';
+    link.href = isStandalone ? './admin.css?v=20261102_full' : './modules/02_admin_spmb/admin.css?v=20261102_full';
     document.head.appendChild(link);
   }
 }

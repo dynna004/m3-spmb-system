@@ -1,238 +1,356 @@
 <!DOCTYPE html>
-<html lang="id">
-
+<html lang="id" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pengumuman Kelulusan Seleksi - Portal SPMB SMA Muhammadiyah 3 Yogyakarta</title>
-  <link rel="stylesheet" href="../../shared/styles.css">
-  <style>
-    .portal-container {
-      max-width: 680px;
-      margin: 2.5rem auto;
-      padding: 0 1rem;
-    }
-
-    .portal-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 2.25rem;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-      border: 1px solid #e2e8f0;
-    }
-
-    .brand-header {
-      text-align: center;
-      margin-bottom: 1.75rem;
-    }
-
-    .brand-logo {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 56px;
-      height: 56px;
-      background: linear-gradient(135deg, #006837 0%, #004d28 100%);
-      color: white;
-      border-radius: 14px;
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 0.75rem;
-      box-shadow: 0 4px 12px rgba(0, 104, 55, 0.25);
-    }
-
-    .nav-steps {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .step-pill {
-      font-size: 0.72rem;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: #e2e8f0;
-      color: #64748b;
-      text-decoration: none;
-    }
-
-    .step-pill.active {
-      background: #006837;
-      color: #ffffff;
-    }
-
-    .portal-grid-kv {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-      background: #f8fafc;
-      padding: 1.25rem;
-      border-radius: 10px;
-      border: 1px solid #e2e8f0;
-      margin: 1.25rem 0;
-    }
-
-    .kv-item strong {
-      display: block;
-      font-size: 0.72rem;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .kv-item span {
-      display: block;
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #0f172a;
-      margin-top: 3px;
-    }
-
-    .notice-box {
-      border-radius: 10px;
-      padding: 1.25rem;
-      margin: 1.25rem 0;
-      font-size: 0.88rem;
-      line-height: 1.6;
-      background: #f0fdf4;
-      border-left: 4px solid #22c55e;
-      color: #14532d;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="portal-container">
-    <div class="nav-steps">
-      <a href="register.html" class="step-pill">1. Registrasi</a>
-      <a href="status-akun.html" class="step-pill">2. Status Aktivasi</a>
-      <a href="login.html" class="step-pill">3. Login Pendaftar</a>
-      <a href="formulir.html" class="step-pill">4. Formulir & Bukti</a>
-      <a href="dashboard.html" class="step-pill">5. Dashboard Siswa</a>
-      <span class="step-pill active">6. Cek Kelulusan</span>
-    </div>
-
-    <div class="portal-card">
-      <div class="brand-header">
-        <div class="brand-logo">M3</div>
-        <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a;">Pengumuman Kelulusan Seleksi SPMB</h2>
-        <p style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">SMA Muhammadiyah 3 Yogyakarta &bull; Alur 10:
-          Akses Hasil Mandiri</p>
-      </div>
-
-      <div
-        style="background: #f8fafc; padding: 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 1.5rem;">
-        <label style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px;">Masukkan Nomor
-          Registrasi atau NISN Anda:</label>
-        <div style="display: flex; gap: 8px;">
-          <input type="text" id="input-query" class="form-control" placeholder="Contoh: REG-2026-001 atau 0051234567"
-            style="padding: 10px 14px;">
-          <button id="btn-search" class="btn btn-primary" style="flex-shrink: 0; padding: 10px 20px;">Cek
-            Status</button>
-        </div>
-      </div>
-
-      <div id="output-area"></div>
-    </div>
-  </div>
-
-  <script type="module">
-    import { getPendaftarById, getPendaftarList, escapeHTML } from './utils.js';
-
-    const inputQuery = document.getElementById('input-query');
-    const btnSearch = document.getElementById('btn-search');
-    const outputArea = document.getElementById('output-area');
-
-    // Auto-fill jika ada sesi login
-    const sess = localStorage.getItem('m3_spmb_logged_in_user');
-    if (sess) {
-      try {
-        const u = JSON.parse(sess);
-        if (u) {
-          inputQuery.value = u.id_pendaftar || u.id || u.nisn || '';
-          displayResult(u);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengumuman Hasil Perankingan Otomatis - SPMB SMA Muhammadiyah 3 Yogyakarta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: {
+                        muh: {
+                            green: '#0b5d38',
+                            dark: '#063d24',
+                            light: '#e6f4ed',
+                            gold: '#f59e0b',
+                            goldlight: '#fef3c7'
+                        }
+                    }
+                }
+            }
         }
-      } catch (e) { }
-    }
+    </script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
 
-    btnSearch.addEventListener('click', () => {
-      const q = inputQuery.value.trim();
-      if (!q) {
-        alert('Harap masukkan No. Registrasi atau NISN!');
-        return;
-      }
-      const found = getPendaftarById(q);
-      displayResult(found);
-    });
-
-    function displayResult(user) {
-      if (!user) {
-        outputArea.innerHTML = `
-          <div style="text-align: center; padding: 2rem; background: #fff1f2; border: 1px solid #fecdd3; border-radius: 10px; color: #9f1239;">
-            Data pendaftar dengan nomor/NISN tersebut tidak ditemukan. Pastikan data sudah benar.
-          </div>
-        `;
-        return;
-      }
-
-      const status = (user.status_kelulusan || 'MENUNGGU').toUpperCase();
-      const isLulus = status === 'LULUS';
-      const isCadangan = status === 'CADANGAN';
-      const isGagal = status === 'TIDAK LULUS';
-
-      outputArea.innerHTML = `
-        <div style="border-radius: 12px; border: 2px solid ${isLulus ? '#22c55e' : (isCadangan ? '#f59e0b' : '#cbd5e1')}; padding: 1.5rem; background: ${isLulus ? '#f0fdf4' : '#ffffff'};">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 14px;">
-            <div>
-              <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #0f172a;">${escapeHTML(user.nama_lengkap || user.nama)}</h3>
-              <span style="font-size: 0.8rem; color: #64748b;">No. Reg: <strong>${escapeHTML(user.id_pendaftar || user.id)}</strong> &bull; NISN: ${escapeHTML(user.nisn)}</span>
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white border-b border-slate-200/80 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <a href="dashboard.html" class="flex items-center gap-2 text-slate-600 hover:text-muh-green font-semibold text-sm transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                        Kembali ke Dasbor Siswa
+                    </a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="../05_kelulusan_spmb/kelulusan.html" class="text-xs font-bold text-muh-green bg-muh-light px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition-colors">
+                        ⚙️ Buka Modul 05 (Tabel Perankingan Admin)
+                    </a>
+                </div>
             </div>
-            <div>
-              <span style="padding: 6px 16px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; 
-                background: ${isLulus ? '#dcfce7' : (isCadangan ? '#fef3c7' : (isGagal ? '#fee2e2' : '#f1f5f9'))}; 
-                color: ${isLulus ? '#15803d' : (isCadangan ? '#b45309' : (isGagal ? '#991b1b' : '#475569'))};">
-                ${isLulus ? '🎉 DINYATAKAN LULUS' : (isCadangan ? '⚠️ CADANGAN' : (isGagal ? '❌ TIDAK LULUS' : '⏳ DALAM PROSES SELEKSI'))}
-              </span>
-            </div>
-          </div>
-
-          <div class="portal-grid-kv" style="margin: 0 0 1rem 0; background: white;">
-            <div class="kv-item">
-              <strong>Peminatan Jurusan Diterima</strong>
-              <span style="color: #006837;">${escapeHTML(user.biodata?.pilihan_jurusan || user.pilihan_jurusan || 'MIPA')}</span>
-            </div>
-            <div class="kv-item">
-              <strong>Nilai Wawancara & Pemetaan</strong>
-              <span>${user.nilai_wawancara || user.wawancara?.nilai_akhir || '88'} / 100</span>
-            </div>
-            <div class="kv-item">
-              <strong>Rekomendasi Beasiswa</strong>
-              <span>${escapeHTML(user.dataWawancara?.rekomendasi_beasiswa || user.wawancara?.beasiswa || 'Reguler')}</span>
-            </div>
-            <div class="kv-item">
-              <strong>Jalur Penerimaan</strong>
-              <span>Reguler Berkelanjutan</span>
-            </div>
-          </div>
-
-          ${isLulus ? `
-            <div class="notice-box">
-              <strong>Tahap Berikutnya: Daftar Ulang Fisik & Keuangan (Alur 11 & 12)</strong><br>
-              Silakan hadir ke Loket SPMB SMA Muhammadiyah 3 Yogyakarta dengan membawa:
-              <ul style="margin-left: 1.25rem; margin-top: 4px;">
-                <li>Ijazah / SKL SMP Asli & Legalisir</li>
-                <li>Fotokopi Kartu Keluarga & Akta Kelahiran</li>
-                <li>Menyelesaikan pembayaran Uang Pangkal di Kasir Sekolah</li>
-              </ul>
-            </div>
-          ` : ''}
         </div>
-      `;
-    }
-  </script>
-</body>
+    </nav>
 
+    <!-- Main Content -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Switcher Simulasi 3 Kategori Perankingan Otomatis -->
+        <div class="mb-6 bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+                <div>
+                    <span class="text-[11px] font-extrabold uppercase tracking-wider text-muh-green bg-muh-light px-2.5 py-1 rounded-md">
+                        ⚡ Simulasi Hasil Perankingan Otomatis (Nilai Akhir)
+                    </span>
+                    <p class="text-xs text-slate-600 mt-1">
+                        Pilih contoh posisi peringkat di bawah ini untuk melihat tampilan pengumuman siswa:
+                        <strong>80 Besar (Lulus)</strong>, <strong>10 Cadangan (Rank 81–90)</strong>, atau <strong>Gagal (Rank 91+ / Coba Gelombang Selanjutnya)</strong>.
+                    </p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <button type="button" onclick="window.simulateOutcome('LULUS')" id="sim-btn-lulus" class="text-left px-3.5 py-2.5 rounded-xl border-2 border-emerald-500 bg-emerald-50/70 hover:bg-emerald-50 transition-all">
+                    <div class="text-xs font-extrabold text-emerald-800">🏆 1. Contoh 80 Besar (LULUS)</div>
+                    <div class="text-[11px] text-emerald-700 font-medium">Peringkat #12 dari 105 • Nilai Akhir: 90.40</div>
+                </button>
+                <button type="button" onclick="window.simulateOutcome('CADANGAN')" id="sim-btn-cadangan" class="text-left px-3.5 py-2.5 rounded-xl border border-amber-300 bg-amber-50/60 hover:bg-amber-50 transition-all">
+                    <div class="text-xs font-extrabold text-amber-800">⏳ 2. Contoh 10 Cadangan</div>
+                    <div class="text-[11px] text-amber-700 font-medium">Peringkat #83 (Cadangan #3 dari 10) • Skor: 79.16</div>
+                </button>
+                <button type="button" onclick="window.simulateOutcome('TIDAK LULUS')" id="sim-btn-gagal" class="text-left px-3.5 py-2.5 rounded-xl border border-rose-300 bg-rose-50/60 hover:bg-rose-50 transition-all">
+                    <div class="text-xs font-extrabold text-rose-800">🔄 3. Contoh Gagal (Rank 91+)</div>
+                    <div class="text-[11px] text-rose-700 font-medium">Peringkat #94 dari 105 • Bisa Coba Gelombang 2</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Container Surat Pengumuman -->
+        <div id="pengumuman-container" class="bg-white rounded-3xl border border-slate-200/80 shadow-xl overflow-hidden">
+
+            <!-- Header Kop Surat -->
+            <div class="bg-slate-900 text-white p-6 sm:p-8 text-center border-b-4 border-muh-gold relative overflow-hidden">
+                <div class="relative z-10 flex flex-col items-center">
+                    <div class="w-14 h-14 rounded-2xl bg-muh-green flex items-center justify-center text-white font-extrabold text-xl shadow-lg mb-3 border border-white/20">M3</div>
+                    <p class="text-xs uppercase tracking-widest text-slate-400 font-semibold">Majelis Pendidikan Dasar dan Menengah Muhammadiyah</p>
+                    <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight mt-1">PANITIA SPMB SMA MUHAMMADIYAH 3 YOGYAKARTA</h1>
+                    <p class="text-xs text-slate-300 mt-1">Keputusan Otomatis Perankingan Nilai Akhir • Tahun Ajaran 2026/2027</p>
+                </div>
+            </div>
+
+            <!-- Body Surat -->
+            <div class="p-6 sm:p-10">
+                <div class="text-center mb-8">
+                    <h2 class="text-lg font-extrabold text-slate-900 underline decoration-2 underline-offset-4">SURAT KEPUTUSAN HASIL PERANKINGAN OTOMATIS CALON MURID BARU</h2>
+                    <p class="text-xs text-slate-500 font-mono mt-1">Nomor: SK/048/SPMB-M3/V/2026</p>
+                </div>
+
+                <!-- Banner Status Dinamis -->
+                <div id="status-banner" class="rounded-2xl p-6 mb-8 text-center border-2">
+                    <!-- Diisi oleh JS -->
+                </div>
+
+                <!-- Box Ringkasan Peringkat & Nilai Akhir -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-center">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Peringkat Nilai Akhir</span>
+                        <span id="rank-display" class="text-2xl font-black text-slate-900 mt-1 block">#12 / 105</span>
+                        <span id="rank-zone-label" class="text-[11px] font-bold text-emerald-700 mt-0.5 block">Masuk Kuota 80 Besar</span>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-center">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Nilai Akhir Gabungan</span>
+                        <span id="score-display" class="text-2xl font-black text-muh-green mt-1 block">90.40</span>
+                        <span id="score-detail-label" class="text-[11px] text-slate-500 mt-0.5 block">60% Rapor + 40% Wawancara</span>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-center">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Aturan Kuota Otomatis</span>
+                        <span class="text-sm font-extrabold text-slate-800 mt-1.5 block">#1–#80: Lulus (80 Besar)</span>
+                        <span class="text-[11px] font-semibold text-amber-700 mt-0.5 block">#81–#90: 10 Cadangan • #91+: Gel. 2</span>
+                    </div>
+                </div>
+
+                <!-- Detail Data Peserta -->
+                <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 mb-8">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Identitas Peserta Seleksi</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="text-xs text-slate-500 block">Nomor Pendaftaran</span>
+                            <span id="det-nopend" class="font-bold font-mono text-slate-900 text-base">-</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-500 block">NISN</span>
+                            <span id="det-nisn" class="font-bold font-mono text-slate-900 text-base">-</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-500 block">Nama Lengkap Siswa</span>
+                            <span id="det-nama" class="font-bold text-slate-900 text-base">-</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-500 block">Asal Sekolah</span>
+                            <span id="det-sekolah" class="font-semibold text-slate-800">-</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-500 block">Jalur &amp; Gelombang</span>
+                            <span id="det-jalur" class="font-semibold text-muh-green">-</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-500 block">Peminatan / Jurusan</span>
+                            <span id="det-jurusan" class="font-semibold text-slate-800">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Box Informasi Tindak Lanjut Dinamis -->
+                <div id="next-step-box" class="mb-8"></div>
+
+                <!-- Tombol Aksi -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-slate-200">
+                    <button onclick="window.print()" class="w-full sm:w-auto px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm transition-all flex items-center justify-center gap-2">
+                        🖨️ Cetak Bukti Hasil Perankingan
+                    </button>
+                    <div id="cta-action-wrapper" class="w-full sm:w-auto"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        let currentStudent = null;
+
+        function getActiveStudent() {
+            try {
+                const logged = JSON.parse(localStorage.getItem('m3_spmb_logged_in_user'));
+                if (logged) return logged;
+                const cur = JSON.parse(localStorage.getItem('m3_spmb_current_user'));
+                if (cur) return cur;
+            } catch (e) {}
+            return {
+                no_pendaftaran: 'SPMB-2026-0012',
+                nisn: '0098451234',
+                nama_lengkap: 'Aisyah Putri Rahmawati',
+                asal_sekolah: 'SMP Muhammadiyah 1 Yogyakarta',
+                jalur_pendaftaran: 'Reguler',
+                pilihan_jurusan: 'MIPA',
+                status_kelulusan: 'LULUS'
+            };
+        }
+
+        window.registerNextWaveAlert = function () {
+            const box = document.getElementById('next-wave-confirm-banner');
+            if (box) {
+                box.classList.remove('hidden');
+                box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        };
+
+        window.simulateOutcome = function (mode) {
+            const banner = document.getElementById('status-banner');
+            const rankDisplay = document.getElementById('rank-display');
+            const rankZoneLabel = document.getElementById('rank-zone-label');
+            const scoreDisplay = document.getElementById('score-display');
+            const scoreDetailLabel = document.getElementById('score-detail-label');
+            const nextStepBox = document.getElementById('next-step-box');
+            const ctaWrapper = document.getElementById('cta-action-wrapper');
+
+            const btnLulus = document.getElementById('sim-btn-lulus');
+            const btnCad = document.getElementById('sim-btn-cadangan');
+            const btnGagal = document.getElementById('sim-btn-gagal');
+            [btnLulus, btnCad, btnGagal].forEach(b => {
+                if (!b) return;
+                b.classList.remove('ring-2', 'ring-offset-1', 'ring-emerald-600', 'ring-amber-500', 'ring-rose-600');
+            });
+
+            document.getElementById('det-nopend').textContent = currentStudent.no_pendaftaran || currentStudent.id_pendaftar || 'SPMB-2026-0012';
+            document.getElementById('det-nisn').textContent = currentStudent.nisn || '0098451234';
+            document.getElementById('det-nama').textContent = currentStudent.nama_lengkap || currentStudent.nama || 'Aisyah Putri Rahmawati';
+            document.getElementById('det-sekolah').textContent = currentStudent.asal_sekolah || currentStudent.biodata?.asal_sekolah || 'SMP Muhammadiyah 1 Yogyakarta';
+            document.getElementById('det-jalur').textContent = (currentStudent.jalur_pendaftaran || 'Reguler') + ' (Gelombang 1)';
+            document.getElementById('det-jurusan').textContent = currentStudent.pilihan_jurusan || currentStudent.biodata?.pilihan_jurusan || 'MIPA';
+
+            if (mode === 'LULUS') {
+                btnLulus?.classList.add('ring-2', 'ring-offset-1', 'ring-emerald-600');
+                rankDisplay.textContent = '#12 / 105';
+                rankZoneLabel.textContent = '🏆 Masuk Kuota 80 Besar (Peringkat 1–80)';
+                rankZoneLabel.className = 'text-[11px] font-bold text-emerald-700 mt-0.5 block';
+                scoreDisplay.textContent = '90.40';
+                scoreDetailLabel.textContent = 'Rapor: 90.00 (60%) • Wawancara: 91.00 (40%)';
+
+                banner.className = 'rounded-2xl p-6 sm:p-8 mb-8 text-center border-2 bg-emerald-50 border-emerald-300 text-emerald-950';
+                banner.innerHTML = `
+                    <div class="w-16 h-16 rounded-full bg-emerald-600 text-white flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-600/30">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                    </div>
+                    <span class="text-xs font-extrabold uppercase tracking-widest text-emerald-700 bg-emerald-200/70 px-3 py-1 rounded-full">KEPUTUSAN PERANKINGAN OTOMATIS: 80 BESAR</span>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-emerald-900 mt-3">SELAMAT! ANDA OTOMATIS DINYATAKAN LULUS</h3>
+                    <p class="text-sm text-emerald-800 mt-2 max-w-xl mx-auto">
+                        Nilai Akhir Anda menempati <strong>Peringkat #12 dari 105 peserta</strong> (masuk dalam kuota <strong>80 Besar Nilai Akhir Teratas</strong>).
+                    </p>
+                `;
+
+                nextStepBox.innerHTML = `
+                    <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex items-start gap-3.5">
+                        <span class="text-xl">📌</span>
+                        <div class="text-xs text-amber-900 leading-relaxed">
+                            <p class="font-bold text-sm mb-1">Instruksi Wajib Daftar Ulang (Peserta 80 Besar):</p>
+                            <p>Silakan segera menyelesaikan proses <strong>Daftar Ulang &amp; Verifikasi Loket (Modul 06)</strong>. Apabila hingga batas waktu daftar ulang berakhir tidak dilakukan konfirmasi, kuota otomatis dialihkan ke peserta <strong>10 Cadangan (Peringkat #81–#90)</strong>.</p>
+                        </div>
+                    </div>
+                `;
+
+                ctaWrapper.innerHTML = `
+                    <a href="../06_verifikasi_loket/loket.html" class="w-full sm:w-auto px-8 py-3.5 bg-muh-green hover:bg-muh-dark text-white font-extrabold rounded-xl text-sm shadow-lg shadow-muh-green/25 transition-all flex items-center justify-center gap-2">
+                        Lanjut ke Daftar Ulang (Modul 06) ➔
+                    </a>
+                `;
+            } else if (mode === 'CADANGAN') {
+                btnCad?.classList.add('ring-2', 'ring-offset-1', 'ring-amber-500');
+                rankDisplay.textContent = '#83 / 105';
+                rankZoneLabel.textContent = '⏳ Kuota 10 Cadangan (Urutan Cadangan #3)';
+                rankZoneLabel.className = 'text-[11px] font-bold text-amber-700 mt-0.5 block';
+                scoreDisplay.textContent = '79.16';
+                scoreDetailLabel.textContent = 'Rapor: 79.40 (60%) • Wawancara: 78.80 (40%)';
+
+                banner.className = 'rounded-2xl p-6 sm:p-8 mb-8 text-center border-2 bg-amber-50 border-amber-300 text-amber-950';
+                banner.innerHTML = `
+                    <div class="w-16 h-16 rounded-full bg-amber-500 text-white flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-500/30 text-2xl font-black">
+                        ⏳
+                    </div>
+                    <span class="text-xs font-extrabold uppercase tracking-widest text-amber-800 bg-amber-200/70 px-3 py-1 rounded-full">KEPUTUSAN PERANKINGAN OTOMATIS: 10 CADANGAN</span>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-amber-900 mt-3">STATUS: CADANGAN OTOMATIS (URUTAN #3 DARI 10)</h3>
+                    <p class="text-sm text-amber-800 mt-2 max-w-xl mx-auto">
+                        Nilai Akhir Anda berada di <strong>Peringkat #83 dari 105 peserta</strong> (masuk zona <strong>Peringkat #81–#90 / 10 Cadangan Otomatis</strong>).
+                    </p>
+                `;
+
+                nextStepBox.innerHTML = `
+                    <div class="bg-amber-50/80 border border-amber-300 rounded-2xl p-5 flex items-start gap-3.5">
+                        <span class="text-xl">🔔</span>
+                        <div class="text-xs text-amber-900 leading-relaxed">
+                            <p class="font-bold text-sm mb-1">Mekanisme Kenaikan Status Otomatis untuk 10 Cadangan:</p>
+                            <p>Apabila terdapat peserta di <strong>80 Besar (Peringkat #1–#80)</strong> yang tidak melakukan daftar ulang hingga batas waktu berakhir, sistem secara otomatis menaikkan status peserta Cadangan mulai dari <strong>Urutan Cadangan #1 (Peringkat #81)</strong> dan seterusnya. Anda juga dapat memilih langsung mendaftar di <strong>Gelombang Selanjutnya</strong>.</p>
+                        </div>
+                    </div>
+                `;
+
+                ctaWrapper.innerHTML = `
+                    <a href="dashboard.html" class="w-full sm:w-auto px-8 py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-extrabold rounded-xl text-sm shadow-lg transition-all flex items-center justify-center gap-2">
+                        Pantau Status Kuota di Dasbor ➔
+                    </a>
+                `;
+            } else {
+                btnGagal?.classList.add('ring-2', 'ring-offset-1', 'ring-rose-600');
+                rankDisplay.textContent = '#94 / 105';
+                rankZoneLabel.textContent = '🔄 Di Luar Kuota #1–#90 (Gagal Gelombang 1)';
+                rankZoneLabel.className = 'text-[11px] font-bold text-rose-700 mt-0.5 block';
+                scoreDisplay.textContent = '74.92';
+                scoreDetailLabel.textContent = 'Rapor: 75.20 (60%) • Wawancara: 74.50 (40%)';
+
+                banner.className = 'rounded-2xl p-6 sm:p-8 mb-8 text-center border-2 bg-rose-50 border-rose-300 text-rose-950';
+                banner.innerHTML = `
+                    <div class="w-16 h-16 rounded-full bg-rose-600 text-white flex items-center justify-center mx-auto mb-4 shadow-lg shadow-rose-600/30">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </div>
+                    <span class="text-xs font-extrabold uppercase tracking-widest text-rose-800 bg-rose-200/70 px-3 py-1 rounded-full">KEPUTUSAN PERANKINGAN OTOMATIS: PERINGKAT #94</span>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-rose-900 mt-3">MOHON MAAF, BELUM LULUS PADA GELOMBANG INI</h3>
+                    <p class="text-sm text-rose-800 mt-2 max-w-xl mx-auto">
+                        Berdasarkan hasil perankingan Nilai Akhir otomatis, Anda berada pada <strong>Peringkat #94 dari 105 peserta</strong> (di luar kuota <strong>80 Besar Lulus</strong> dan <strong>10 Cadangan</strong>).
+                    </p>
+                `;
+
+                nextStepBox.innerHTML = `
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6">
+                        <div class="flex items-start gap-3.5">
+                            <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shrink-0">🔄</div>
+                            <div class="text-xs text-blue-950 leading-relaxed flex-1">
+                                <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider bg-blue-200 text-blue-900 px-2.5 py-0.5 rounded-md mb-1">
+                                    Kesempatan Kedua Tersedia
+                                </span>
+                                <h4 class="font-extrabold text-base text-blue-900 mb-1">
+                                    Jangan Berkecil Hati! Anda Dapat Mencoba Kembali di Gelombang Selanjutnya
+                                </h4>
+                                <p class="text-blue-900/90">
+                                    Peserta yang belum masuk dalam <strong>80 Besar</strong> maupun <strong>10 Cadangan</strong> pada Gelombang 1 dapat langsung mengikuti seleksi kembali pada <strong>Gelombang 2 (20 Mei – 30 Juni 2026)</strong> menggunakan akun yang sama tanpa perlu registrasi ulang dari awal.
+                                </p>
+                                <div id="next-wave-confirm-banner" class="hidden mt-4 p-3.5 rounded-xl bg-emerald-100 border border-emerald-300 text-emerald-900 font-bold text-xs">
+                                    ✅ Pendaftaran ulang Anda untuk <strong>Gelombang 2 (Gelombang Selanjutnya)</strong> telah tercatat! Anda dapat memperbarui dokumen prestasi atau mengikuti jadwal wawancara Gelombang 2 melalui Dasbor Siswa.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                ctaWrapper.innerHTML = `
+                    <button type="button" onclick="window.registerNextWaveAlert()" class="w-full sm:w-auto px-7 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl text-sm shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center gap-2">
+                        🔄 Daftar / Coba Lagi di Gelombang Selanjutnya ➔
+                    </button>
+                `;
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            currentStudent = getActiveStudent();
+            const status = (currentStudent.status_kelulusan || 'LULUS').toUpperCase();
+            if (status === 'CADANGAN') {
+                window.simulateOutcome('CADANGAN');
+            } else if (status === 'TIDAK LULUS' || status === 'GAGAL') {
+                window.simulateOutcome('TIDAK LULUS');
+            } else {
+                window.simulateOutcome('LULUS');
+            }
+        });
+    </script>
+</body>
 </html>

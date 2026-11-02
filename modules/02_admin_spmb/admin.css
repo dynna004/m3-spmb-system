@@ -38,6 +38,61 @@
 }
 
 /* Base Wrapper */
+main.container:has(#admin-spmb-root),
+.admin-page-container,
+.admin-standalone-wrapper,
+.admin-shell,
+.admin-dashboard-layout {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+main.container:has(#admin-spmb-root),
+.admin-page-container {
+  padding: 0 1rem !important;
+  margin: 1rem auto !important;
+}
+
+.table-responsive-wrapper {
+  overflow-x: visible !important;
+}
+
+.filter-btn-group {
+  flex-wrap: wrap !important;
+}
+
+.spmb-data-table th {
+  white-space: normal !important;
+  padding: 10px 12px !important;
+  line-height: 1.25;
+}
+
+.spmb-data-table td {
+  padding: 10px 12px !important;
+  white-space: normal !important;
+}
+
+.admin-modal-backdrop {
+  overflow-y: auto !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.admin-modal-card {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.admin-modal-card.modal-lg {
+  max-width: 960px !important;
+}
+
+.email-preview-frame-wrapper,
+.whatsapp-bubble-box,
+.lightbox-window,
+.lightbox-view-area {
+  max-height: none !important;
+  overflow: visible !important;
+}
 .admin-shell {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: var(--admin-text-body);
@@ -49,7 +104,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
   width: 100%;
   transition: var(--admin-transition);
@@ -65,7 +120,7 @@ body.admin-standalone-body {
 }
 
 .admin-standalone-wrapper {
-  max-width: 1200px;
+  max-width: 100%;
   margin: 1.5rem auto;
   padding: 0 1.25rem;
 }
@@ -75,7 +130,7 @@ body.admin-standalone-body {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
   background: transparent;
   gap: 1.25rem;

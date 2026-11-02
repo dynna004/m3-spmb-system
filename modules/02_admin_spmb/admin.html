@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Admin SPMB - SMA Muhammadiyah 3 Yogyakarta</title>
   <link rel="stylesheet" href="../../shared/styles.css">
-  <link rel="stylesheet" href="./admin.css">
+  <link rel="stylesheet" href="./admin.css?v=20261102_full">
   <style>
     body {
       background-color: #f1f5f9;
@@ -17,9 +17,10 @@
     }
 
     .admin-page-container {
-      max-width: 1440px;
-      margin: 1.5rem auto;
-      padding: 0 1.25rem;
+      max-width: 100%;
+      width: 100%;
+      margin: 1rem auto;
+      padding: 0 1rem;
     }
   </style>
 </head>
@@ -45,7 +46,7 @@
   </div>
 
   <script type="module">
-    import { renderAdminSPMB } from './admin.js';
+    import { renderAdminSPMB } from './admin.js?v=20261102_full';
     renderAdminSPMB('admin-viewport');
   </script>
 </body>
