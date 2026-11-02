@@ -30,6 +30,15 @@
   --tu-shadow-hover: 0 8px 24px -4px rgba(0, 104, 55, 0.12);
 }
 
+/* Full-Width Container Override (Tanpa Scroll Samping untuk Screenshot) */
+main.container:has(.tu-module-container),
+.tu-page-wrapper {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 0 1rem 2rem 1rem !important;
+  margin: 1rem auto !important;
+}
+
 .tu-module-container {
   display: flex;
   flex-direction: column;
@@ -227,13 +236,14 @@
 /* 3. Sub-Navigation Tabs */
 .tu-nav-tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   background: #ffffff;
   padding: 8px 12px;
   border-radius: 12px;
   border: 1px solid var(--tu-slate-200);
   box-shadow: var(--tu-shadow);
-  overflow-x: auto;
+  overflow-x: visible;
 }
 
 .tu-tab-btn {
@@ -413,35 +423,38 @@
   margin-top: 2px;
 }
 
-/* Responsive Table */
+/* Responsive Table (Tanpa Scroll Samping) */
 .tu-table-container {
-  overflow-x: auto;
+  overflow-x: visible;
   width: 100%;
 }
 
 .tu-data-table {
   width: 100%;
+  table-layout: auto;
   border-collapse: collapse;
   text-align: left;
-  font-size: 0.875rem;
+  font-size: 0.84rem;
 }
 
 .tu-data-table th {
   background: var(--tu-slate-50);
   color: var(--tu-slate-800);
   font-weight: 700;
-  font-size: 0.775rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 12px 16px;
+  letter-spacing: 0.03em;
+  padding: 10px 10px;
   border-bottom: 2px solid var(--tu-slate-200);
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.25;
 }
 
 .tu-data-table td {
-  padding: 14px 16px;
+  padding: 10px 10px;
   border-bottom: 1px solid var(--tu-slate-200);
   vertical-align: middle;
+  white-space: normal;
 }
 
 .tu-data-table tbody tr {
@@ -568,20 +581,20 @@
 /* 6. Rombel Visualizer (Tab 2) */
 .tu-rombel-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.25rem;
-  padding: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  padding: 1.25rem;
 }
 
 .tu-rombel-card {
   background: #ffffff;
   border-radius: 12px;
   border: 1px solid var(--tu-slate-200);
-  padding: 1.25rem;
+  padding: 1.1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
@@ -642,8 +655,8 @@
 }
 
 .tu-rombel-students-list {
-  max-height: 200px;
-  overflow-y: auto;
+  max-height: none;
+  overflow-y: visible;
   border: 1px solid var(--tu-slate-100);
   border-radius: 8px;
   padding: 8px;

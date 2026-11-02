@@ -8,7 +8,7 @@
 
   <!-- Shared Style System & Modul 09 Style -->
   <link rel="stylesheet" href="../../shared/styles.css">
-  <link rel="stylesheet" href="./tu_dashboard_v2.css">
+  <link rel="stylesheet" href="./tu_dashboard_v2.css?v=20261102_fullwidth">
 
   <style>
     body {
@@ -48,9 +48,10 @@
     }
 
     .tu-page-wrapper {
-      max-width: 1320px;
-      margin: 2rem auto;
-      padding: 0 1.5rem 3rem 1.5rem;
+      max-width: 100%;
+      width: 100%;
+      margin: 1rem auto;
+      padding: 0 1rem 2rem 1rem;
     }
   </style>
 </head>
@@ -76,7 +77,7 @@
 
   <!-- Module Initializer (Versi 2) -->
   <script type="module">
-    import { renderTUDashboardV2 } from './tu_dashboard_v2.js?v=20261031_v3';
+    import { renderTUDashboardV2 } from './tu_dashboard_v2.js?v=20261102_fullwidth';
     renderTUDashboardV2('tu-app-viewport');
   </script>
 </body>

@@ -5,7 +5,67 @@
  * Developer: Raudhatul Audyna | Strategi: Agile | Layer: Presentation & Application
  * ========================================================================================= */
 
-@import url("./tu_dashboard.css");
+@import url("./tu_dashboard.css?v=20261102_fullwidth");
+
+/* 0. Revision Alert Banner (V2 Header) */
+.tu-revision-banner {
+  background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+  color: #ffffff;
+  border-radius: var(--tu-card-radius);
+  padding: 1rem 1.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-left: 5px solid #f5a623;
+  box-shadow: var(--tu-shadow);
+}
+
+.tu-revision-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 260px;
+}
+
+.tu-revision-banner-icon {
+  font-size: 1.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tu-revision-banner-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tu-revision-banner-tag {
+  background: #f5a623;
+  color: #0f172a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.tu-revision-banner-desc {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.92);
+  margin-top: 3px;
+  line-height: 1.4;
+}
 
 /* 1. Kurikulum Governance Action Bar in Rombel Tab (M3 Green/Gold Theme) */
 .tu-kurikulum-box {

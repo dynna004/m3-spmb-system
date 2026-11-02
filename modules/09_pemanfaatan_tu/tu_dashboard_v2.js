@@ -456,7 +456,7 @@ function ensureTUStylesV2() {
     link.id = cssId;
     link.rel = 'stylesheet';
     const isStandalone = window.location.pathname.includes('/09_pemanfaatan_tu/');
-    link.href = isStandalone ? './tu_dashboard_v2.css' : './modules/09_pemanfaatan_tu/tu_dashboard_v2.css';
+    link.href = (isStandalone ? './tu_dashboard_v2.css' : './modules/09_pemanfaatan_tu/tu_dashboard_v2.css') + '?v=20261102_fullwidth';
     document.head.appendChild(link);
   }
 }
