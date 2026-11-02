@@ -722,34 +722,62 @@ export function renderWawancara(containerId) {
         cursor: pointer;
         transition: all 0.2s ease;
       }
+      /* Full-Width Container Override (Tanpa Scroll Samping untuk Screenshot) */
+      main.container:has(.wawancara-layout-wrapper),
+      .standalone-container {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 0 1rem !important;
+        margin: 1rem auto !important;
+      }
+      .wawancara-main-area .table-responsive {
+        overflow-x: visible !important;
+      }
+      .wawancara-main-area .table {
+        width: 100%;
+        table-layout: auto;
+      }
+      .wawancara-main-area .table th,
+      .wawancara-main-area .table td {
+        padding: 8px 8px;
+        font-size: 0.8rem;
+        white-space: normal;
+        word-break: break-word;
+      }
+
       .jadwal-toggle-btn.active {
         background: #006837;
         color: #ffffff;
       }
       .jadwal-table-wrapper {
-        overflow-x: auto;
+        overflow-x: visible;
+        width: 100%;
       }
       .jadwal-table {
         width: 100%;
+        table-layout: auto;
         border-collapse: collapse;
-        font-size: 0.86rem;
+        font-size: 0.8rem;
       }
       .jadwal-table th {
         background: #f1f5f9;
         color: #0f172a;
         font-weight: 800;
-        padding: 11px 12px;
+        padding: 9px 7px;
         text-align: left;
         border-bottom: 2px solid #cbd5e1;
-        font-size: 0.78rem;
+        font-size: 0.72rem;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-        white-space: nowrap;
+        letter-spacing: 0.3px;
+        white-space: normal;
+        line-height: 1.25;
       }
       .jadwal-table td {
-        padding: 12px;
+        padding: 9px 7px;
         border-bottom: 1px solid #e2e8f0;
         vertical-align: middle;
+        white-space: normal;
+        line-height: 1.35;
       }
       .jadwal-table tbody tr:hover {
         background-color: #f8fafc;
@@ -768,14 +796,14 @@ export function renderWawancara(containerId) {
       .jadwal-slot-badge-day {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: 4px;
         font-weight: 700;
-        font-size: 0.75rem;
-        padding: 3px 8px;
+        font-size: 0.7rem;
+        padding: 2px 6px;
         border-radius: 6px;
       }
       .jadwal-candidate-name {
-        font-size: 0.95rem;
+        font-size: 0.86rem;
         font-weight: 800;
         color: #0f172a;
         display: block;
@@ -783,13 +811,13 @@ export function renderWawancara(containerId) {
       .jadwal-time-pill {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: 4px;
         font-weight: 800;
-        font-size: 0.82rem;
+        font-size: 0.75rem;
         background: #ecfdf5;
         color: #006837;
-        padding: 4px 10px;
-        border-radius: 8px;
+        padding: 3px 7px;
+        border-radius: 7px;
         border: 1px solid #a7f3d0;
       }
 
@@ -797,12 +825,12 @@ export function renderWawancara(containerId) {
       .badge-pewawancara {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        padding: 4px 10px;
-        border-radius: 8px;
+        gap: 4px;
+        padding: 3px 7px;
+        border-radius: 7px;
         font-weight: 800;
-        font-size: 0.8rem;
-        letter-spacing: 0.3px;
+        font-size: 0.74rem;
+        letter-spacing: 0.2px;
       }
       .badge-yosa {
         background: #e0f2fe;
@@ -820,10 +848,10 @@ export function renderWawancara(containerId) {
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        padding: 3px 8px;
+        padding: 2px 7px;
         border-radius: 6px;
         font-weight: 700;
-        font-size: 0.74rem;
+        font-size: 0.72rem;
         letter-spacing: 0.2px;
       }
       .badge-metode-luring {
@@ -839,14 +867,14 @@ export function renderWawancara(containerId) {
 
       /* Pewawancara Management Styling */
       .pewawancara-avatar-badge {
-        width: 36px;
-        height: 36px;
+        width: 34px;
+        height: 34px;
         border-radius: 50%;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         font-weight: 800;
-        font-size: 0.82rem;
+        font-size: 0.8rem;
         color: #ffffff;
         flex-shrink: 0;
         box-shadow: 0 2px 5px rgba(0,0,0,0.12);
@@ -864,28 +892,31 @@ export function renderWawancara(containerId) {
 
       /* Kalender Jadwal Mingguan Styling */
       .kalender-grid-wrapper {
-        padding: 1.25rem;
-        overflow-x: auto;
+        padding: 0.85rem;
+        overflow-x: visible;
+        width: 100%;
       }
       .kalender-matrix-table {
         width: 100%;
-        min-width: 960px;
+        min-width: 0;
+        table-layout: fixed;
         border-collapse: separate;
-        border-spacing: 8px;
+        border-spacing: 5px;
       }
       .kalender-matrix-table th {
         background: #006837;
         color: #ffffff;
-        padding: 10px;
+        padding: 8px 4px;
         border-radius: 8px;
-        font-size: 0.82rem;
+        font-size: 0.75rem;
         font-weight: 700;
         text-align: center;
+        word-break: break-word;
       }
       .kalender-time-header {
         background: #f1f5f9 !important;
         color: #0f172a !important;
-        width: 120px;
+        width: 96px;
         font-weight: 800;
         border: 1px solid #cbd5e1;
       }
@@ -893,10 +924,11 @@ export function renderWawancara(containerId) {
         background: #f8fafc;
         border: 1px dashed #cbd5e1;
         border-radius: 8px;
-        min-height: 80px;
+        min-height: 75px;
         vertical-align: top;
-        padding: 8px;
+        padding: 6px;
         transition: all 0.2s;
+        word-break: break-word;
       }
       .kalender-cell.has-candidates {
         background: #ffffff;
@@ -1007,7 +1039,7 @@ export function renderWawancara(containerId) {
         font-weight: 600;
       }
 
-      /* Modal Styling */
+      /* Modal Styling (Full Tanpa Scroll untuk Screenshot) */
       .modal-wawancara-overlay {
         position: fixed;
         top: 0;
@@ -1020,7 +1052,7 @@ export function renderWawancara(containerId) {
         display: none;
         align-items: center;
         justify-content: center;
-        padding: 1rem;
+        padding: 0.75rem 1.25rem;
         overflow-y: auto;
       }
       .modal-wawancara-overlay.show {
@@ -1029,19 +1061,19 @@ export function renderWawancara(containerId) {
       .modal-wawancara-content {
         background: #ffffff;
         width: 100%;
-        max-width: 780px;
+        max-width: 1220px;
         height: auto;
-        max-height: 90vh;
-        border-radius: 16px;
+        max-height: none;
+        border-radius: 14px;
         box-shadow: 0 12px 32px rgba(0,0,0,0.3);
         display: flex;
         flex-direction: column;
-        overflow: hidden;
+        overflow: visible;
         margin: auto;
-        animation: slideUpModal 0.25s ease-out;
+        animation: slideUpModal 0.2s ease-out;
       }
       @keyframes slideUpModal {
-        from { opacity: 0; transform: translateY(20px); }
+        from { opacity: 0; transform: translateY(12px); }
         to { opacity: 1; transform: translateY(0); }
       }
       #form-penilaian-wawancara {
@@ -1049,20 +1081,21 @@ export function renderWawancara(containerId) {
         flex-direction: column;
         flex: 1;
         min-height: 0;
-        overflow: hidden;
+        overflow: visible;
         margin: 0;
       }
       .modal-wawancara-header {
         flex-shrink: 0;
         background: #006837;
         color: white;
-        padding: 1.1rem 1.5rem;
+        padding: 0.75rem 1.25rem;
+        border-radius: 14px 14px 0 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
       }
       .modal-wawancara-header h3 {
-        font-size: 1.1rem;
+        font-size: 1.02rem;
         font-weight: 700;
         margin: 0;
       }
@@ -1078,52 +1111,71 @@ export function renderWawancara(containerId) {
       .modal-close-btn:hover { opacity: 1; }
       
       .modal-wawancara-body {
-        padding: 1.5rem;
-        overflow-y: auto;
+        padding: 0.9rem 1.25rem;
+        overflow: visible;
         flex: 1;
-        min-height: 0;
+      }
+      .modal-wawancara-body .form-group {
+        margin-bottom: 0.5rem;
+      }
+      .modal-wawancara-body .form-group label {
+        margin-bottom: 0.25rem;
+        font-size: 0.8rem;
+      }
+      .modal-wawancara-body .form-control {
+        padding: 6px 10px;
+        font-size: 0.84rem;
+      }
+
+      .modal-section-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 0.7rem 0.9rem;
       }
 
       .form-section-title {
-        font-size: 0.92rem;
-        font-weight: 700;
+        font-size: 0.85rem;
+        font-weight: 800;
         color: #006837;
-        border-bottom: 2px solid #e2e8f0;
-        padding-bottom: 6px;
-        margin-top: 1.25rem;
-        margin-bottom: 0.85rem;
+        border-bottom: 1.5px solid #e2e8f0;
+        padding-bottom: 4px;
+        margin-top: 0;
+        margin-bottom: 0.55rem;
         display: flex;
         align-items: center;
         gap: 6px;
-      }
-      .form-section-title:first-child {
-        margin-top: 0;
       }
 
       .grid-2col {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 1rem;
+        gap: 0.75rem;
       }
-      @media (max-width: 640px) {
-        .grid-2col { grid-template-columns: 1fr; }
+      .grid-3col {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr 1fr;
+        gap: 0.75rem;
+      }
+      @media (max-width: 768px) {
+        .grid-2col, .grid-3col { grid-template-columns: 1fr; }
       }
 
       .bakat-checkboxes {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 6px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        margin-top: 4px;
       }
       .bakat-label {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: 5px;
         background: #f8fafc;
         border: 1.5px solid #cbd5e1;
-        padding: 6px 12px;
-        border-radius: 8px;
-        font-size: 0.85rem;
+        padding: 5px 8px;
+        border-radius: 7px;
+        font-size: 0.78rem;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.2s;
@@ -1137,14 +1189,14 @@ export function renderWawancara(containerId) {
       .beasiswa-preview-box {
         background: #f8fafc;
         border: 1.5px dashed #cbd5e1;
-        border-radius: 10px;
-        padding: 10px 14px;
-        margin-top: 8px;
+        border-radius: 8px;
+        padding: 6px 10px;
         display: flex;
         align-items: center;
-        gap: 10px;
-        font-size: 0.88rem;
+        gap: 8px;
+        font-size: 0.82rem;
         font-weight: 600;
+        min-height: 35px;
       }
 
       .toast-notification {
@@ -1199,7 +1251,7 @@ export function renderWawancara(containerId) {
          ========================================================= */
       .wawancara-layout-wrapper {
         display: flex;
-        gap: 1.5rem;
+        gap: 1rem;
         align-items: flex-start;
         position: relative;
         width: 100%;
@@ -1208,12 +1260,12 @@ export function renderWawancara(containerId) {
       }
       
       .wawancara-sidebar {
-        width: 260px;
-        min-width: 260px;
+        width: 225px;
+        min-width: 225px;
         background: #cbd5e1; /* Abu-abu rapi terstruktur sesuai gambar mockup */
         border: 1.5px solid #94a3b8;
         border-radius: 18px;
-        padding: 1.25rem 1rem;
+        padding: 1rem 0.85rem;
         display: flex;
         flex-direction: column;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
@@ -1951,128 +2003,144 @@ export function renderWawancara(containerId) {
           <div class="modal-wawancara-body">
 
             <!-- Alert Banner jika Non-Editing -->
-            <div id="modal-readonly-banner" style="display: ${isEditMode ? 'none' : 'flex'}; background: #fef3c7; border: 1px solid #fde68a; color: #92400e; padding: 10px 14px; border-radius: 10px; margin-bottom: 1rem; font-size: 0.85rem; font-weight: 600; align-items: center; gap: 8px;">
+            <div id="modal-readonly-banner" style="display: ${isEditMode ? 'none' : 'flex'}; background: #fef3c7; border: 1px solid #fde68a; color: #92400e; padding: 7px 12px; border-radius: 8px; margin-bottom: 0.65rem; font-size: 0.8rem; font-weight: 600; align-items: center; gap: 8px;">
               🔒 <strong>Mode Non-Editing (Read-Only):</strong> Anda sedang melihat data nilai wawancara. Form di bawah dinonaktifkan dari pengeditan.
             </div>
             
             <!-- Info Peserta Summary -->
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; margin-bottom: 1rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px 14px; margin-bottom: 0.7rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
               <div>
-                <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">NAMA CALON SISWA</div>
-                <div style="font-weight: 700; font-size: 1rem; color: #006837;" id="modal-candidate-name">-</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700;">NAMA CALON SISWA</div>
+                <div style="font-weight: 800; font-size: 0.95rem; color: #006837;" id="modal-candidate-name">-</div>
               </div>
               <div>
-                <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">NO. PENDAFTARAN</div>
-                <div style="font-weight: 700; font-size: 0.95rem;" id="modal-candidate-id">-</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700;">NO. PENDAFTARAN</div>
+                <div style="font-weight: 700; font-size: 0.9rem;" id="modal-candidate-id">-</div>
               </div>
               <div>
-                <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">PILIHAN JURUSAN</div>
-                <div style="font-weight: 700; font-size: 0.95rem; color: #0284c7;" id="modal-candidate-jurusan">-</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700;">PILIHAN JURUSAN</div>
+                <div style="font-weight: 700; font-size: 0.9rem; color: #0284c7;" id="modal-candidate-jurusan">-</div>
               </div>
               <div>
-                <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">METODE & RUANG</div>
-                <div id="modal-candidate-metode-ruang" style="font-weight: 700; font-size: 0.85rem; margin-top: 2px;">-</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700;">METODE & RUANG</div>
+                <div id="modal-candidate-metode-ruang" style="font-weight: 700; font-size: 0.82rem; margin-top: 1px;">-</div>
               </div>
               <div>
-                <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">PEWAWANCARA BERTUGAS</div>
-                <select id="modal-candidate-pewawancara" class="form-control" style="font-weight: 800; font-size: 0.85rem; padding: 3px 8px; width: auto; color: #006837;">
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700;">PEWAWANCARA BERTUGAS</div>
+                <select id="modal-candidate-pewawancara" class="form-control" style="font-weight: 800; font-size: 0.82rem; padding: 3px 8px; width: auto; color: #006837;">
                   <option value="Yosa">👨‍🏫 Yosa</option>
                   <option value="Veli">👩‍🏫 Veli</option>
                 </select>
               </div>
             </div>
 
-            <!-- Section 1: Nilai Wawancara Siswa -->
-            <div class="form-section-title">👤 1. Penilaian Wawancara Siswa</div>
-            <div class="grid-2col">
-              <div class="form-group">
-                <label for="wawancara-nilai-siswa">Nilai Wawancara Siswa (0-100) <span style="color:red">*</span></label>
-                <input type="number" id="wawancara-nilai-siswa" class="form-control" min="0" max="100" placeholder="Contoh: 85" required>
+            <!-- Baris 1: Section 1 (Siswa) & Section 2 (Orang Tua/Wali) Berdampingan -->
+            <div class="grid-2col" style="margin-bottom: 0.65rem;">
+              <!-- Section 1: Nilai Wawancara Siswa -->
+              <div class="modal-section-card">
+                <div class="form-section-title">👤 1. Penilaian Wawancara Siswa</div>
+                <div class="grid-2col">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="wawancara-nilai-siswa">Nilai Siswa (0-100) <span style="color:red">*</span></label>
+                    <input type="number" id="wawancara-nilai-siswa" class="form-control" min="0" max="100" placeholder="Contoh: 85" required>
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="wawancara-catatan-siswa">Catatan & Profil Siswa</label>
+                    <textarea id="wawancara-catatan-siswa" class="form-control" rows="2" placeholder="Catatan keaktifan, kepribadian, kepemimpinan..."></textarea>
+                  </div>
+                </div>
               </div>
-              <div class="form-group">
-                <label for="wawancara-catatan-siswa">Catatan & Profil Siswa</label>
-                <textarea id="wawancara-catatan-siswa" class="form-control" rows="2" placeholder="Catatan keaktifan, kepribadian, kepemimpinan..."></textarea>
-              </div>
-            </div>
 
-            <!-- Section 2: Nilai Wawancara Orang Tua / Wali -->
-            <div class="form-section-title">👨‍👩‍👧 2. Penilaian Wawancara Orang Tua / Wali</div>
-            <div class="grid-2col">
-              <div class="form-group">
-                <label for="wawancara-nilai-wali">Nilai Wawancara Wali (0-100) <span style="color:red">*</span></label>
-                <input type="number" id="wawancara-nilai-wali" class="form-control" min="0" max="100" placeholder="Contoh: 88" required>
-              </div>
-              <div class="form-group">
-                <label for="wawancara-catatan-wali">Catatan & Kesiapan Wali</label>
-                <textarea id="wawancara-catatan-wali" class="form-control" rows="2" placeholder="Dukungan orang tua, komitmen tata tertib..."></textarea>
-              </div>
-            </div>
-
-            <!-- Section 3: Peminatan / Bakat -->
-            <div class="form-section-title">🎨 3. Pemetaan Peminatan & Bakat</div>
-            <div class="form-group">
-              <label>Pilih Peminatan & Bakat Siswa (Bisa lebih dari 1):</label>
-              <div class="bakat-checkboxes">
-                <label class="bakat-label"><input type="checkbox" name="bakat" value="Sains"> 🧪 Sains & Riset</label>
-                <label class="bakat-label"><input type="checkbox" name="bakat" value="Bahasa"> 🗣️ Bahasa & Komunikasi</label>
-                <label class="bakat-label"><input type="checkbox" name="bakat" value="Sosial"> 🤝 Sosial & Humaniora</label>
-                <label class="bakat-label"><input type="checkbox" name="bakat" value="IT"> 💻 IT & Rekayasa</label>
-                <label class="bakat-label"><input type="checkbox" name="bakat" value="Seni"> 🎨 Seni & Desain</label>
-                <label class="bakat-label"><input type="checkbox" name="bakat" value="Olahraga"> ⚽ Olahraga</label>
-              </div>
-            </div>
-
-            <!-- Section 4: Hafalan Qur'an & Beasiswa -->
-            <div class="form-section-title">📖 4. Hafalan Qur'an & Rekomendasi Beasiswa Tahfidz</div>
-            <div class="grid-2col">
-              <div class="form-group">
-                <label for="wawancara-hafalan-juz">Jumlah Hafalan Qur'an (Juz)</label>
-                <input type="number" id="wawancara-hafalan-juz" class="form-control" min="0" max="30" step="0.5" value="0" placeholder="0 - 30 Juz">
-              </div>
-              <div class="form-group">
-                <label>Rekomendasi Beasiswa (Otomatis)</label>
-                <div class="beasiswa-preview-box" id="beasiswa-preview-container">
-                  <span id="beasiswa-preview-icon">📘</span>
-                  <span id="beasiswa-preview-text">Reguler (Non-Beasiswa)</span>
+              <!-- Section 2: Nilai Wawancara Orang Tua / Wali -->
+              <div class="modal-section-card">
+                <div class="form-section-title">👨‍👩‍👧 2. Penilaian Wawancara Orang Tua / Wali</div>
+                <div class="grid-2col">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="wawancara-nilai-wali">Nilai Wali (0-100) <span style="color:red">*</span></label>
+                    <input type="number" id="wawancara-nilai-wali" class="form-control" min="0" max="100" placeholder="Contoh: 88" required>
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="wawancara-catatan-wali">Catatan & Kesiapan Wali</label>
+                    <textarea id="wawancara-catatan-wali" class="form-control" rows="2" placeholder="Dukungan orang tua, komitmen tata tertib..."></textarea>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Section 5: Rekomendasi Akhir Kelulusan & Metode -->
-            <div class="form-section-title">🎯 5. Rekomendasi Akhir Kelulusan & Konfirmasi Metode</div>
-            <div class="grid-2col">
-              <div class="form-group">
-                <label for="wawancara-rekomendasi-akhir">Rekomendasi Wawancara untuk Modul Kelulusan <span style="color:red">*</span></label>
-                <select id="wawancara-rekomendasi-akhir" class="form-control" required style="font-weight: 700; color: #006837;">
-                  <option value="LAYAK">✅ LAYAK (Sangat Direkomendasikan Diterima)</option>
-                  <option value="CADANGAN">⚠️ CADANGAN (Dipertimbangkan / Antrean Cadangan)</option>
-                  <option value="TIDAK_LAYAK">❌ TIDAK LAYAK (Tidak Direkomendasikan)</option>
-                </select>
+            <!-- Baris 2: Section 3 (Peminatan & Bakat) & Section 4 (Hafalan Qur'an & Beasiswa) Berdampingan -->
+            <div class="grid-2col" style="margin-bottom: 0.65rem;">
+              <!-- Section 3: Peminatan / Bakat -->
+              <div class="modal-section-card">
+                <div class="form-section-title">🎨 3. Pemetaan Peminatan & Bakat</div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label>Pilih Peminatan & Bakat Siswa (Bisa lebih dari 1):</label>
+                  <div class="bakat-checkboxes">
+                    <label class="bakat-label"><input type="checkbox" name="bakat" value="Sains"> 🧪 Sains & Riset</label>
+                    <label class="bakat-label"><input type="checkbox" name="bakat" value="Bahasa"> 🗣️ Bahasa & Komunikasi</label>
+                    <label class="bakat-label"><input type="checkbox" name="bakat" value="Sosial"> 🤝 Sosial & Humaniora</label>
+                    <label class="bakat-label"><input type="checkbox" name="bakat" value="IT"> 💻 IT & Rekayasa</label>
+                    <label class="bakat-label"><input type="checkbox" name="bakat" value="Seni"> 🎨 Seni & Desain</label>
+                    <label class="bakat-label"><input type="checkbox" name="bakat" value="Olahraga"> ⚽ Olahraga</label>
+                  </div>
+                </div>
               </div>
-              <div class="form-group">
-                <label for="wawancara-metode-pelaksanaan">Metode Pelaksanaan Wawancara</label>
-                <select id="wawancara-metode-pelaksanaan" class="form-control" style="font-weight: 700;">
-                  <option value="Luring">🏢 Luring (Tatap Muka di Sekolah)</option>
-                  <option value="Daring">🌐 Daring (Virtual Meet / Online)</option>
-                </select>
+
+              <!-- Section 4: Hafalan Qur'an & Beasiswa -->
+              <div class="modal-section-card">
+                <div class="form-section-title">📖 4. Hafalan Qur'an & Rekomendasi Beasiswa Tahfidz</div>
+                <div class="grid-2col">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="wawancara-hafalan-juz">Jumlah Hafalan Qur'an (Juz)</label>
+                    <input type="number" id="wawancara-hafalan-juz" class="form-control" min="0" max="30" step="0.5" value="0" placeholder="0 - 30 Juz">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label>Rekomendasi Beasiswa (Otomatis)</label>
+                    <div class="beasiswa-preview-box" id="beasiswa-preview-container">
+                      <span id="beasiswa-preview-icon">📘</span>
+                      <span id="beasiswa-preview-text">Reguler (Non-Beasiswa)</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="form-group" style="margin-top: 10px;">
-              <label for="wawancara-nama-pewawancara">Pewawancara yang Mengesahkan</label>
-              <select id="wawancara-nama-pewawancara" class="form-control" style="font-weight: 700;">
-                <option value="Yosa">👨‍🏫 Yosa, S.Pd</option>
-                <option value="Veli">👩‍🏫 Veli, M.Pd</option>
-              </select>
+
+            <!-- Baris 3: Section 5: Rekomendasi Akhir Kelulusan, Metode & Pengesahan dalam 3 Kolom -->
+            <div class="modal-section-card">
+              <div class="form-section-title">🎯 5. Rekomendasi Akhir Kelulusan & Konfirmasi Metode</div>
+              <div class="grid-3col">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="wawancara-rekomendasi-akhir">Rekomendasi Wawancara untuk Modul Kelulusan <span style="color:red">*</span></label>
+                  <select id="wawancara-rekomendasi-akhir" class="form-control" required style="font-weight: 700; color: #006837;">
+                    <option value="LAYAK">✅ LAYAK (Sangat Direkomendasikan Diterima)</option>
+                    <option value="CADANGAN">⚠️ CADANGAN (Dipertimbangkan / Antrean Cadangan)</option>
+                    <option value="TIDAK_LAYAK">❌ TIDAK LAYAK (Tidak Direkomendasikan)</option>
+                  </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="wawancara-metode-pelaksanaan">Metode Pelaksanaan Wawancara</label>
+                  <select id="wawancara-metode-pelaksanaan" class="form-control" style="font-weight: 700;">
+                    <option value="Luring">🏢 Luring (Tatap Muka di Sekolah)</option>
+                    <option value="Daring">🌐 Daring (Virtual Meet / Online)</option>
+                  </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="wawancara-nama-pewawancara">Pewawancara yang Mengesahkan</label>
+                  <select id="wawancara-nama-pewawancara" class="form-control" style="font-weight: 700;">
+                    <option value="Yosa">👨‍🏫 Yosa, S.Pd</option>
+                    <option value="Veli">👩‍🏫 Veli, M.Pd</option>
+                  </select>
+                </div>
+              </div>
             </div>
 
           </div>
 
-          <div class="modal-footer" style="position: sticky; bottom: 0; background: #ffffff; border-top: 2px solid #e2e8f0; padding: 1rem 1.5rem; display: flex; justify-content: flex-end; gap: 12px; z-index: 20; box-shadow: 0 -4px 12px rgba(0,0,0,0.05);">
-            <button type="button" class="btn btn-secondary" id="btn-cancel-modal" style="background: #f1f5f9; color: #475569; padding: 10px 20px; font-weight: 600; border: 1.5px solid #cbd5e1; border-radius: 8px; cursor: pointer;">Tutup</button>
-            <button type="submit" class="btn btn-primary" id="btn-save-wawancara-submit" style="display: ${isEditMode ? 'inline-flex' : 'none'}; background: #006837; color: #ffffff; padding: 10px 24px; font-weight: 700; font-size: 0.95rem; border-radius: 8px; border: none; box-shadow: 0 4px 12px rgba(0, 104, 55, 0.3); cursor: pointer; align-items: center; gap: 8px;">
+          <div class="modal-footer" style="background: #ffffff; border-top: 1.5px solid #e2e8f0; border-radius: 0 0 14px 14px; padding: 0.7rem 1.25rem; display: flex; justify-content: flex-end; gap: 10px;">
+            <button type="button" class="btn btn-secondary" id="btn-cancel-modal" style="background: #f1f5f9; color: #475569; padding: 8px 18px; font-weight: 600; font-size: 0.88rem; border: 1.5px solid #cbd5e1; border-radius: 8px; cursor: pointer;">Tutup</button>
+            <button type="submit" class="btn btn-primary" id="btn-save-wawancara-submit" style="display: ${isEditMode ? 'inline-flex' : 'none'}; background: #006837; color: #ffffff; padding: 8px 20px; font-weight: 700; font-size: 0.88rem; border-radius: 8px; border: none; box-shadow: 0 4px 12px rgba(0, 104, 55, 0.3); cursor: pointer; align-items: center; gap: 8px;">
               💾 Simpan Penilaian Wawancara
             </button>
-            <span id="modal-readonly-badge" style="display: ${!isEditMode ? 'inline-flex' : 'none'}; background: #e2e8f0; color: #475569; padding: 8px 16px; font-weight: 700; border-radius: 8px; font-size: 0.85rem; align-items: center; gap: 6px;">
+            <span id="modal-readonly-badge" style="display: ${!isEditMode ? 'inline-flex' : 'none'}; background: #e2e8f0; color: #475569; padding: 7px 14px; font-weight: 700; border-radius: 8px; font-size: 0.82rem; align-items: center; gap: 6px;">
               🔒 Mode Lihat Saja (Read-Only)
             </span>
           </div>
@@ -2362,8 +2430,8 @@ function renderJadwalViewport() {
                       : `<span class="badge-status-belum">⏳ Belum Wawancara</span>`}
                   </td>
                   <td style="text-align: center;">
-                    <button class="btn btn-primary btn-input-nilai" data-id="${candidateId}" style="padding: 6px 12px; font-size: 0.78rem; font-weight: 700; background: ${isSelesai ? '#0284c7' : '#006837'}; color: #fff; border-radius: 6px; border: none; cursor: pointer; white-space: nowrap;">
-                      ${isSelesai ? '✏️ Edit Skor' : '🎤 Mulai Wawancara'}
+                    <button class="btn btn-primary btn-input-nilai" data-id="${candidateId}" style="padding: 5px 9px; font-size: 0.74rem; font-weight: 700; background: ${isSelesai ? '#0284c7' : '#006837'}; color: #fff; border-radius: 6px; border: none; cursor: pointer;">
+                      ${isSelesai ? '✏️ Edit Skor' : '🎤 Wawancara'}
                     </button>
                   </td>
                 </tr>
