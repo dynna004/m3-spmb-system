@@ -1820,6 +1820,17 @@ export function renderAdminSPMB(containerId) {
       };
     });
 
+    modalContent.querySelectorAll('.btn-download-doc-item').forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const docId = btn.getAttribute('data-doc-id');
+        const selectedDoc = docs.find(d => d.id === docId);
+        if (selectedDoc) {
+          downloadSvgOrDocAsImage(selectedDoc.mockSvg, selectedDoc.fileName);
+        }
+      };
+    });
+
     document.getElementById('btn-modal-close-footer').onclick = () => modalBackdrop.classList.remove('open');
     document.getElementById('btn-modal-preview-email')?.addEventListener('click', () => {
       modalBackdrop.classList.remove('open');
@@ -1842,14 +1853,66 @@ export function renderAdminSPMB(containerId) {
     if (e.target === modalBackdrop) modalBackdrop.classList.remove('open');
   };
 
-  // Lightbox Handler
+  // Lightbox & Download Handler
   const lightboxModal = document.getElementById('admin-lightbox-modal');
+  let activeLightboxSvg = '';
+  let activeLightboxFileName = 'Dokumen_SPMB.png';
+
+  function downloadSvgOrDocAsImage(svgHtml, rawFileName) {
+    const cleanName = (rawFileName || 'Dokumen_SPMB').replace(/\.(pdf|jpg|jpeg|png)$/i, '') + '.png';
+    const svgBlob = new Blob([svgHtml.trim()], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = (img.width || 600) * 2;
+      canvas.height = (img.height || 420) * 2;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      canvas.toBlob((pngBlob) => {
+        if (!pngBlob) return;
+        const dlUrl = URL.createObjectURL(pngBlob);
+        const a = document.createElement('a');
+        a.href = dlUrl;
+        a.download = cleanName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(dlUrl), 1000);
+        showToast('success', 'Berhasil Diunduh', `File ${cleanName} telah diunduh ke perangkat Anda.`);
+      }, 'image/png');
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      const fallbackBlob = new Blob([svgHtml.trim()], { type: 'image/svg+xml;charset=utf-8' });
+      const dlUrl = URL.createObjectURL(fallbackBlob);
+      const a = document.createElement('a');
+      a.href = dlUrl;
+      a.download = (rawFileName || 'Dokumen_SPMB').replace(/\.(pdf|jpg|jpeg|png)$/i, '') + '.svg';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(dlUrl), 1000);
+    };
+    img.src = url;
+  }
+
   function openLightbox(title, contentHtml, fileName) {
+    activeLightboxSvg = contentHtml;
+    activeLightboxFileName = fileName;
     document.getElementById('lightbox-doc-title').innerHTML = `<span>📑 ${escapeHTML(title)}</span>`;
     document.getElementById('lightbox-display-area').innerHTML = contentHtml;
     document.getElementById('lightbox-doc-meta').textContent = `Nama Berkas: ${fileName}`;
     lightboxModal.classList.add('open');
   }
+  document.getElementById('btn-lightbox-download')?.addEventListener('click', () => {
+    if (activeLightboxSvg) {
+      downloadSvgOrDocAsImage(activeLightboxSvg, activeLightboxFileName);
+    }
+  });
   document.getElementById('btn-close-lightbox').onclick = () => lightboxModal.classList.remove('open');
   document.getElementById('btn-lightbox-close-foot').onclick = () => lightboxModal.classList.remove('open');
 

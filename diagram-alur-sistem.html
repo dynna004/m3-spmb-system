@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabel Urutan Alur Sistem SPMB & TU (Versi Revisi Otomatis)</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+    .header-box {
+      background: linear-gradient(135deg, #003d20 0%, #006837 100%);
+      color: #fff;
+      padding: 20px 26px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .header-box h1 { margin: 0 0 6px 0; font-size: 1.3rem; }
+    .header-box p { margin: 0; font-size: 0.88rem; opacity: 0.9; }
+    .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn {
+      text-decoration: none;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      background: #f5a623;
+      color: #0f172a;
+    }
+    .btn-white { background: #fff; color: #004d28; }
+    .table-card {
+      background: #fff;
+      border: 1px solid #cbd5e1;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+      margin-bottom: 28px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+    th {
+      background: #006837;
+      color: #fff;
+      text-align: left;
+      padding: 12px 14px;
+      font-weight: 700;
+      border-bottom: 2px solid #004d28;
+    }
+    td {
+      padding: 11px 14px;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: #f8fafc; }
+    tr:hover td { background: #f0fdf4; }
+    .badge-alur {
+      display: inline-block;
+      background: #006837;
+      color: #fff;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+    .badge-screen {
+      display: inline-block;
+      background: #dcfce7;
+      color: #004d28;
+      border: 1px solid #86efac;
+      font-family: monospace;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-size: 0.78rem;
+    }
+    .badge-rev {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #7dd3fc;
+      font-family: monospace;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-size: 0.78rem;
+    }
+    code {
+      background: #f1f5f9;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-box">
+      <div>
+        <h1>📋 Tabel Urutan Alur Sistem Integrasi SPMB & TU (Versi Revisi Otomatis)</h1>
+        <p>Diurutkan sesuai kode aktual hasil revisi: Aktivasi Akun Otomatis, Validasi Bayar Otomatis, Reminder H-1, Perankingan 80 Besar/10 Cadangan Otomatis, & Pleno Kurikulum TU V2.</p>
+      </div>
+      <div class="btn-group">
+        <button class="btn" onclick="window.print()">🖨️ Cetak Tabel / Simpan PDF</button>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 95px;">Urutan Alur</th>
+            <th style="width: 150px;">Aktor</th>
+            <th style="width: 260px;">Kode Layar & Nama Layar</th>
+            <th style="width: 210px;">File Kode Sumber</th>
+            <th>Deskripsi Proses & Perubahan Status Data (Versi Revisi)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge-alur">Alur 1a</span></td>
+            <td>Calon Siswa & Sistem Otomatis</td>
+            <td><span class="badge-rev">M01-REG</span><br><strong>Modul 1 Registrasi Akun Otomatis</strong></td>
+            <td><code>01_portal_spmb/register.html</code><br><code>01_portal_spmb/portal.js</code><br><code>activationEmailService.js</code></td>
+            <td>Calon siswa mengisi Nama, Email, No. WA, & NISN. Sistem mengecek keunikan & Honeypot Anti-Bot secara <em>real-time</em>:<br>• Jika <strong>NISN/Email Duplikat</strong>: langsung ditolak di layar registrasi.<br>• Jika <strong>NISN & Email Unik</strong>: akun <strong>Otomatis Aktif</strong> (<code>status_akun: "active"</code>, <code>metode_aktivasi: "OTOMATIS_REGISTRASI"</code>) tanpa menunggu verifikasi manual Admin, dan sistem langsung mengirim <strong>Email Notifikasi Aktivasi & Kredensial Login</strong>.<br>• Jika terindikasi <strong>Bot/Spam</strong>: ditahan (<code>BOT_SUSPECT</code>).</td>
+          </tr>
+          <tr>
+            <td><span class="badge-alur">Alur 1b</span></td>
+            <td>Calon Siswa & Admin Loket (Luring)</td>
+            <td><span class="badge-screen">M02-WALK</span><br><strong>Modul 2 Modal Input Loket Walk-in</strong></td>
+            <td><code>02_admin_spmb/admin.html</code><br><code>02_admin_spmb/admin.js</code></td>
+            <td>Pendaftar datang langsung ke loket sekolah. Admin menginput biodata & pembayaran tunai loket, menerbitkan No. Registrasi <code>SPMB-2026-WLK-xxx</code>, mencetak struk tanda terima, dan akun langsung berstatus <code>active</code>.</td>
+          </tr>
+          <tr>
+            <td><span class="badge-alur">Alur 2 & 3</span></td>
+            <td>Admin SPMB</td>
+            <td><span class="badge-rev">M02-DASH</span>, <span class="badge-rev">M02-EDIT</span>, <span class="badge-rev">M02-EMAIL</span><br><strong>Modul 2 Dashboard Monitoring Registrasi Otomatis & Anti-Bot</strong></td>
+            <td><code>02_admin_spmb/admin.html</code><br><code>02_admin_spmb/admin.js</code><br><code>activationEmailService.js</code></td>
+            <td>Karena aktivasi sudah berjalan otomatis saat registrasi, peran Admin di <strong>Modul 2 Dashboard</strong> adalah:<br>1. Memantau akun yang <strong>Terverifikasi & Otomatis Aktif</strong> serta melihat pratinjau <strong>Contoh Email Aktivasi</strong> (<code>M02-EMAIL</code>).<br>2. Mendeteksi & <strong>menghapus akun Bot/Spam</strong> (<code>BOT_SUSPECT</code>).<br>3. Mengedit Nama / Email / NISN / No. WA (<code>M02-EDIT</code>) jika ada laporan salah ketik (<em>typo</em>) dari pendaftar.</td>
+          </tr>
+          <tr>
+            <td><span class="badge-alur">Alur 4</span></td>
+            <td>Calon Siswa</td>
+            <td><span class="badge-rev">M01-STAT</span> & <span class="badge-screen">M01-LOG</span><br><strong>Modul 1 Status Aktivasi Otomatis & Login Pendaftar</strong></td>
+            <td><code>01_portal_spmb/status-akun.html</code><br><code>01_portal_spmb/login.html</code></td>
+            <td>Calon siswa membuka <strong>Modul 1 Status & Email Aktivasi</strong> (melihat badge <code>✓ OTOMATIS AKTIF (NISN & EMAIL UNIK)</code> dan membaca Kotak Masuk Email Kredensial Login), kemudian login menggunakan NISN/Email di <strong>Modul 1 Login Pendaftar</strong>.</td>
+          </tr>
+          <tr>
+            <td><span class="badge-alur">Alur 5</span></td>
+            <td>Calon Siswa</td>
+            <td><span class="badge-screen">M01-FORM</span> & <span class="badge-screen">M01-DASH</span><br><strong>Modul 1 Formulir & Modul 1 Dashboard Siswa</strong></td>
+            <td><code>01_portal_spmb/formulir.html</code><br><code>01_portal_spmb/dashboard.html</code></td>
+            <td>Siswa mengisi biodata lengkap, pilihan jurusan (<code>MIPA</code> / <code>IPS</code>), serta mengunggah 4 berkas digital (<strong>Ijazah/SKL, KK, Akta Kelahiran, dan Bukti Bayar Formulir</strong>) di <strong>Modul 1 Formulir</strong>, lalu memantau progres pendaftaran & kartu peserta di <strong>Modul 1 Dashboard Siswa</strong>.</td>
+          </tr>
+          <tr>
+            <td><span class="badge-alur">Alur 6</span></td>
+            <td>Sistem Otomatis & Bendahara Keuangan</td>
+            <td><span class="badge-rev">M03-FORM</span> & <span class="badge-rev">M03-LOG</span><br><strong>Modul 3 Tab Validasi Biaya Formulir & Tab Audit Log</strong></td>
+            <td><code>03_keuangan_spmb/keuangan.html</code><br><code>03_keuangan_spmb/keuangan.js</code></td>
+            <td><strong>Validasi Otomatis Idempoten</strong>:<br>• Siswa yang sudah mengunggah bukti bayar digital di Modul 1 <strong>otomatis tervalidasi menjadi <code>lunas_otomatis</code></strong> (<code>status_pembayaran: "LUNAS"</code>) oleh sistem.<br>• Siswa tanpa bukti unggahan tetap berstatus <code>pending</code>.<br>• Bendahara tetap memiliki tombol <strong>✅ Validasi Manual (<code>lunas_manual</code>)</strong> untuk pembayaran tunai di loket sekolah atau <strong>🚫 Tolak</strong>. Seluruh perubahan otomatis/manual tercatat di <strong>Modul 3 Tab Audit Log</strong>.</td>
+          </tr>
+          <tr>
+            <td><span class="badge-alur">Pra-Alur 7</span></td>
+            <td>Koordinator Wawancara & Sistem Reminder</td>
+            <td><span class="badge-rev">M04-PEW</span> & <span class="badge-rev">M04-JAD</span><br><strong>Modul 4 (Rev) Manajemen Pewawancara & Jadwal Wawancara</strong></td>
+            <td><code>04_wawancara_spmb_rev/wawancara.html</code><br><code>04_wawancara_spmb_rev/wawancara.js</code><br><code>reminderService.js</code></td>
+            <td>Pendaftar berstatus <code>LUNAS</code> masuk ke <strong>Modul 4 (Rev) Tabel & Kalender Jadwal Wawancara</strong> (Weekday 08.00–15.00, Weekend 09.00–15.00 WIB; metode <strong>Luring</strong> atau <strong>Daring Google Meet/Zoom</strong>) bersama penguji <strong>Yosa</strong> / <strong>Veli</strong>, dilengkapi pengiriman <strong>Reminder Otomatis H-1</strong> via WA & Email.</td>
+          </tr>
+          <tr>
+            <td><span class="badge-alur">Alur 7</span></td>
+            <td>Pewawancara (Yosa / Veli)</td>
+            <td><span class="badge-rev">M04-EVAL</span><br><strong>Modul 4 (Rev) Modal Penilaian Wawancara & Anekdotal</strong></td>
+            <td><code>04_wawancara_spmb_rev/wawancara.js</code><br><code>anekdotalService.js</code></td>
+            <td>Pewawancara menginput nilai siswa & wali murid, memetakan aspek bakat/ibadah, menguji hafalan Al-Qur'an (rekomendasi otomatis potongan SPP: 1 Juz = Rp500rb, 2–3 Juz = Rp1jt, >3 Juz = Konfirmasi Sekolah), menetapkan <code>LAYAK / TIDAK LAYAK</code>, serta mencetak <strong>Catatan Anekdotal</strong> (<code>statusWawancara: "SELESAI"</code>).</td>
+          </tr>
+          <tr>
+            <td><span class="badge-alur">Alur 8</span></td>
+            <td>Sistem Otomatis & Panitia Pleno</td>
+            <td><span class="badge-rev">M05-RANK</span><br><strong>Modul 5 Dashboard Kuota & Perankingan Otomatis</strong></td>
+            <td><code>05_kelulusan_spmb/kelulusan.html</code><br><code>05_kelulusan_spmb/kelulusan.js</code></td>
+            <td>Menghitung <code>Nilai Akhir = (60% × Nilai Rapor) + (40% × Nilai Wawancara)</code> dan menjalankan <strong>Perankingan & Kelulusan Otomatis</strong> sesuai batas kuota yang dapat diedit Admin:<br>• <strong>Peringkat 1–80 (Default 80 Besar)</strong>: Otomatis <code>LULUS</code><br>• <strong>Peringkat 81–90 (Default 10 Cadangan)</strong>: Otomatis <code>CADANGAN</code><br>• <strong>Peringkat 91+</strong>: Otomatis <code>TIDAK LULUS</code> (diarahkan coba di Gelombang 2).<br><em>(Admin tetap bisa mengubah status manual via dropdown di tiap baris tabel).</em></td>
+          </tr>
+          <tr>
+            <td><span class="badge-alur">Alur 9a & 9b</span></td>
+            <td>Panitia Pleno & Kepala Sekolah</td>
+            <td><span class="badge-screen">M05-PUB</span><br><strong>Modul 5 Modal Publikasi & Cetak SKL Luring</strong></td>
+            <td><code>05_kelulusan_spmb/kelulusan.js</code></td>
+            <td><strong>Alur 9a</strong>: Publikasi hasil perankingan ke Portal Siswa (<code>isPublished: true</code>) & cetak Berita Acara Pleno.<br><strong>Alur 9b</strong>: Mencetak Surat Keterangan Lulus (SKL) fisik perorangan bagi pendaftar luring.</td>
+          </tr>
+          <tr>
+            <td><span class="badge-alur">Alur 10</span></td>
+            <td>Calon Siswa</td>
+            <td><span class="badge-rev">M01-PENG</span><br><strong>Modul 1 Pengumuman Hasil Perankingan Otomatis</strong></td>
+            <td><code>01_portal_spmb/pengumuman.html</code><br><code>01_portal_spmb/portal.js</code></td>
+            <td>Calon siswa membuka <strong>Modul 1 Pengumuman</strong> dan melihat SK Hasil Perankingan Otomatis sesuai posisinya: <strong>80 Besar (LULUS)</strong>, <strong>10 Cadangan (Rank 81–90)</strong>, atau <strong>Gagal (Rank 91+ / Bisa Coba Gelombang Selanjutnya)</strong>.</td>
+          </tr>
+          <tr>
+            <td><span class="badge-alur">Alur 11 & 12</span></td>
+            <td>Calon Siswa & Bendahara Keuangan</td>
+            <td><span class="badge-screen">M03-UP</span><br><strong>Modul 3 Tab Pembayaran Uang Pangkal</strong></td>
+            <td><code>03_keuangan_spmb/keuangan.html</code><br><code>03_keuangan_spmb/keuangan.js</code></td>
+            <td>Siswa yang dinyatakan <code>LULUS</code> membayar Uang Pangkal daftar ulang (otomatis dipotong nominal beasiswa Tahfidz dari Modul 04) dan divalidasi pelunasannya di <strong>Modul 3 Tab Uang Pangkal</strong> (<code>LUNAS</code>).</td>
+          </tr>
+          <tr>
+            <td><span class="badge-alur">Alur 13</span></td>
+            <td>Petugas Loket Daftar Ulang</td>
+            <td><span class="badge-screen">M06-LOK</span><br><strong>Modul 6 Terminal Verifikasi Loket Fisik</strong></td>
+            <td><code>06_verifikasi_loket/verifikasi.html</code><br><code>06_verifikasi_loket/verifikasi.js</code></td>
+            <td>Petugas loket memverifikasi 6 berkas fisik asli siswa yang sudah <code>LULUS</code> & <code>LUNAS</code> (KK, Akta, Ijazah/SKL, Pasfoto 3x4, Surat Pernyataan, Kartu Peserta), mengesahkan <code>status_daftar_ulang: "TERVERIFIKASI"</code>, & mencetak tanda terima berkas.</td>
+          </tr>
+          <tr>
+            <td><span class="badge-alur">Alur 14</span></td>
+            <td>Koordinator SPMB</td>
+            <td><span class="badge-screen">M07-LOCK</span><br><strong>Modul 7 Dashboard Audit & Lock Data</strong></td>
+            <td><code>07_pengelolaan_data/lock.html</code><br><code>07_pengelolaan_data/lock.js</code></td>
+            <td><em>Tripartite Audit Engine</em> memeriksa 3 syarat mutlak: <strong>LULUS (M05) + LUNAS (M03) + TERVERIFIKASI (M06)</strong>. Jika terpenuhi, Koordinator mengunci data final menjadi <code>VERIFIED_LOCKED</code> (<code>is_locked: true</code>).</td>
+          </tr>
+          <tr>
+            <td><span class="badge-alur">Jembatan SSoT</span></td>
+            <td>Sistem Database Terpadu (SSoT)</td>
+            <td><span class="badge-screen">M08-SSOT</span><br><strong>Modul 8 Dashboard Schema & SSoT Inspector</strong></td>
+            <td><code>08_basis_data_tu/schema.html</code><br><code>08_basis_data_tu/schema.js</code></td>
+            <td>Menyimpan & menyinkronkan data terkunci ke <code>m3_spmb_tu_db</code> (SSoT), memvalidasi keunikan NISN (<em>Zero Duplicate</em>), serta menampilkan ERD 6 Entitas, Kamus Data, & <em>Live JSON Inspector</em>.</td>
+          </tr>
+          <tr>
+            <td><span class="badge-alur">Alur 15</span></td>
+            <td>Staf Tata Usaha (TU) & Bagian Kurikulum</td>
+            <td><span class="badge-rev">M09-INDUK</span>, <span class="badge-rev">M09-KUR</span>, <span class="badge-rev">M09-DAPO</span><br><strong>Modul 9 (V2) Dashboard Buku Induk TU & Integrasi Kurikulum</strong></td>
+            <td><code>09_pemanfaatan_tu/tu_dashboard_v2.html</code><br><code>09_pemanfaatan_tu/tu_dashboard_v2.js</code></td>
+            <td>Staf TU menarik otomatis siswa <code>VERIFIED_LOCKED</code> tanpa ketik ulang (<em>Zero Re-entry</em>), menerbitkan Nomor Buku Induk (<code>M3-2026-XXXX</code>), <strong>mengunduh format penempatan kelas (<code>.xlsx</code>) untuk Bagian Kurikulum & mengunggah hasil pleno Kurikulum (<code>.xlsx</code>)</strong> (kolom kelas dikunci <em>Read-Only</em> bagi TU), mencetak Buku Induk, & mengekspor Dapodik (<code>.xlsx</code>).</td>
+          </tr>
+          <tr>
+            <td><span class="badge-alur">Alur 16</span></td>
+            <td>Kepala Sekolah & Pimpinan Yayasan</td>
+            <td><span class="badge-screen">M10-EXEC</span><br><strong>Modul 10 Dashboard Eksekutif Kepala Sekolah</strong></td>
+            <td><code>10_executive_report/report_standalone.html</code><br><code>10_executive_report/report.js</code></td>
+            <td>Menampilkan analitik pimpinan: 5 KPI Bento Grid, keterisian kuota MIPA/IPS, <em>Funnel</em> konversi Alur 1–16, demografi SMP asal, rekapitulasi finansial, grafik tren historis 5 tahun terakhir, & cetak laporan eksekutif.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

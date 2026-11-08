@@ -14,6 +14,18 @@ const initialSchema = {
       pilihan_jurusan: "MIPA",
       status_akun: "AKTIF",
       status_pembayaran: "LUNAS",
+      pembayaran: {
+        file_bukti: "Bukti_Transfer_BSI_0051234567.svg",
+        status_pembayaran: "lunas_otomatis",
+        validated_at: "2026-10-05T08:05:00Z",
+        validated_by: "Sistem Otomatis",
+        validation_method: "automatic_upload",
+        validation_type: "otomatis",
+        metode_pembayaran: "Transfer Bank BSI",
+        no_referensi: "TRX-BSI-20261005-992101",
+        tgl_bayar: "2026-10-05",
+        catatan_validasi: "Validasi administrasi bukti bayar berhasil via unggahan berkas digital"
+      },
       nilai_wawancara: 88,
       status_kelulusan: "LULUS",
       status_daftar_ulang: "VERIFIKASI_LOKET",
