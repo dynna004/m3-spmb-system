@@ -317,6 +317,7 @@ const SEED_INDONESIAN_STUDENTS = [
 
 /**
  * Mengambil data pendaftar terbaru dari local storage & memastikan akun non-bot sudah terverifikasi/aktif otomatis
+ * serta memastikan contoh akun Bot tersedia untuk demonstrasi di halaman Admin
  */
 function fetchCurrentPendaftar() {
   try {
@@ -327,11 +328,16 @@ function fetchCurrentPendaftar() {
     let changed = false;
 
     SEED_INDONESIAN_STUDENTS.forEach(seed => {
+      const isSeedBot = Boolean(seed.is_bot_suspect || seed.security_flag === 'BOT_SUSPECT');
+      if (isSeedBot && sessionDeletedBotIds.has(seed.id_pendaftar)) {
+        return;
+      }
       if (!currentIds.has(seed.id_pendaftar)) {
         if (seed.status_akun === 'active' && !seed.notifikasi_aktivasi) {
           dispatchActivationNotification(seed, 'Otomatis Saat Registrasi (NISN & Email Unik)');
         }
-        current.push(seed);
+        current.push({ ...seed });
+        currentIds.add(seed.id_pendaftar);
         changed = true;
       }
     });
@@ -362,11 +368,19 @@ function fetchCurrentPendaftar() {
       }
     });
 
+    // Urutkan agar 2 pendaftar terverifikasi pertama tampil di atas, diikuti contoh Bot agar langsung terlihat di tabel, lalu sisanya
+    const verifiedItems = current.filter(i => !(i.is_bot_suspect || i.security_flag === 'BOT_SUSPECT'));
+    const botItems = current.filter(i => Boolean(i.is_bot_suspect || i.security_flag === 'BOT_SUSPECT'));
+    const reordered = [
+      ...verifiedItems.slice(0, 2),
+      ...botItems,
+      ...verifiedItems.slice(2)
+    ];
+
     if (changed) {
-      localStorage.setItem('spmb_pendaftar_db', JSON.stringify(current));
-      list = current;
+      localStorage.setItem('spmb_pendaftar_db', JSON.stringify(reordered));
     }
-    return list;
+    return reordered;
   } catch (e) {
     console.error('fetchCurrentPendaftar error:', e);
     return SEED_INDONESIAN_STUDENTS;
@@ -441,7 +455,7 @@ export function renderAdminSPMB(containerId) {
             </div>
 
             <!-- Tombol Switch ke Notifikasi Email -->
-            <button type="button" class="header-action-btn" id="btn-admin-notif" title="Lihat Contoh & Log Notifikasi Email Aktivasi">
+            <button type="button" class="header-action-btn" id="btn-admin-notif" title="Lihat & Log Notifikasi Email Aktivasi">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                 <polyline points="22,6 12,13 2,6"/>
@@ -472,7 +486,7 @@ export function renderAdminSPMB(containerId) {
                 </li>
                 <li class="nav-submenu-item" id="nav-tab-notifications">
                   <a href="javascript:void(0)" id="sub-notifikasi-email">
-                    <span>📧 Contoh &amp; Log Notifikasi Email Aktivasi</span>
+                    <span>📧 Log &amp; Lihat Notifikasi Email Aktivasi</span>
                     <span class="sub-badge" style="background: #dcfce7; color: #166534;">Otomatis</span>
                   </a>
                 </li>
@@ -601,7 +615,7 @@ export function renderAdminSPMB(containerId) {
                         <th>Email &amp; No. WhatsApp</th>
                         <th>Status Aktivasi / Identifikasi</th>
                         <th>Notifikasi Email Login</th>
-                        <th style="text-align: right; padding-right: 20px;">Aksi Admin (Edit Typo / Email / Hapus)</th>
+                        <th style="text-align: right; padding-right: 20px;">Aksi Admin (Edit Data / Detail / Hapus)</th>
                       </tr>
                     </thead>
                     <tbody id="table-pendaftar-body">
@@ -619,7 +633,7 @@ export function renderAdminSPMB(containerId) {
             </div>
 
             <!-- ==========================================================
-                 SUB-VIEW 2: CONTOH & LOG NOTIFIKASI EMAIL AKTIVASI
+                 SUB-VIEW 2: LOG & LIHAT NOTIFIKASI EMAIL AKTIVASI
                  ========================================================== -->
             <div id="admin-subview-notifications" style="display: none;">
               <div class="activation-notif-banner">
@@ -628,10 +642,10 @@ export function renderAdminSPMB(containerId) {
                     ⚡ Sistem Pengiriman Email Otomatis Saat Registrasi
                   </span>
                   <h2 style="font-size: 1.4rem; font-weight: 800; margin: 8px 0 4px;">
-                    📧 Contoh Tampilan &amp; Log Notifikasi Email Aktivasi Akun
+                    📧 Log &amp; Lihat Notifikasi Email Aktivasi Akun
                   </h2>
                   <p style="margin: 0; font-size: 0.85rem; opacity: 0.92;">
-                    Setiap pendaftar yang terverifikasi unik langsung menerima email berisi kredensial &amp; tautan Login seperti contoh di bawah ini.
+                    Setiap pendaftar yang terverifikasi unik langsung menerima email berisi kredensial &amp; tautan Login yang dapat dilihat di bawah ini.
                   </p>
                 </div>
                 <button type="button" id="btn-back-to-accounts" style="background: #ffffff; color: #006837; border: none; border-radius: 8px; padding: 10px 16px; font-size: 0.82rem; font-weight: 800; cursor: pointer;">
@@ -656,7 +670,7 @@ export function renderAdminSPMB(containerId) {
                 <div class="table-toolbar">
                   <div class="toolbar-left">
                     <h2 class="table-card-title">
-                      <span>Daftar Pengiriman &amp; Contoh Tampilan Email Aktivasi Login</span>
+                      <span>Daftar Pengiriman &amp; Lihat Notifikasi Email Aktivasi Login</span>
                     </h2>
                   </div>
                   <div class="toolbar-right">
@@ -679,7 +693,7 @@ export function renderAdminSPMB(containerId) {
                         <th>Metode Aktivasi</th>
                         <th>Waktu Kirim Email</th>
                         <th>Status Pengiriman</th>
-                        <th style="text-align: right; padding-right: 20px;">Aksi Pratinjau Email</th>
+                        <th style="text-align: right; padding-right: 20px;">Aksi Lihat Email</th>
                       </tr>
                     </thead>
                     <tbody id="table-notif-email-body">
@@ -755,7 +769,7 @@ export function renderAdminSPMB(containerId) {
                 <label class="walkin-label" for="edit-catatan">
                   <span>Catatan Perbaikan Admin</span>
                 </label>
-                <input type="text" id="edit-catatan" class="walkin-input" placeholder="Contoh: Perbaikan typo penulisan nama/email sesuai laporan siswa" />
+                <input type="text" id="edit-catatan" class="walkin-input" placeholder="Perbaikan typo penulisan nama/email sesuai laporan siswa" />
               </div>
             </div>
           </div>
@@ -769,14 +783,14 @@ export function renderAdminSPMB(containerId) {
       </div>
 
       <!-- ==============================================
-           MODAL 2: CONTOH TAMPILAN NOTIFIKASI EMAIL AKTIVASI & LOGIN
+           MODAL 2: LIHAT TAMPILAN NOTIFIKASI EMAIL AKTIVASI & LOGIN
            ============================================== -->
       <div class="admin-modal-backdrop" id="admin-preview-email-modal">
         <div class="admin-modal-card modal-lg" style="max-width: 720px;">
           <div class="modal-header" style="background: linear-gradient(135deg, #064e3b 0%, #006837 100%); color: #ffffff;">
             <div>
               <h3 class="modal-title" style="color: #ffffff; margin: 0;">
-                <span>📩 Contoh Tampilan Notifikasi Email Aktivasi Akun &amp; Login</span>
+                <span>📩 Lihat Notifikasi Email Aktivasi Akun &amp; Login</span>
               </h3>
               <p style="margin: 2px 0 0; font-size: 0.76rem; opacity: 0.9;">
                 Email ini diterima otomatis oleh siswa setelah akun terverifikasi/teraktivasi
@@ -1014,7 +1028,7 @@ export function renderAdminSPMB(containerId) {
         <div style="flex: 1; min-width: 280px;">
           <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px;">
             <span style="background: #dcfce7; color: #166534; border: 1px solid #86efac; font-size: 0.72rem; font-weight: 800; padding: 3px 10px; border-radius: 999px;">
-              ✓ CONTOH AKUN SUDAH TERVERIFIKASI / OTOMATIS AKTIF
+              ✓ AKUN SUDAH TERVERIFIKASI / OTOMATIS AKTIF
             </span>
             <span style="font-size: 0.75rem; color: #64748b;">
               (NISN &amp; Email Tidak Duplikat &rarr; Langsung Aktif &amp; Email Login Terkirim)
@@ -1042,10 +1056,10 @@ export function renderAdminSPMB(containerId) {
 
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: center;">
           <button type="button" id="btn-showcase-preview-email" class="btn-action-activate" style="padding: 9px 16px; font-size: 0.8rem;">
-            📩 Lihat Contoh Tampilan Email Aktivasi (${escapeHTML(nama)})
+            📩 Lihat Notifikasi Email Aktivasi (${escapeHTML(nama)})
           </button>
           <button type="button" id="btn-showcase-edit-sample" class="btn-action-edit" style="justify-content: center; padding: 7px 14px;">
-            ✏️ Contoh Edit Data (Jika Laporan Typo)
+            ✏️ Edit Data Pendaftar (Jika Laporan Typo)
           </button>
         </div>
       </div>
@@ -1059,56 +1073,100 @@ export function renderAdminSPMB(containerId) {
     });
   }
 
-  // Render Panel Identifikasi Bot Saja (Tanpa Duplikat)
+  // Render Panel Contoh & Radar Identifikasi Bot Saja (Tanpa Duplikat)
   function renderBotMonitorPanel(botCount) {
     if (!botAlertPanel) return;
     const botItems = pendaftarList.filter(item => item.is_bot_suspect || item.security_flag === 'BOT_SUSPECT');
 
+    botAlertPanel.style.display = 'block';
+
     if (botItems.length === 0) {
-      botAlertPanel.style.display = 'none';
+      botAlertPanel.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.25rem;">🤖</span>
+            <div>
+              <strong style="color: #991b1b; font-size: 0.9rem;">Contoh Identifikasi Akun Bot / Spam (Semua Akun Bot Telah Dihapus)</strong>
+              <div style="font-size: 0.78rem; color: #64748b;">
+                Seluruh entri bot telah dibersihkan oleh Admin. Klik tombol di samping untuk memuat kembali contoh akun Bot untuk simulasi.
+              </div>
+            </div>
+          </div>
+          <button type="button" id="btn-restore-bot-samples" class="btn-refresh" style="border-color: #fca5a5; color: #991b1b; background: #fff5f5; font-weight: 700;">
+            🔄 Muat Ulang Contoh Bot (3 Akun Bot)
+          </button>
+        </div>
+      `;
+      document.getElementById('btn-restore-bot-samples')?.addEventListener('click', () => {
+        sessionDeletedBotIds.clear();
+        updateSummaryStats();
+        renderTableRows();
+        renderNotificationTableRows();
+        showToast('Contoh Bot Dimuat Ulang', '3 contoh akun teridentifikasi Bot/Spam telah ditampilkan kembali.', 'success');
+      });
       return;
     }
 
-    botAlertPanel.style.display = 'block';
     botAlertPanel.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 1.2rem;">🤖</span>
-          <div>
-            <strong style="color: #991b1b; font-size: 0.9rem;">Radar Identifikasi Bot / Spam (${botItems.length} Entri Terdeteksi)</strong>
-            <div style="font-size: 0.76rem; color: #64748b;">
-              Sistem menahan akun di bawah ini karena teridentifikasi pola bot otomatis. Admin dapat langsung menghapusnya.
-            </div>
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px;">
+            <span style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; font-size: 0.72rem; font-weight: 800; padding: 3px 10px; border-radius: 999px;">
+              🤖 CONTOH IDENTIFIKASI AKUN BOT / SPAM (${botItems.length} ENTRI TERDETEKSI)
+            </span>
+            <span style="font-size: 0.75rem; color: #7f1d1d; font-weight: 600;">
+              (Ditahan Otomatis oleh Sistem &bull; Pengiriman Email Login Diblokir)
+            </span>
+          </div>
+          <div style="font-size: 0.78rem; color: #64748b;">
+            Berikut adalah contoh akun pendaftar yang terdeteksi sebagai <strong>Bot / Script Otomatis</strong> (berdasarkan honeypot terisi, waktu pengisian &lt; 700ms, domain email sementara/disposable, atau pola NISN berulang). Admin dapat langsung menghapus akun bot tersebut.
           </div>
         </div>
-        <button type="button" id="btn-purge-all-bots" class="btn-action-delete" style="padding: 6px 12px;">
-          🗑️ Hapus Semua Akun Bot (${botCount})
-        </button>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          ${sessionDeletedBotIds.size > 0 ? `
+            <button type="button" id="btn-restore-bot-samples" class="btn-refresh" style="padding: 6px 12px; font-size: 0.76rem;">
+              🔄 Reset Contoh Bot
+            </button>
+          ` : ''}
+          <button type="button" id="btn-purge-all-bots" class="btn-action-delete" style="padding: 6px 12px;">
+            🗑️ Hapus Semua Akun Bot (${botCount})
+          </button>
+        </div>
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 6px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 10px;">
         ${botItems.map(item => {
           const regId = item.id_pendaftar || item.id;
+          const regNo = escapeHTML(formatRegNumber(regId));
           const nama = escapeHTML(item.nama_lengkap || item.nama || '-');
           const nisn = escapeHTML(item.nisn || '-');
           const email = escapeHTML(item.email || '-');
+          const noWa = escapeHTML(item.no_wa || '-');
           const note = escapeHTML(item.security_note || 'Indikasi Bot Otomatis');
 
           return `
-            <div class="anomaly-item-row" style="background: #fff5f5; border-color: #fecaca;">
-              <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 240px;">
-                <span style="font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; background:#fee2e2; color:#991b1b;">
-                  🤖 BOT TERDETEKSI
-                </span>
-                <div>
-                  <strong style="color: #0f172a;">${nama}</strong>
-                  <span style="color: #64748b; font-size: 0.75rem;">(NISN: <code>${nisn}</code> &bull; Email: <code>${email}</code>)</span>
-                  <div style="font-size: 0.74rem; color: #dc2626;">${note}</div>
+            <div style="background: #fff5f5; border: 1px solid #fecaca; border-left: 4px solid #dc2626; border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; justify-content: space-between; gap: 8px;">
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 4px;">
+                  <span style="font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 6px; background: #fee2e2; color: #991b1b;">
+                    🤖 BOT TERDETEKSI &bull; ${regNo}
+                  </span>
+                  <span style="font-size: 0.68rem; font-weight: 700; color: #dc2626;">🚫 Email Diblokir</span>
+                </div>
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem;">${nama}</div>
+                <div style="font-size: 0.75rem; color: #475569; margin-top: 2px;">
+                  NISN: <code style="color: #991b1b; font-weight: 700;">${nisn}</code> &bull; WA: ${noWa}
+                </div>
+                <div style="font-size: 0.75rem; color: #0369a1; font-weight: 600;">
+                  ✉️ ${email}
+                </div>
+                <div style="font-size: 0.73rem; color: #b91c1c; background: #ffffff; border: 1px dashed #fca5a5; border-radius: 6px; padding: 6px 8px; margin-top: 6px; line-height: 1.4;">
+                  ${note}
                 </div>
               </div>
-              <div style="display: flex; gap: 6px;">
-                <button type="button" class="btn-action-delete btn-quick-bot-delete" data-id="${escapeHTML(regId)}" data-name="${nama}">
-                  🗑️ Hapus Pendaftar Bot
+              <div style="display: flex; justify-content: flex-end; gap: 6px; padding-top: 4px;">
+                <button type="button" class="btn-action-delete btn-quick-bot-delete" data-id="${escapeHTML(regId)}" data-name="${nama}" style="width: 100%; justify-content: center;">
+                  🗑️ Hapus Akun Bot Ini
                 </button>
               </div>
             </div>
@@ -1117,9 +1175,21 @@ export function renderAdminSPMB(containerId) {
       </div>
     `;
 
+    document.getElementById('btn-restore-bot-samples')?.addEventListener('click', () => {
+      sessionDeletedBotIds.clear();
+      updateSummaryStats();
+      renderTableRows();
+      renderNotificationTableRows();
+      showToast('Contoh Bot Dimuat Ulang', 'Seluruh contoh akun Bot/Spam telah ditampilkan kembali.', 'success');
+    });
+
     document.getElementById('btn-purge-all-bots')?.addEventListener('click', () => {
       if (confirm(`Hapus permanen ${botItems.length} akun yang teridentifikasi sebagai Bot / Spam?`)) {
-        botItems.forEach(b => deletePendaftar(b.id_pendaftar || b.id));
+        botItems.forEach(b => {
+          const bid = b.id_pendaftar || b.id;
+          sessionDeletedBotIds.add(bid);
+          deletePendaftar(bid);
+        });
         updateSummaryStats();
         renderTableRows();
         renderNotificationTableRows();
@@ -1261,20 +1331,9 @@ export function renderAdminSPMB(containerId) {
             ${emailBadgeHtml}
           </td>
 
-          <!-- Aksi Admin: Contoh Email, Edit Data (Typo), Detail, Hapus -->
+          <!-- Aksi Admin: Edit Data (Typo), Detail, Hapus (Tanpa Tombol Contoh Email) -->
           <td style="text-align: right; padding-right: 16px;">
             <div class="action-buttons-group" style="justify-content: flex-end; flex-wrap: wrap; gap: 6px;">
-              ${!isBot ? `
-                <button
-                  type="button"
-                  class="btn-preview-email-row btn-trigger-preview-email"
-                  data-id="${escapeHTML(regId)}"
-                  title="Lihat contoh tampilan notifikasi email aktivasi untuk login"
-                >
-                  <span>✉️ Contoh Email</span>
-                </button>
-              ` : ''}
-
               <button
                 type="button"
                 class="btn-action-edit btn-trigger-edit"
@@ -1312,10 +1371,6 @@ export function renderAdminSPMB(containerId) {
   }
 
   function attachTableEvents() {
-    document.querySelectorAll('.btn-trigger-preview-email').forEach(btn => {
-      btn.onclick = (e) => openEmailPreviewModal(e.currentTarget.getAttribute('data-id'));
-    });
-
     document.querySelectorAll('.btn-trigger-edit').forEach(btn => {
       btn.onclick = (e) => openEditModal(e.currentTarget.getAttribute('data-id'));
     });
@@ -1394,14 +1449,14 @@ export function renderAdminSPMB(containerId) {
           </td>
           <td>
             ${isBot
-              ? `<span class="notif-badge-waiting" style="background:#fee2f2; color:#991b1b; border-color:#fecaca;">🚫 Diblokir Anti-Bot</span>`
-              : `<span class="notif-badge-sent">✅ ${escapeHTML(meta.status_pengiriman)} (${meta.jumlah_kirim}x)</span>`
-            }
+          ? `<span class="notif-badge-waiting" style="background:#fee2f2; color:#991b1b; border-color:#fecaca;">🚫 Diblokir Anti-Bot</span>`
+          : `<span class="notif-badge-sent">✅ ${escapeHTML(meta.status_pengiriman)} (${meta.jumlah_kirim}x)</span>`
+        }
           </td>
           <td style="text-align: right; padding-right: 16px;">
             <div style="display: inline-flex; gap: 6px;">
               <button type="button" class="btn-preview-email-row btn-notif-preview" data-id="${escapeHTML(regId)}">
-                👁️ Lihat Contoh Email
+                👁️ Lihat Email
               </button>
               ${!isBot ? `
                 <button type="button" class="btn-resend-email-row btn-notif-resend" data-id="${escapeHTML(regId)}">
@@ -1623,6 +1678,7 @@ export function renderAdminSPMB(containerId) {
   function executeDeletePendaftar(id, name) {
     if (!id) return;
     if (confirm(`Yakin ingin menghapus data pendaftar "${name}" (${formatRegNumber(id)}) secara permanen dari database SPMB?`)) {
+      sessionDeletedBotIds.add(id);
       const deleted = deletePendaftar(id);
       if (deleted) {
         updateSummaryStats();
@@ -1778,11 +1834,6 @@ export function renderAdminSPMB(containerId) {
 
     modalFooter.innerHTML = `
       <button type="button" class="btn-refresh" id="btn-modal-close-footer" style="padding: 8px 14px;">Tutup</button>
-      ${!isBot ? `
-        <button type="button" class="btn-preview-email-row" id="btn-modal-preview-email" style="padding: 8px 14px;">
-          ✉️ Contoh Email Aktivasi
-        </button>
-      ` : ''}
       <button type="button" class="btn-action-edit" id="btn-modal-edit-student" style="padding: 8px 14px;">
         ✏️ Edit Nama / Email / NISN / WA
       </button>

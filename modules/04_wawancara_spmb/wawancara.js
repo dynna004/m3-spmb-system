@@ -66,18 +66,6 @@ let pewawancaraSearch = '';
 let pewawancaraFilterStatus = 'ALL'; // 'ALL' | 'AKTIF' | 'NONAKTIF'
 let editingPewawancaraId = null; // null jika mode tambah, string ID jika mode edit
 
-// Sidebar Navbar State (Bisa dibuka dan ditutup, tersimpan di localStorage)
-const SIDEBAR_STATE_KEY = 'spmb_wawancara_sidebar_open';
-let isSidebarOpen = true;
-let activeNavSection = 'JADWAL'; // 'DASHBOARD' | 'JADWAL' | 'PENILAIAN' | 'PEWAWANCARA' | 'LAPORAN'
-
-try {
-  const savedSidebar = localStorage.getItem(SIDEBAR_STATE_KEY);
-  if (savedSidebar !== null) {
-    isSidebarOpen = savedSidebar === 'true';
-  }
-} catch (e) {}
-
 try {
   const savedMode = localStorage.getItem(ROLE_KEY);
   if (savedMode !== null) {
@@ -167,66 +155,6 @@ function renderPewawancaraBadge(name) {
 }
 
 /**
- * Update active state tombol menu sidebar
- */
-function updateSidebarNavActive(section) {
-  activeNavSection = section;
-  const navBtns = document.querySelectorAll('.sidebar-nav-btn');
-  navBtns.forEach(btn => btn.classList.remove('active'));
-
-  if (section === 'DASHBOARD') {
-    const el = document.getElementById('side-nav-dashboard');
-    if (el) el.classList.add('active');
-  } else if (section === 'JADWAL') {
-    const el = document.getElementById('side-nav-jadwal');
-    if (el) el.classList.add('active');
-  } else if (section === 'PENILAIAN') {
-    const el = document.getElementById('side-nav-penilaian');
-    if (el) el.classList.add('active');
-  } else if (section === 'PEWAWANCARA') {
-    const el = document.getElementById('side-nav-pewawancara');
-    if (el) el.classList.add('active');
-  } else if (section === 'LAPORAN') {
-    const el = document.getElementById('side-nav-laporan');
-    if (el) el.classList.add('active');
-  }
-}
-
-/**
- * Toggle buka dan tutup sidebar (expand / collapse)
- */
-function toggleSidebarState() {
-  isSidebarOpen = !isSidebarOpen;
-  try {
-    localStorage.setItem(SIDEBAR_STATE_KEY, String(isSidebarOpen));
-  } catch (e) {}
-
-  const sidebar = document.getElementById('wawancara-sidebar');
-  const wrapper = document.getElementById('wawancara-layout-wrapper');
-  const triggerBar = document.getElementById('sidebar-trigger-bar');
-  const toggleBtn = document.getElementById('btn-toggle-sidebar');
-  const labelEl = document.querySelector('.sidebar-collapse-label');
-
-  if (sidebar) {
-    if (isSidebarOpen) {
-      sidebar.classList.remove('collapsed');
-      if (wrapper) wrapper.classList.remove('sidebar-collapsed');
-      if (triggerBar) triggerBar.style.display = 'none';
-      if (toggleBtn) toggleBtn.setAttribute('title', 'Tutup Sidebar');
-      if (labelEl) labelEl.textContent = 'Tutup Menu';
-      showToast('📂 Sidebar Navigasi dibuka');
-    } else {
-      sidebar.classList.add('collapsed');
-      if (wrapper) wrapper.classList.add('sidebar-collapsed');
-      if (triggerBar) triggerBar.style.display = 'flex';
-      if (toggleBtn) toggleBtn.setAttribute('title', 'Buka Sidebar');
-      if (labelEl) labelEl.textContent = '';
-      showToast('📁 Sidebar Navigasi ditutup (Mode Layar Penuh)');
-    }
-  }
-}
-
-/**
  * Helper untuk memastikan setiap pendaftar memiliki jadwal wawancara yang valid
  * dengan pewawancara yang jelas dan metode (Daring atau Luring)
  * Sesuai aturan:
@@ -262,6 +190,14 @@ function ensureCandidateJadwal(c, idx) {
     if (c.jadwal_wawancara.metode === 'Daring' && (!c.jadwal_wawancara.ruang || c.jadwal_wawancara.ruang.includes('Gedung') || c.jadwal_wawancara.ruang.includes('Lab'))) {
       c.jadwal_wawancara.ruang = 'Google Meet / Zoom (Daring Online)';
     }
+  }
+
+  // Pastikan jika Daring selalu memiliki link_daring / link_meet default
+  if ((c.jadwal_wawancara.metode || '').toUpperCase() === 'DARING') {
+    const existingLink = c.jadwal_wawancara.link_daring || c.jadwal_wawancara.link_meet || '';
+    const defaultLink = existingLink || 'https://meet.google.com/spmb-m3-wawancara';
+    c.jadwal_wawancara.link_daring = defaultLink;
+    c.jadwal_wawancara.link_meet = defaultLink;
   }
 
   // Pastikan pewawancara valid
@@ -1246,374 +1182,21 @@ export function renderWawancara(containerId) {
         }
       }
 
-      /* =========================================================
-         SIDEBAR NAVBAR LAYOUT UNTUK MODUL 04 (SESUAI WIREFRAME MOCKUP)
-         ========================================================= */
+      /* Main Workspace Area (Full-Width Tanpa Sidebar) */
       .wawancara-layout-wrapper {
-        display: flex;
-        gap: 1rem;
-        align-items: flex-start;
-        position: relative;
+        display: block;
         width: 100%;
         min-height: calc(100vh - 180px);
-        transition: all 0.3s ease;
-      }
-      
-      .wawancara-sidebar {
-        width: 225px;
-        min-width: 225px;
-        background: #cbd5e1; /* Abu-abu rapi terstruktur sesuai gambar mockup */
-        border: 1.5px solid #94a3b8;
-        border-radius: 18px;
-        padding: 1rem 0.85rem;
-        display: flex;
-        flex-direction: column;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: sticky;
-        top: 1rem;
-        flex-shrink: 0;
-        z-index: 50;
       }
 
-      .wawancara-sidebar.collapsed {
-        width: 68px;
-        min-width: 68px;
-        padding: 1.25rem 0.5rem;
-      }
-
-      /* Top Bar Sidebar (Hamburger) */
-      .sidebar-top-bar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 0.5rem;
-      }
-
-      .sidebar-hamburger-btn {
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        color: #0f172a;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 7px;
-        border-radius: 8px;
-        transition: all 0.2s ease;
-      }
-
-      .sidebar-hamburger-btn:hover {
-        background: rgba(0, 0, 0, 0.1);
-        transform: scale(1.05);
-      }
-
-      .sidebar-collapse-label {
-        font-size: 0.72rem;
-        font-weight: 700;
-        color: #475569;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      /* Logo SMA Card (Kotak Rounded Gelap Sesuai Mockup) */
-      .sidebar-brand-container {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        transition: opacity 0.25s ease;
-      }
-
-      .sidebar-logo-card {
-        width: 105px;
-        height: 105px;
-        background: #2b3544; /* Charcoal gelap sesuai mockup */
-        border-radius: 14px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        margin-top: 0.75rem;
-        margin-bottom: 1.1rem;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
-        border: 2px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .sidebar-logo-icon {
-        font-size: 1.6rem;
-      }
-
-      .sidebar-logo-text {
-        color: #ffffff;
-        font-weight: 800;
-        font-size: 0.85rem;
-        letter-spacing: 0.5px;
-        text-align: center;
-      }
-
-      /* Title & Subtitle */
-      .sidebar-title-group {
-        margin-bottom: 1.25rem;
-      }
-
-      .sidebar-portal-title {
-        font-size: 1.35rem;
-        font-weight: 800;
-        color: #0f172a;
-        margin: 0;
-        line-height: 1.2;
-        letter-spacing: -0.3px;
-      }
-
-      .sidebar-portal-subtitle {
-        font-size: 0.82rem;
-        color: #475569;
-        margin: 4px 0 0 0;
-        font-weight: 600;
-        line-height: 1.35;
-      }
-
-      /* Navigation Menu List */
-      .sidebar-nav-menu {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-        margin-bottom: 1.5rem;
-      }
-
-      .sidebar-nav-btn {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        width: 100%;
-        padding: 12px 18px;
-        background: #ffffff;
-        border: 1.5px solid #cbd5e1;
-        border-radius: 10px;
-        font-weight: 700;
-        font-size: 0.9rem;
-        color: #334155;
-        cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        text-align: left;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-        font-family: inherit;
-        white-space: nowrap;
-        position: relative;
-      }
-
-      .sidebar-nav-btn:hover {
-        background: #f8fafc;
-        border-color: #006837;
-        color: #006837;
-        transform: translateY(-1.5px);
-        box-shadow: 0 4px 10px rgba(0, 104, 55, 0.12);
-      }
-
-      /* Active State (Tombol Gelap Sesuai Mockup 'Keuangan') */
-      .sidebar-nav-btn.active {
-        background: #2b3544; /* Charcoal gelap persis di gambar */
-        color: #ffffff;
-        border-color: #1e293b;
-        box-shadow: 0 6px 16px rgba(43, 53, 68, 0.35);
-      }
-
-      .sidebar-nav-btn.active:hover {
-        background: #1e293b;
-        color: #ffffff;
-        border-color: #0f172a;
-      }
-
-      .side-nav-icon {
-        font-size: 1.15rem;
-        flex-shrink: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .side-nav-text {
-        flex: 1;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      /* Sidebar Collapsed State Rules */
-      .wawancara-sidebar.collapsed .sidebar-brand-container,
-      .wawancara-sidebar.collapsed .sidebar-team-info,
-      .wawancara-sidebar.collapsed .side-nav-text,
-      .wawancara-sidebar.collapsed .sidebar-collapse-label {
-        display: none !important;
-      }
-
-      .wawancara-sidebar.collapsed .sidebar-nav-btn {
-        justify-content: center;
-        padding: 12px 0;
-        border-radius: 10px;
-      }
-
-      .wawancara-sidebar.collapsed .sidebar-top-bar {
-        justify-content: center;
-      }
-
-      /* Sidebar Team Info Footer */
-      .sidebar-team-info {
-        margin-top: auto;
-        padding-top: 1rem;
-        border-top: 1px solid rgba(0, 0, 0, 0.08);
-      }
-
-      .team-info-badge {
-        background: rgba(255, 255, 255, 0.6);
-        border: 1px solid #cbd5e1;
-        border-radius: 10px;
-        padding: 8px 12px;
-      }
-
-      /* Main Workspace Area */
       .wawancara-main-area {
-        flex: 1;
-        min-width: 0;
         width: 100%;
-        transition: all 0.3s ease;
-      }
-
-      /* Reopen Quick Bar */
-      .sidebar-collapsed-trigger-bar {
-        background: #ffffff;
-        border: 1.5px solid #cbd5e1;
-        border-radius: 12px;
-        padding: 8px 16px;
-        margin-bottom: 1.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        animation: fadeInQuick 0.25s ease-out;
-      }
-
-      .btn-reopen-pill {
-        background: #006837;
-        color: #ffffff;
-        border: none;
-        border-radius: 8px;
-        padding: 7px 15px;
-        font-weight: 700;
-        font-size: 0.85rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        box-shadow: 0 2px 6px rgba(0, 104, 55, 0.25);
-        transition: all 0.2s;
-        font-family: inherit;
-      }
-
-      .btn-reopen-pill:hover {
-        background: #004d28;
-        transform: translateY(-1px);
-      }
-
-      @keyframes fadeInQuick {
-        from { opacity: 0; transform: translateY(-6px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-
-      /* Responsive Rules */
-      @media (max-width: 960px) {
-        .wawancara-layout-wrapper {
-          flex-direction: column;
-        }
-        .wawancara-sidebar {
-          width: 100% !important;
-          min-width: 100% !important;
-          position: static;
-        }
-        .wawancara-sidebar.collapsed {
-          display: none !important;
-        }
       }
     </style>
 
-    <div class="wawancara-layout-wrapper ${isSidebarOpen ? '' : 'sidebar-collapsed'}" id="wawancara-layout-wrapper">
-      <!-- 1. SIDEBAR NAVBAR (SESUAI WIREFRAME MOCKUP) -->
-      <aside class="wawancara-sidebar ${isSidebarOpen ? '' : 'collapsed'}" id="wawancara-sidebar">
-        <!-- Top Bar Toggle (Hamburger Button) -->
-        <div class="sidebar-top-bar">
-          <button type="button" id="btn-toggle-sidebar" class="sidebar-hamburger-btn" title="${isSidebarOpen ? 'Tutup Sidebar' : 'Buka Sidebar'}" aria-label="Toggle Sidebar">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <line x1="3" y1="12" x2="21" y2="12"></line>
-              <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-          </button>
-          <span class="sidebar-collapse-label">${isSidebarOpen ? 'Tutup Menu' : ''}</span>
-        </div>
-
-        <!-- Logo SMA Card (Kotak Rounded Gelap Sesuai Mockup) -->
-        <div class="sidebar-brand-container">
-          <div class="sidebar-logo-card">
-            <div class="sidebar-logo-icon">🏫</div>
-            <div class="sidebar-logo-text">Logo SMA</div>
-          </div>
-          <div class="sidebar-title-group">
-            <h3 class="sidebar-portal-title">Portal SPMB</h3>
-            <p class="sidebar-portal-subtitle">Dashboard Wawancara Pendaftaran</p>
-          </div>
-        </div>
-
-        <!-- Menu Navigasi Vertikal (Pill Buttons Sesuai Mockup) -->
-        <nav class="sidebar-nav-menu">
-          <button type="button" class="sidebar-nav-btn ${activeNavSection === 'DASHBOARD' ? 'active' : ''}" id="side-nav-dashboard" title="Dashboard Ringkasan">
-            <span class="side-nav-icon">📊</span>
-            <span class="side-nav-text">Dashboard</span>
-          </button>
-          <button type="button" class="sidebar-nav-btn ${activeNavSection === 'JADWAL' ? 'active' : ''}" id="side-nav-jadwal" title="Jadwal Wawancara">
-            <span class="side-nav-icon">📅</span>
-            <span class="side-nav-text">Jadwal Wawancara</span>
-          </button>
-          <button type="button" class="sidebar-nav-btn ${activeNavSection === 'PENILAIAN' ? 'active' : ''}" id="side-nav-penilaian" title="Penilaian & Rekapitulasi">
-            <span class="side-nav-icon">📋</span>
-            <span class="side-nav-text">Penilaian</span>
-          </button>
-          <button type="button" class="sidebar-nav-btn ${activeNavSection === 'PEWAWANCARA' ? 'active' : ''}" id="side-nav-pewawancara" title="Kelola Tim Pewawancara">
-            <span class="side-nav-icon">👥</span>
-            <span class="side-nav-text">Kelola Pewawancara</span>
-          </button>
-          <button type="button" class="sidebar-nav-btn ${activeNavSection === 'LAPORAN' ? 'active' : ''}" id="side-nav-laporan" title="Laporan & Cetak">
-            <span class="side-nav-icon">🖨️</span>
-            <span class="side-nav-text">Laporan</span>
-          </button>
-        </nav>
-
-        <!-- Sidebar Footer / Info Tim Penguji -->
-        <div class="sidebar-team-info">
-          <div class="team-info-badge">
-            <div style="font-size: 0.72rem; color: #475569; font-weight: 700; text-transform: uppercase;">Pewawancara Bertugas</div>
-            <div style="font-weight: 800; font-size: 0.82rem; color: #006837; margin-top: 2px;">
-              ${activePewawancaraList.map(p => p.nama).join(' &bull; ')}
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <!-- 2. MAIN WORKSPACE CONTENT AREA -->
+    <div class="wawancara-layout-wrapper" id="wawancara-layout-wrapper">
+      <!-- MAIN WORKSPACE CONTENT AREA -->
       <main class="wawancara-main-area" id="wawancara-main-area">
-        <!-- Reopen Bar (Tampil saat sidebar ditutup / collapse) -->
-        <div class="sidebar-collapsed-trigger-bar" id="sidebar-trigger-bar" style="display: ${isSidebarOpen ? 'none' : 'flex'};">
-          <button type="button" id="btn-reopen-sidebar" class="btn-reopen-pill" title="Buka Sidebar Navigasi">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <line x1="3" y1="12" x2="21" y2="12"></line>
-              <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-            <span>Buka Menu Sidebar</span>
-          </button>
-          <span style="font-size: 0.82rem; font-weight: 700; color: #006837;">SMA Muhammadiyah 3 Yogyakarta &bull; Modul 04 Wawancara</span>
-        </div>
-
         <!-- Banner Modul -->
         <div class="wawancara-header">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px;">
@@ -2265,6 +1848,129 @@ export function renderWawancara(containerId) {
       </div>
     </div>
 
+    <!-- Modal Form Edit Jadwal Wawancara (Ruangan, Pewawancara, Jam, Metode, & Link Daring) -->
+    <div class="modal-wawancara-overlay" id="modal-edit-jadwal" style="display: none;">
+      <div class="modal-wawancara-content" style="max-width: 660px;">
+        <div class="modal-wawancara-header" style="background: linear-gradient(135deg, #004d28 0%, #006837 100%); color: white; padding: 1.05rem 1.4rem;">
+          <h3 id="modal-edit-jadwal-title" style="margin: 0; font-size: 1.1rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+            📅 Edit Jadwal Wawancara (Ruangan, Pewawancara, Jam &amp; Link Daring)
+          </h3>
+          <button type="button" class="modal-close-btn" id="modal-edit-jadwal-close" style="color: white; font-size: 1.5rem; background: none; border: none; cursor: pointer;">&times;</button>
+        </div>
+
+        <form id="form-edit-jadwal">
+          <div class="modal-wawancara-body" style="padding: 1.2rem 1.4rem;">
+            <input type="hidden" id="edit-jadwal-candidate-id" value="">
+
+            <!-- Ringkasan Calon Siswa -->
+            <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <div style="font-size: 0.7rem; color: #166534; font-weight: 700; text-transform: uppercase;">Calon Siswa</div>
+                <div id="edit-jadwal-candidate-name" style="font-weight: 800; font-size: 0.95rem; color: #0f172a;">-</div>
+              </div>
+              <div>
+                <div style="font-size: 0.7rem; color: #166534; font-weight: 700; text-transform: uppercase;">No. Registrasi &amp; Jurusan</div>
+                <div id="edit-jadwal-candidate-meta" style="font-weight: 700; font-size: 0.85rem; color: #006837;">-</div>
+              </div>
+            </div>
+
+            <div class="grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label for="edit-jadwal-hari" style="font-weight: 700; font-size: 0.84rem; margin-bottom: 4px; display: block;">
+                  Hari Pelaksanaan <span style="color: red;">*</span>
+                </label>
+                <select id="edit-jadwal-hari" class="form-control" required style="font-weight: 700;">
+                  <option value="Senin">Senin (Weekday: 08.00 - 15.00)</option>
+                  <option value="Selasa">Selasa (Weekday: 08.00 - 15.00)</option>
+                  <option value="Rabu">Rabu (Weekday: 08.00 - 15.00)</option>
+                  <option value="Kamis">Kamis (Weekday: 08.00 - 15.00)</option>
+                  <option value="Jumat">Jumat (Weekday: 08.00 - 15.00)</option>
+                  <option value="Sabtu">Sabtu (Weekend: 09.00 - 15.00)</option>
+                  <option value="Minggu">Minggu (Weekend: 09.00 - 15.00)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="edit-jadwal-tanggal" style="font-weight: 700; font-size: 0.84rem; margin-bottom: 4px; display: block;">
+                  Tanggal Wawancara <span style="color: red;">*</span>
+                </label>
+                <input type="date" id="edit-jadwal-tanggal" class="form-control" required style="font-weight: 600;">
+              </div>
+            </div>
+
+            <div class="grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px;">
+              <div class="form-group">
+                <label for="edit-jadwal-jam" style="font-weight: 700; font-size: 0.84rem; margin-bottom: 4px; display: block;">
+                  Jam Sesi Wawancara <span style="color: red;">*</span>
+                </label>
+                <select id="edit-jadwal-jam" class="form-control" required style="font-weight: 700; color: #006837;">
+                  <option value="08:00">⏰ 08.00 - 09.00 WIB (Khusus Weekday)</option>
+                  <option value="09:00">⏰ 09.00 - 10.00 WIB</option>
+                  <option value="10:00">⏰ 10.00 - 11.00 WIB</option>
+                  <option value="11:00">⏰ 11.00 - 12.00 WIB</option>
+                  <option value="13:00">⏰ 13.00 - 14.00 WIB</option>
+                  <option value="14:00">⏰ 14.00 - 15.00 WIB</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="edit-jadwal-pewawancara" style="font-weight: 700; font-size: 0.84rem; margin-bottom: 4px; display: block;">
+                  Pewawancara Bertugas <span style="color: red;">*</span>
+                </label>
+                <select id="edit-jadwal-pewawancara" class="form-control" required style="font-weight: 700;">
+                  <!-- Diisi dinamis dari getPewawancaraList() -->
+                </select>
+              </div>
+            </div>
+
+            <div class="grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px;">
+              <div class="form-group">
+                <label for="edit-jadwal-metode" style="font-weight: 700; font-size: 0.84rem; margin-bottom: 4px; display: block;">
+                  Metode Wawancara <span style="color: red;">*</span>
+                </label>
+                <select id="edit-jadwal-metode" class="form-control" required style="font-weight: 700;">
+                  <option value="Luring">🏢 Luring (Tatap Muka di Sekolah)</option>
+                  <option value="Daring">🌐 Daring (Online / Virtual Meet)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="edit-jadwal-ruang" style="font-weight: 700; font-size: 0.84rem; margin-bottom: 4px; display: block;">
+                  Ruangan / Lokasi Wawancara <span style="color: red;">*</span>
+                </label>
+                <input type="text" id="edit-jadwal-ruang" class="form-control" list="list-ruang-pewawancara" placeholder="Contoh: Ruang Wawancara 1 (Gedung Utama)" required style="font-weight: 600;">
+              </div>
+            </div>
+
+            <!-- Kolom Khusus Link Daring (Muncul otomatis saat Metode = Daring, atau bisa diisi) -->
+            <div id="edit-jadwal-link-daring-group" class="form-group" style="margin-top: 12px; background: #f0f9ff; border: 1.5px solid #7dd3fc; border-radius: 10px; padding: 12px 14px; display: none;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
+                <label for="edit-jadwal-link-daring" style="font-weight: 800; font-size: 0.84rem; color: #0369a1; margin: 0;">
+                  🔗 Link Wawancara Daring (Google Meet / Zoom) <span style="color: red;">*</span>
+                </label>
+                <button type="button" id="btn-generate-link-daring" style="background: #0284c7; color: #ffffff; border: none; border-radius: 6px; padding: 4px 10px; font-size: 0.74rem; font-weight: 700; cursor: pointer;">
+                  ⚡ Buat Link Meet Otomatis
+                </button>
+              </div>
+              <input type="url" id="edit-jadwal-link-daring" class="form-control" placeholder="https://meet.google.com/spmb-m3-wawancara" style="font-weight: 600; color: #0369a1; background: #ffffff;">
+              <small style="font-size: 0.72rem; color: #475569; display: block; margin-top: 4px;">
+                Tautan ini akan tampil pada Tabel Jadwal, Kalender Jadwal, dan Dashboard Calon Siswa untuk sesi wawancara daring.
+              </small>
+            </div>
+          </div>
+
+          <div class="modal-footer" style="padding: 0.95rem 1.4rem; background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px;">
+            <button type="button" class="btn btn-secondary" id="btn-cancel-modal-edit-jadwal" style="background: #f1f5f9; color: #475569; padding: 8px 18px; font-weight: 600; border: 1.5px solid #cbd5e1; border-radius: 8px; cursor: pointer;">
+              Batal
+            </button>
+            <button type="submit" class="btn btn-primary" style="background: #006837; color: #ffffff; padding: 8px 22px; font-weight: 700; font-size: 0.88rem; border-radius: 8px; border: none; box-shadow: 0 4px 10px rgba(0, 104, 55, 0.3); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+              💾 Simpan Perubahan Jadwal
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <!-- Toast Notification -->
     <div class="toast-notification" id="wawancara-toast"></div>
   `;
@@ -2367,14 +2073,14 @@ function renderJadwalViewport() {
               <th style="width: 45px; text-align: center;">No.</th>
               <th>Hari & Tanggal</th>
               <th>Jam Sesi Wawancara</th>
-              <th>Metode & Platform</th>
+              <th>Metode, Ruangan &amp; Link</th>
               <th>No. Registrasi</th>
               <th>Nama Lengkap Calon Siswa</th>
               <th>Asal Sekolah</th>
               <th>Minat</th>
               <th>Pewawancara Bertugas</th>
               <th>Status Wawancara</th>
-              <th style="text-align: center;">Aksi</th>
+              <th style="text-align: center;">Aksi (Edit Jadwal / Nilai)</th>
             </tr>
           </thead>
           <tbody>
@@ -2386,9 +2092,10 @@ function renderJadwalViewport() {
               const candidateName = c.nama || c.nama_lengkap || 'Tanpa Nama';
               const asalSekolah = c.asal_sekolah || c.biodata?.asal_sekolah || '-';
               const jurusan = c.pilihan_jurusan || c.biodata?.pilihan_jurusan || 'MIPA';
-              const ruang = jw.ruang ? jw.ruang.split('(')[0].trim() : 'R. Wawancara 1';
+              const ruang = jw.ruang || 'Ruang Wawancara 1 (Gedung Utama)';
               const pewawancara = jw.pewawancara || 'Yosa';
               const isDaring = (jw.metode || '').toUpperCase() === 'DARING';
+              const linkDaring = jw.link_daring || jw.link_meet || 'https://meet.google.com/spmb-m3-wawancara';
 
               return `
                 <tr>
@@ -2411,8 +2118,15 @@ function renderJadwalViewport() {
                       </span>
                     </div>
                     <div style="font-weight: 600; font-size: 0.78rem; color: #334155;">
-                      ${ruang}
+                      📍 ${ruang}
                     </div>
+                    ${isDaring ? `
+                      <div style="margin-top: 3px;">
+                        <a href="${linkDaring}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; font-weight: 700; color: #0284c7; background: #e0f2fe; padding: 2px 7px; border-radius: 5px; text-decoration: none; border: 1px solid #bae6fd;" title="Buka Link Wawancara Daring">
+                          🔗 ${linkDaring.replace(/^https?:\/\//, '')}
+                        </a>
+                      </div>
+                    ` : ''}
                   </td>
                   <td><strong style="color: #006837;">${candidateId}</strong></td>
                   <td>
@@ -2430,9 +2144,14 @@ function renderJadwalViewport() {
                       : `<span class="badge-status-belum">⏳ Belum Wawancara</span>`}
                   </td>
                   <td style="text-align: center;">
-                    <button class="btn btn-primary btn-input-nilai" data-id="${candidateId}" style="padding: 5px 9px; font-size: 0.74rem; font-weight: 700; background: ${isSelesai ? '#0284c7' : '#006837'}; color: #fff; border-radius: 6px; border: none; cursor: pointer;">
-                      ${isSelesai ? '✏️ Edit Skor' : '🎤 Wawancara'}
-                    </button>
+                    <div style="display: inline-flex; gap: 5px; flex-wrap: wrap; justify-content: center;">
+                      <button type="button" class="btn btn-edit-jadwal" data-id="${candidateId}" style="padding: 5px 9px; font-size: 0.73rem; font-weight: 700; background: #f0fdf4; color: #006837; border-radius: 6px; border: 1.5px solid #86efac; cursor: pointer;" title="Edit Ruangan, Pewawancara, Jam, atau Link Daring">
+                        📅 Edit Jadwal
+                      </button>
+                      <button type="button" class="btn btn-primary btn-input-nilai" data-id="${candidateId}" style="padding: 5px 9px; font-size: 0.73rem; font-weight: 700; background: ${isSelesai ? '#0284c7' : '#006837'}; color: #fff; border-radius: 6px; border: none; cursor: pointer;">
+                        ${isSelesai ? '✏️ Edit Skor' : '🎤 Wawancara'}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               `;
@@ -2504,6 +2223,7 @@ function renderJadwalViewport() {
                               const cName = sc.nama || sc.nama_lengkap;
                               const pew = sc.jadwal_wawancara?.pewawancara || 'Yosa';
                               const isDar = (sc.jadwal_wawancara?.metode || '').toUpperCase() === 'DARING';
+                              const linkDar = sc.jadwal_wawancara?.link_daring || sc.jadwal_wawancara?.link_meet || 'https://meet.google.com/spmb-m3-wawancara';
                               return `
                                 <div class="kalender-cell-item">
                                   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
@@ -2521,12 +2241,24 @@ function renderJadwalViewport() {
                                     </span>
                                     ${renderPewawancaraBadge(pew)}
                                   </div>
-                                  <div style="font-size: 0.72rem; color: #64748b; margin-bottom: 6px;">
-                                    ${sc.pilihan_jurusan || 'MIPA'} &bull; ${sc.jadwal_wawancara?.ruang ? sc.jadwal_wawancara.ruang.split('(')[0].trim() : 'R. Wawancara 1'}
+                                  <div style="font-size: 0.72rem; color: #64748b; margin-bottom: 4px;">
+                                    ${sc.pilihan_jurusan || 'MIPA'} &bull; 📍 ${sc.jadwal_wawancara?.ruang ? sc.jadwal_wawancara.ruang.split('(')[0].trim() : 'R. Wawancara 1'}
                                   </div>
-                                  <button class="btn btn-primary btn-input-nilai" data-id="${cId}" style="width: 100%; padding: 4px 6px; font-size: 0.72rem; font-weight: 700; background: ${isSelesai ? '#0284c7' : '#006837'}; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
-                                    ${isSelesai ? '✏️ Edit Skor' : '🎤 Wawancarai'}
-                                  </button>
+                                  ${isDar ? `
+                                    <div style="margin-bottom: 6px;">
+                                      <a href="${linkDar}" target="_blank" rel="noopener noreferrer" style="font-size: 0.68rem; font-weight: 700; color: #0284c7; text-decoration: underline; word-break: break-all;">
+                                        🔗 Link Meet Daring
+                                      </a>
+                                    </div>
+                                  ` : ''}
+                                  <div style="display: flex; gap: 4px;">
+                                    <button type="button" class="btn btn-edit-jadwal" data-id="${cId}" style="flex: 1; padding: 4px 5px; font-size: 0.68rem; font-weight: 700; background: #f0fdf4; color: #006837; border: 1px solid #86efac; border-radius: 4px; cursor: pointer;">
+                                      📅 Edit Jadwal
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-input-nilai" data-id="${cId}" style="flex: 1; padding: 4px 5px; font-size: 0.68rem; font-weight: 700; background: ${isSelesai ? '#0284c7' : '#006837'}; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
+                                      ${isSelesai ? '✏️ Skor' : '🎤 Nilai'}
+                                    </button>
+                                  </div>
                                 </div>
                               `;
                             }).join('')}
@@ -2543,6 +2275,13 @@ function renderJadwalViewport() {
   }
 
   // Re-bind click event buttons di dalam viewport Jadwal
+  viewport.querySelectorAll('.btn-edit-jadwal').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const id = e.currentTarget.getAttribute('data-id');
+      openModalEditJadwal(id);
+    });
+  });
+
   viewport.querySelectorAll('.btn-input-nilai').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const id = e.currentTarget.getAttribute('data-id');
@@ -3036,16 +2775,6 @@ function handleDeletePewawancara(id, nama) {
  * Attach Event Listeners untuk Subtabs, Filter, dan Modal
  */
 function attachTableEventListeners() {
-  // Sidebar Toggle Buttons (Hamburger Button & Reopen Pill)
-  const btnToggleSidebar = document.getElementById('btn-toggle-sidebar');
-  const btnReopenSidebar = document.getElementById('btn-reopen-sidebar');
-  if (btnToggleSidebar) {
-    btnToggleSidebar.addEventListener('click', toggleSidebarState);
-  }
-  if (btnReopenSidebar) {
-    btnReopenSidebar.addEventListener('click', toggleSidebarState);
-  }
-
   // Subtabs & Views Switcher
   const btnSubtabJadwal = document.getElementById('btn-subtab-jadwal');
   const btnSubtabEval = document.getElementById('btn-subtab-eval');
@@ -3065,13 +2794,10 @@ function attachTableEventListeners() {
     if (viewPewawancara) viewPewawancara.style.display = tabName === 'PEWAWANCARA' ? 'block' : 'none';
 
     if (tabName === 'JADWAL') {
-      updateSidebarNavActive('JADWAL');
       renderJadwalViewport();
     } else if (tabName === 'EVAL') {
-      updateSidebarNavActive('PENILAIAN');
       renderTableRows();
     } else if (tabName === 'PEWAWANCARA') {
-      updateSidebarNavActive('PEWAWANCARA');
       renderPewawancaraTable();
     }
   }
@@ -3084,58 +2810,6 @@ function attachTableEventListeners() {
   }
   if (btnSubtabPewawancara) {
     btnSubtabPewawancara.addEventListener('click', () => switchToTab('PEWAWANCARA'));
-  }
-
-  // Sidebar Menu Items Navigation
-  const sideNavDashboard = document.getElementById('side-nav-dashboard');
-  const sideNavJadwal = document.getElementById('side-nav-jadwal');
-  const sideNavPenilaian = document.getElementById('side-nav-penilaian');
-  const sideNavPewawancara = document.getElementById('side-nav-pewawancara');
-  const sideNavLaporan = document.getElementById('side-nav-laporan');
-
-  if (sideNavDashboard) {
-    sideNavDashboard.addEventListener('click', () => {
-      switchToTab('EVAL');
-      updateSidebarNavActive('DASHBOARD');
-      const statsEl = document.querySelector('.stats-grid-wawancara');
-      if (statsEl) statsEl.scrollIntoView({ behavior: 'smooth' });
-      showToast('📊 Menampilkan Dashboard & Statistik Wawancara');
-    });
-  }
-
-  if (sideNavJadwal) {
-    sideNavJadwal.addEventListener('click', () => {
-      switchToTab('JADWAL');
-      const jCard = document.querySelector('.jadwal-card-container');
-      if (jCard) jCard.scrollIntoView({ behavior: 'smooth' });
-      showToast('📅 Menampilkan Tabel Jadwal Wawancara');
-    });
-  }
-
-  if (sideNavPenilaian) {
-    sideNavPenilaian.addEventListener('click', () => {
-      switchToTab('EVAL');
-      const evalTable = document.getElementById('table-wawancara');
-      if (evalTable) evalTable.scrollIntoView({ behavior: 'smooth' });
-      showToast('📋 Menampilkan Lembar Penilaian & Rekapitulasi Wawancara');
-    });
-  }
-
-  if (sideNavPewawancara) {
-    sideNavPewawancara.addEventListener('click', () => {
-      switchToTab('PEWAWANCARA');
-      showToast('👥 Menampilkan Menu Kelola Tim Pewawancara (Editor)');
-    });
-  }
-
-  if (sideNavLaporan) {
-    sideNavLaporan.addEventListener('click', () => {
-      updateSidebarNavActive('LAPORAN');
-      showToast('🖨️ Membuka jendela Cetak Dokumen Resmi Wawancara SPMB...');
-      setTimeout(() => {
-        window.print();
-      }, 300);
-    });
   }
 
   const btnQuickManage = document.getElementById('btn-quick-manage-pewawancara');
@@ -3321,6 +2995,55 @@ function attachTableEventListeners() {
   }
   if (formPew) {
     formPew.addEventListener('submit', handleSavePewawancara);
+  }
+
+  // Modal Edit Jadwal Wawancara Event Handlers
+  const modalEditJadwalClose = document.getElementById('modal-edit-jadwal-close');
+  const btnCancelModalEditJadwal = document.getElementById('btn-cancel-modal-edit-jadwal');
+  const modalEditJadwalOverlay = document.getElementById('modal-edit-jadwal');
+  const formEditJadwal = document.getElementById('form-edit-jadwal');
+  const selectEditMetode = document.getElementById('edit-jadwal-metode');
+  const btnGenerateLinkDaring = document.getElementById('btn-generate-link-daring');
+
+  if (modalEditJadwalClose) modalEditJadwalClose.addEventListener('click', closeModalEditJadwal);
+  if (btnCancelModalEditJadwal) btnCancelModalEditJadwal.addEventListener('click', closeModalEditJadwal);
+  if (modalEditJadwalOverlay) {
+    modalEditJadwalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalEditJadwalOverlay) closeModalEditJadwal();
+    });
+  }
+  if (selectEditMetode) {
+    selectEditMetode.addEventListener('change', (e) => {
+      const isDar = e.target.value === 'Daring';
+      const linkGroup = document.getElementById('edit-jadwal-link-daring-group');
+      const ruangInput = document.getElementById('edit-jadwal-ruang');
+      const linkInput = document.getElementById('edit-jadwal-link-daring');
+      if (linkGroup) linkGroup.style.display = isDar ? 'block' : 'none';
+      if (isDar) {
+        if (ruangInput && (!ruangInput.value || ruangInput.value.includes('Gedung') || ruangInput.value.includes('Lab') || ruangInput.value.includes('Masjid'))) {
+          ruangInput.value = 'Google Meet / Zoom (Daring Online)';
+        }
+        if (linkInput && !linkInput.value) {
+          linkInput.value = 'https://meet.google.com/spmb-m3-wawancara';
+        }
+      } else {
+        if (ruangInput && ruangInput.value.includes('Daring')) {
+          ruangInput.value = 'Ruang Wawancara 1 (Gedung Utama)';
+        }
+      }
+    });
+  }
+  if (btnGenerateLinkDaring) {
+    btnGenerateLinkDaring.addEventListener('click', () => {
+      const cid = (document.getElementById('edit-jadwal-candidate-id')?.value || 'm3').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const linkInput = document.getElementById('edit-jadwal-link-daring');
+      if (linkInput) {
+        linkInput.value = `https://meet.google.com/spmb-m3-${cid.slice(-5)}`;
+      }
+    });
+  }
+  if (formEditJadwal) {
+    formEditJadwal.addEventListener('submit', handleSaveEditJadwal);
   }
 
   // Sync pewawancara select in evaluation modal
@@ -3586,6 +3309,191 @@ function handleSaveWawancara(e) {
   closeModalPenilaian();
   renderWawancara(activeContainerId); // Re-render modul view
   showToast(`✅ Penilaian wawancara ${activeCandidateId} oleh ${pewawancaraVal} berhasil disimpan ke SSoT!`);
+}
+
+/**
+ * Buka Modal Edit Jadwal Wawancara (Ruangan, Pewawancara, Jam, Hari/Tanggal, Metode & Link Daring)
+ */
+function openModalEditJadwal(candidateId) {
+  if (!isEditMode) {
+    showToast('🔒 Anda dalam Mode Viewer. Ubah ke "Mode Editor" di kanan atas untuk mengedit jadwal wawancara.', 'error');
+    return;
+  }
+
+  const allCandidates = getPendaftarSSoT();
+  const candidate = allCandidates.find(c => (c.id || c.id_pendaftar) === candidateId);
+  if (!candidate) {
+    showToast('Data calon siswa tidak ditemukan!', 'error');
+    return;
+  }
+
+  const jw = candidate.jadwal_wawancara || {};
+  const pewList = getPewawancaraList();
+  const currentPew = jw.pewawancara || candidate.dataWawancara?.pewawancara || 'Yosa';
+  const currentMetode = (jw.metode || 'Luring').toUpperCase() === 'DARING' ? 'Daring' : 'Luring';
+  const currentJam = jw.jam || '08:00';
+  const currentHari = jw.hari || 'Senin';
+  const currentTanggal = jw.tanggal || '2026-10-19';
+  const currentRuang = jw.ruang || (currentMetode === 'Daring' ? 'Google Meet / Zoom (Daring Online)' : 'Ruang Wawancara 1 (Gedung Utama)');
+  const currentLink = jw.link_daring || jw.link_meet || 'https://meet.google.com/spmb-m3-wawancara';
+
+  document.getElementById('edit-jadwal-candidate-id').value = candidateId;
+  document.getElementById('edit-jadwal-candidate-name').textContent = candidate.nama || candidate.nama_lengkap || '-';
+  document.getElementById('edit-jadwal-candidate-meta').textContent = `${candidateId} • Jurusan ${candidate.pilihan_jurusan || candidate.biodata?.pilihan_jurusan || 'MIPA'}`;
+
+  const selectPew = document.getElementById('edit-jadwal-pewawancara');
+  if (selectPew) {
+    selectPew.innerHTML = pewList.map(p => `
+      <option value="${p.nama}" ${currentPew.toLowerCase().includes(p.nama.toLowerCase()) ? 'selected' : ''}>
+        ${(p.nama.toLowerCase().includes('veli') || p.nama.toLowerCase().includes('fatimah')) ? '👩‍🏫' : '👨‍🏫'} ${p.nama} (${p.gelar || p.peran || 'Penguji'})
+      </option>
+    `).join('');
+  }
+
+  const hariEl = document.getElementById('edit-jadwal-hari');
+  if (hariEl) hariEl.value = currentHari;
+
+  const tglEl = document.getElementById('edit-jadwal-tanggal');
+  if (tglEl) tglEl.value = currentTanggal;
+
+  const jamEl = document.getElementById('edit-jadwal-jam');
+  if (jamEl) {
+    const matchedJam = ['08:00', '09:00', '10:00', '11:00', '13:00', '14:00'].find(j => currentJam.startsWith(j)) || '09:00';
+    jamEl.value = matchedJam;
+  }
+
+  const metodeEl = document.getElementById('edit-jadwal-metode');
+  if (metodeEl) metodeEl.value = currentMetode;
+
+  const ruangEl = document.getElementById('edit-jadwal-ruang');
+  if (ruangEl) ruangEl.value = currentRuang;
+
+  const linkGroup = document.getElementById('edit-jadwal-link-daring-group');
+  const linkInput = document.getElementById('edit-jadwal-link-daring');
+  if (linkInput) linkInput.value = currentLink;
+  if (linkGroup) linkGroup.style.display = currentMetode === 'Daring' ? 'block' : 'none';
+
+  const modal = document.getElementById('modal-edit-jadwal');
+  if (modal) modal.style.display = 'flex';
+}
+
+/**
+ * Tutup Modal Edit Jadwal Wawancara
+ */
+function closeModalEditJadwal() {
+  const modal = document.getElementById('modal-edit-jadwal');
+  if (modal) modal.style.display = 'none';
+}
+
+/**
+ * Simpan Perubahan Jadwal Wawancara (Ruangan, Pewawancara, Jam, Hari/Tanggal, Metode, Link Daring) ke SSoT
+ */
+function handleSaveEditJadwal(e) {
+  if (e) e.preventDefault();
+  if (!isEditMode) {
+    showToast('🔒 Mode Viewer: Pengeditan jadwal dinonaktifkan.', 'error');
+    return;
+  }
+
+  const candidateId = document.getElementById('edit-jadwal-candidate-id')?.value;
+  if (!candidateId) return;
+
+  const hari = document.getElementById('edit-jadwal-hari')?.value || 'Senin';
+  const tanggal = document.getElementById('edit-jadwal-tanggal')?.value || '2026-10-19';
+  const jam = document.getElementById('edit-jadwal-jam')?.value || '09:00';
+  const pewawancara = document.getElementById('edit-jadwal-pewawancara')?.value || 'Yosa';
+  const metode = document.getElementById('edit-jadwal-metode')?.value || 'Luring';
+  let ruang = document.getElementById('edit-jadwal-ruang')?.value.trim() || 'Ruang Wawancara 1 (Gedung Utama)';
+  let linkDaring = document.getElementById('edit-jadwal-link-daring')?.value.trim() || '';
+
+  const isWeekend = ['Sabtu', 'Minggu'].includes(hari);
+  if (isWeekend && jam === '08:00') {
+    showToast('⚠️ Pada akhir pekan (Sabtu/Minggu), jam layanan dimulai pukul 09.00 WIB!', 'error');
+    return;
+  }
+
+  if (metode === 'Daring') {
+    if (!linkDaring) {
+      linkDaring = 'https://meet.google.com/spmb-m3-wawancara';
+    }
+    if (!ruang) {
+      ruang = 'Google Meet / Zoom (Daring Online)';
+    }
+  }
+
+  const jamMap = {
+    '08:00': { selesai: '09:00', sesi: '08.00 - 09.00 WIB' },
+    '09:00': { selesai: '10:00', sesi: '09.00 - 10.00 WIB' },
+    '10:00': { selesai: '11:00', sesi: '10.00 - 11.00 WIB' },
+    '11:00': { selesai: '12:00', sesi: '11.00 - 12.00 WIB' },
+    '13:00': { selesai: '14:00', sesi: '13.00 - 14.00 WIB' },
+    '14:00': { selesai: '15:00', sesi: '14.00 - 15.00 WIB' }
+  };
+  const slotMeta = jamMap[jam] || { selesai: '10:00', sesi: `${jam.replace(':', '.')} WIB` };
+
+  const updatedJadwal = {
+    tanggal,
+    hari,
+    tipe_hari: isWeekend ? 'Weekend' : 'Weekday',
+    jam,
+    jam_selesai: slotMeta.selesai,
+    sesi: slotMeta.sesi,
+    metode,
+    ruang,
+    pewawancara,
+    link_daring: metode === 'Daring' ? linkDaring : '',
+    link_meet: metode === 'Daring' ? linkDaring : ''
+  };
+
+  // Simpan ke SSoT db
+  try {
+    const dbData = db.get() || { pendaftar: [] };
+    if (!Array.isArray(dbData.pendaftar)) {
+      dbData.pendaftar = getPendaftarSSoT();
+    }
+    const idx = dbData.pendaftar.findIndex(p => (p.id || p.id_pendaftar) === candidateId);
+    if (idx !== -1) {
+      dbData.pendaftar[idx].jadwal_wawancara = {
+        ...(dbData.pendaftar[idx].jadwal_wawancara || {}),
+        ...updatedJadwal
+      };
+      if (dbData.pendaftar[idx].dataWawancara) {
+        dbData.pendaftar[idx].dataWawancara.pewawancara = pewawancara;
+        dbData.pendaftar[idx].dataWawancara.metode = metode;
+      }
+      db.save(dbData);
+    }
+  } catch (err) {
+    console.warn('Error saving jadwal to SSoT:', err);
+  }
+
+  // Sinkronkan juga ke spmb_pendaftar_db (Portal Siswa)
+  try {
+    const pRaw = localStorage.getItem('spmb_pendaftar_db');
+    if (pRaw) {
+      const pList = JSON.parse(pRaw);
+      const pIdx = pList.findIndex(p => (p.id_pendaftar === candidateId || p.id === candidateId));
+      if (pIdx !== -1) {
+        pList[pIdx].jadwal_wawancara = {
+          ...(pList[pIdx].jadwal_wawancara || {}),
+          ...updatedJadwal
+        };
+        if (pList[pIdx].dataWawancara) {
+          pList[pIdx].dataWawancara.pewawancara = pewawancara;
+          pList[pIdx].dataWawancara.metode = metode;
+        }
+        localStorage.setItem('spmb_pendaftar_db', JSON.stringify(pList));
+      }
+    }
+  } catch (err) {}
+
+  window.dispatchEvent(new CustomEvent('spmb_db_updated', {
+    detail: { type: 'jadwal_wawancara_updated', id: candidateId, jadwal: updatedJadwal }
+  }));
+
+  closeModalEditJadwal();
+  renderWawancara(activeContainerId);
+  showToast(`✅ Jadwal wawancara ${candidateId} berhasil diperbarui (${hari}, ${slotMeta.sesi} • ${pewawancara} • ${ruang})!`);
 }
 
 /**
