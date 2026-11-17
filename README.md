@@ -8,13 +8,13 @@ Sistem terintegrasi berbasis Web Modular dengan prinsip **Single Source of Truth
 
 | Modul | Deskripsi Modul | Penanggung Jawab (Developer) |
 |---|---|---|
-| `01_portal_spmb` | Portal Utama Pendaftaran Siswa Baru | **Yosa** |
+| `01_portal_spmb` | Portal Utama Pendaftaran Siswa Baru | **Audy** |
 | `02_admin_spmb` | Admin & Aktivasi Akun Pendaftar | **Yosa** |
-| `03_keuangan_spmb` | Konfirmasi & Pembayaran Biaya SPMB | **Yosa** |
-| `04_wawancara_spmb` | Input Nilai Wawancara & Pemetaan Jurusan | **Yosa** |
+| `03_keuangan_spmb` | Konfirmasi & Pembayaran Biaya SPMB | **veli** |
+| `04_wawancara_spmb` | Input Nilai Wawancara & Pemetaan Jurusan | **Audy** |
 | `05_kelulusan_spmb` | Pengumuman Kelulusan Siswa Baru | **Yosa** |
-| `06_verifikasi_loket` | Loket Daftar Ulang & Penyerahan Berkas | **Yosa** |
-| `07_pengelolaan_data` | Lock & Validasi Data Final | **Yosa** |
+| `06_verifikasi_loket` | Loket Daftar Ulang & Penyerahan Berkas | **Novelia** |
+| `07_pengelolaan_data` | Lock & Validasi Data Final | **Raudhatul** |
 | `08_basis_data_tu` | Schema Single Source of Truth TU | **Raudhatul** |
 | `09_pemanfaatan_tu` | Dashboard Access TU (Tanpa Input Ulang) | **Raudhatul** |
 | `10_executive_report` | Laporan Kepala Sekolah & Yayasan | **Novelia** |
